@@ -3,6 +3,8 @@ import select
 import threading
 import sys
 import time
+import datetime
+
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
 hote = '134.214.106.23'
@@ -33,15 +35,25 @@ class ThreadPasserelleRecv(threading.Thread):
         
     def run(self):
         while 1:
-            #attendre une trame et l'afficher
-            trameRecue = self.connexion.recv(1024)
-            message = "%s" % (trameRecue)
-            print message
-            #traiter la trame et enregistrer l'information dans la BI
-            #
-            #Parser
-            #
-            #
+            #attendre une trame
+            trameRecue = self.connexion.recv(224)
+            
+            msg_recu = msg_recu.decode()
+            
+            #récupère l'identifiant du capteur
+            ident = msg_recu[16:24]
+            print ident
+            
+            #Si le capteur appartient à ceux étudiés on traite la trame
+            if ident in identifiants
+                #Récupère la date et l'heure de reception
+                now = datetime.datetime.now()
+
+                #traiter la trame et enregistrer l'information dans la BI
+                #
+                #Parser
+                #
+                #Met A J BI
         
 class ThreadTraitementBaseInformation(threading.Thread):
 
@@ -54,4 +66,4 @@ class ThreadTraitementBaseInformation(threading.Thread):
             #Lire la BI et agir (envoi de commandes) toutes les XX secondes
             #
             time.sleep(1)
-            
+            #
