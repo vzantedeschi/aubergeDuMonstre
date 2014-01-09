@@ -1,0 +1,3 @@
+fenetre 00893386
+interrupteur 0021CC07
+presence 00054155
