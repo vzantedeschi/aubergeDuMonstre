@@ -13,7 +13,9 @@ print("Connexion établie avec le serveur sur le port {}".format(port))
 trame = "A55A3B0510020024000000042024"
 trame2 = "A55A0B05000000000021CC072024"
 trameEteindre = "A55A3B05700000000021CC0730A4"
-trame1 = trameEteindre.encode()
+trameIDMoodleAllumer = "A55A3B0500000000FF9F1E042024"
+trameIDMoodleEteindre = "A55A3B0570000000FF9F1E042024"
+trame1 = trameIDMoodleAllumer.encode()
 connexion_avec_passerelle.send(trame1)
 
 while 1:
