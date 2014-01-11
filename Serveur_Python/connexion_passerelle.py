@@ -15,7 +15,7 @@ trameIntOff = "A55A0B05300000000021CC073064"
 
 trameIDMoodleAllumer = "A55A5B0510000000FF9F1E033044"
 
-trameIDMoodleEteindre = "A55A5B0530000000FF9F1E006064"
+trameIDMoodleEteindre = "A55A5B0530000000FF9F1E033064"
 
 trame1 = trameIDMoodleEteindre.encode()
 connexion_avec_passerelle.send(trame1)
