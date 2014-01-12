@@ -8,6 +8,7 @@ digraph architecture{
     serv -> base
     capteur -> passerelle
     passerelle -> actionneur
+  passerelle [shape=box,style="rounded"];
   serv [label="serveur python",shape=box,fillcolor="palegreen",style="filled,rounded"];
   app [label="appli web",shape=box,fillcolor="palegreen",style="filled,rounded"];
   base [label="base de règles et d'informations",shape=box,fillcolor="palegreen",style="filled,rounded"];
