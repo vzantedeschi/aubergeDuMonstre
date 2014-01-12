@@ -1,0 +1,15 @@
+digraph architecture{
+    
+    passerelle -> serv
+    serv -> passerelle
+    serv -> app
+    app -> serv
+    base -> serv
+    serv -> base
+    capteur -> passerelle
+    passerelle -> actionneur
+  serv [label="serveur python",shape=box,fillcolor="palegreen",style="filled,rounded"];
+  app [label="appli web",shape=box,fillcolor="palegreen",style="filled,rounded"];
+  base [label="base de règles et d'informations",shape=box,fillcolor="palegreen",style="filled,rounded"];
+}
+
