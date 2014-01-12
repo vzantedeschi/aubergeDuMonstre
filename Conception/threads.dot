@@ -1,9 +1,9 @@
 digraph threads{
-    serv -> comm [label=" signal s1"];
-    timer -> comm [label=" signal s1"];
+    serv -> comm [label=" signal s1", style="dotted" ];
+    timer -> comm [label=" signal s1", style="dotted" ];
     comm -> timer [label=" new"];
     comm -> sender [label=" new"];
-    app -> comm [label=" signal s1"];
+    app -> comm [label=" signal s1", style="dotted" ];
 
     comm [label="command checker",shape=box,fillcolor="palegreen",style="filled,rounded"];
     serv [label="passerelle listener",shape=box,fillcolor="palegreen",style="filled,rounded"];
