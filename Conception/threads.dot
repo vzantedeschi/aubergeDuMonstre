@@ -1,0 +1,17 @@
+digraph threads{
+    serv -> comm [label=" signal s1"];
+    timer -> comm [label=" signal s1"];
+    comm -> timer [label=" new"];
+    comm -> sender [label=" new"];
+    app -> comm [label=" signal s1"];
+
+    comm [label="command checker",shape=box,fillcolor="palegreen",style="filled,rounded"];
+    serv [label="passerelle listener",shape=box,fillcolor="palegreen",style="filled,rounded"];
+    app [label="application web listener",fillcolor="palegreen",shape=box,style="filled,rounded"];
+    sender [label="sender",shape=box,fillcolor="palegreen",style="filled,rounded"];
+    timer [label="timer",shape=box,style="rounded"];
+    
+    bi [label="objets qui \nconsultent la \nbase d'information",fillcolor="palegreen",style="filled"];
+    signal [label="s1 : \nsignal entrainant \nune action spéciale\ndu thread command "];
+}
+
