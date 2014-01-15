@@ -1,6 +1,6 @@
 digraph threads{
     serv -> comm [label=" signal s1", style="dotted" ];
-    timer -> comm [label=" signal s1", style="dotted" ];
+    timer -> comm [label=" signal s2", style="dotted" ];
     comm -> timer [label=" new"];
     comm -> sender [label=" new"];
     app -> comm [label=" signal s1", style="dotted" ];
@@ -12,6 +12,6 @@ digraph threads{
     timer [label="timer",shape=box,style="rounded"];
     
     bi [label="objets qui \nconsultent la \nbase d'information",fillcolor="palegreen",style="filled"];
-    signal [label="s1 : \nsignal entrainant \nune action spéciale\ndu thread command "];
+    signal [label="s1 et s2 : \nsignaux entrainant \nune action spéciale\ndu thread command "];
 }
 

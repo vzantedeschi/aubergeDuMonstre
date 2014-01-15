@@ -1,0 +1,21 @@
+//Class Diagram of the information database 
+//created on http://yuml.me/diagram/scruffy/class/draw
+//choosing plain one and left to right direction
+[Auberge]-0..*>[Piece|- int id]
+[Piece]0..1-0..*[Personne]
+[Personne]^[Resident|- String nom; - int id]
+[Personne]^[Intrus]
+[Piece]0..2-0..*[Capteur|- int id]
+[Capteur]^[RFID| - int id] 
+[RFID]->[Personne]
+[Capteur]^[Humidite| - float taux]
+[Capteur]^[Temperature| - float degres]
+[Capteur]^[Presence| - Date dernierMouvement]
+[Piece]0..2-0..*[Actionneur| - int id; - bool active]
+[Actionneur]^[Interrupteur]
+[Actionneur]^[FermetureVolet]
+[Actionneur]^[FermeturePorte]
+[Actionneur]^[Clim]
+[Actionneur]^[AntiIncendie]
+[Actionneur]^[FermetureRideau]
+
