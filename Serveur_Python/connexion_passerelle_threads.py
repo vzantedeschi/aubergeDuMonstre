@@ -113,4 +113,7 @@ print "Serveur Python lancé"
 PasserelleListener = ThreadPasserelleListener(hote,port)
 PasserelleListener.start()
 
+while(1):
+    time.sleep(2)
+    
 print "Exit main program"
