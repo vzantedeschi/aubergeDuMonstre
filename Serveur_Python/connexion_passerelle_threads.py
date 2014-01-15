@@ -7,11 +7,16 @@ import datetime
 
 import trame
 
+def passe_hex(elem):
+    return int(elem,16)
+
 # Ici il faut mettre en mémoire les valeurs des identifiants des capteurs utilisés
 # et éventuellement les constantes (Sync Bytes, H_SEQ)
 fic_id = open("../identifiants.txt","r")
 identifiants = fic_id.readlines()
 fic_id.close()
+#Test
+identifiants = map(passe_hex,identifiants)
 for identifiant in identifiants:
     print identifiant
 
@@ -50,7 +55,7 @@ class ThreadPasserelleListener(threading.Thread):
             print ident
             
             # Si le capteur appartient à ceux étudiés on traite la trame
-            if ident in identifiants:
+            if int(ident,16) in identifiants:
                 # Récupère la date et l'heure de reception
                 now = datetime.datetime.now()
 
@@ -59,8 +64,8 @@ class ThreadPasserelleListener(threading.Thread):
                 # Passage par le parser
                 infosTrame = trame.Trame(msg_recu,now)
 
-                print ("ID {}".format(infosTrame.idBytes))
-                print ("DB {}".format(infosTrame.dataBytes))
+                print ("ID {}".format(hex(infosTrame.idBytes)))
+                print ("DB {}".format(hex(infosTrame.dataBytes)))
                 print ("Heure {}".format(infosTrame.heure))
                 
 class ThreadAppliWebListener(threading.Thread):
