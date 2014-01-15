@@ -1,5 +1,6 @@
 import socket
 import select
+import sys
 import generateurTrames
 
 hote = 'localhost'
@@ -19,14 +20,30 @@ socketClient, infoClient = socketSimulateur.accept()
 #Envoi message de confirmation
 socketClient.send(b"connected")
 
-#On appuie sur ON
-trame = gen.pressON()
-trame = trame.encode()
-socketClient.send(trame)
+while True :
 
-#On appuie sur OFF
-trame = gen.pressOFF()
-trame = trame.encode()
-socketClient.send(trame)
+	try:
+		#Envoi d'une trame parassite
+		trame = gen.genericFrame()
+		trame = trame.encode()
+		socketClient.send(trame)
 
-socketSimulateur.close()
+		#On appuie sur ON
+		trame = gen.pressON()
+		trame = trame.encode()
+		socketClient.send(trame)
+
+		#On appuie sur OFF
+		trame = gen.pressOFF()
+		trame = trame.encode()
+		socketClient.send(trame)
+
+		#Envoi d'une trame parassite
+		trame = gen.genericFrame()
+		trame = trame.encode()
+		socketClient.send(trame)
+
+	except KeyboardInterrupt:
+		print '\nFermeture de la connection'
+		socketSimulateur.close()
+		break
