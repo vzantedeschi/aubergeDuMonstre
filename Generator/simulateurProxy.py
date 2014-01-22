@@ -1,6 +1,8 @@
 import socket
 import select
 import sys
+import time
+import random
 import generateurTrames
 
 hote = 'localhost'
@@ -22,6 +24,8 @@ socketClient.send(b"connected")
 
 while True :
 
+	wait = random.randint(1,10)
+
 	try:
 		#Envoi d'une trame parassite
 		trame = gen.genericFrame()
@@ -33,6 +37,7 @@ while True :
 		trame = trame.encode()
 		socketClient.send(trame)
 
+		time.sleep(wait);
 		#On appuie sur OFF
 		trame = gen.pressOFF()
 		trame = trame.encode()
@@ -42,6 +47,8 @@ while True :
 		trame = gen.genericFrame()
 		trame = trame.encode()
 		socketClient.send(trame)
+
+		time.sleep(wait);
 
 	except KeyboardInterrupt:
 		print '\nFermeture de la connection'
