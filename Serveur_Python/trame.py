@@ -35,9 +35,13 @@ class Trame:
                 self.length = hSeqAndLength & 0x1f
                 self.org = int(trame[6:8], 16)
                 
-                #remise en ordre des octets DATA_BYTES
+                #### a priori pas utile d'inverser l'ordre des octets ####
+                """#remise en ordre des octets DATA_BYTES
                 dataByte0 = trame[8:10] #utile pour le mode
-                db = "%s%s%s%s" % (trame[14:16], trame[12:14], trame[10:12], dataByte0)            
+                db = "%s%s%s%s" % (trame[14:16], trame[12:14], trame[10:12], dataByte0)  """   
+                
+                dataByte0 = trame[14:16] #utile pour le mode
+                db = "%s%s%s%s" % (trame[8:10], trame[10:12], trame[12:14], dataByte0)
                 self.dataBytes = int(db, 16)    
                 
                 self.idBytes = int(trame[16:24], 16)
