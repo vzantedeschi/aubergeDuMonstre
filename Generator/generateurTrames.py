@@ -26,7 +26,7 @@ class generateurTrames():
             elif (type == 'presence') :
                 self.presence = id
 
-    #Generation des trames parassites
+    #Generation des trames parasites
     def genericFrame(self) :
         org = "06"
         dataBytes = "23000000"

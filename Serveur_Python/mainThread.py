@@ -9,9 +9,10 @@ import datetime
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
 hote = '134.214.106.23'
-hote = 'localhost'
+#hote = 'localhost'
 # Mettre ici le port de la passerelle sur lequel se connecter.
-port = 4000
+port = 5000
+#port = 4000
 
 print "Lancement du Serveur"
 
@@ -33,11 +34,15 @@ fic_id.close()
 SYNC_BYTES = "A55A"
 H_SEQ = "0B"
 identifiants = [int(el,16) for el in identifiants]
+
+threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
+threadCommand.start()
         
 try: 
 	while True:
 	    msg_recu = connexion_avec_passerelle.recv(28)	    
 	    msg_recu = msg_recu.decode()
+	    print msg_recu
 	    
 	    # Recupere l'identifiant du capteur
 	    ident = msg_recu[16:24]
@@ -57,7 +62,7 @@ try:
 	        print ("Heure {}".format(infosTrame.heure))
 
 except KeyboardInterrupt:
-	print '\nFermeture de la connection'
+	print '\nFermeture de la connexion'
 	connexion_avec_passerelle.close()
 
 print "Exit main program"
