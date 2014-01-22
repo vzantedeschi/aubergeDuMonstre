@@ -30,7 +30,7 @@ class generateurTrames():
     def genericFrame(self) :
         org = "06"
         dataBytes = "23000000"
-        idBytes = "0000000"
+        idBytes = "00000000"
         message = org+dataBytes+idBytes
         status = "20"
         checksum = "24"
