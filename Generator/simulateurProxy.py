@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import socket
 import select
 import sys
@@ -24,12 +27,19 @@ socketSimulateur.listen(5)
 #Recuperation du port de communication du client
 socketClient, infoClient = socketSimulateur.accept()
 
+<<<<<<< HEAD
 gen = generateurTrames.generateurTrames("identifiants.txt")
+=======
+#Envoi message de confirmation
+#provoque une erreur lors du test des identifiants dans le main
+#socketClient.send(b"connected")
+>>>>>>> 17e3727c04134ea753d3c531620d058eca6f2c2d
 
 #Creation d'un timer pour l'envoi de trames nulles du capteur de presence toute les 2 minutes
 t = threading.Timer(120, envoiTramesAbsence)
 t.start()
 
+<<<<<<< HEAD
 print "BIENVENUE DANS L'AUBERGE DU MONSTRE !"
 print "\nA travers ce menu, vous pourriez simuler des scenarios"
 
@@ -37,6 +47,16 @@ print "\nA travers ce menu, vous pourriez simuler des scenarios"
 while True :
 
 	try:
+=======
+        # temps aléatoire d'attente entre deux messages
+	wait = random.randint(1,10)
+
+	try:
+		#Envoi d'une trame parasite
+		trame = gen.genericFrame()
+		trame = trame.encode()
+		socketClient.send(trame)
+>>>>>>> 17e3727c04134ea753d3c531620d058eca6f2c2d
 
 		print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
 		print "1. Quelqu'un entre dans une piece"
@@ -73,6 +93,11 @@ while True :
 		elif event == 3 :
 			trame = gen.pressOFF()
 
+<<<<<<< HEAD
+=======
+		#Envoi d'une trame parasite
+		trame = gen.genericFrame()
+>>>>>>> 17e3727c04134ea753d3c531620d058eca6f2c2d
 		trame = trame.encode()
 		print 'Scenario cree, trame envoyee'
 		socketClient.send(trame)		

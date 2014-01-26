@@ -6,12 +6,21 @@ import threadsDefined
 import socket
 import trame
 import datetime
+import interpreteur
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
+<<<<<<< HEAD
 hote = '134.214.106.23'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
+=======
+#hote = '134.214.106.23'
+hote = 'localhost'
+# Mettre ici le port de la passerelle sur lequel se connecter.
+#port = 5000
+port = 12900
+>>>>>>> 17e3727c04134ea753d3c531620d058eca6f2c2d
 
 print "Lancement du Serveur"
 
@@ -33,14 +42,19 @@ fic_id.close()
 SYNC_BYTES = "A55A"
 H_SEQ = "0B"
 identifiants = [int(el,16) for el in identifiants]
-        
+
+threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
+threadCommand.start()
+
+#Process qui va vérifier les trames provenant de la passerelle       
 try: 
 	while True:
 	    msg_recu = connexion_avec_passerelle.recv(28)	    
 	    msg_recu = msg_recu.decode()
+	    print msg_recu
 	    
 	    # Recupere l'identifiant du capteur
-	    ident = msg_recu[16:24]
+	    ident = msg_recu[16:24] 
 	    
 	    # Si le capteur appartient a ceux etudies on traite la trame
 	    if int(ident,16) in identifiants :
@@ -56,8 +70,16 @@ try:
 	        print ("DB {}".format(hex(infosTrame.dataBytes)))
 	        print ("Heure {}".format(infosTrame.heure))
 
+	        # Insérer la trame dans la BI
+	        interpreteur.Interpretation(infosTrame)
+
+	        #Mettre le checkStatus du thread de commande à 1
+	        threadCommand.checkStatus = 1
+	        #Note : il est possible que l'on se retrouve avec deux
+	        # timers au lieu d'un avec cet appel... => double check de la BI
+
 except KeyboardInterrupt:
-	print '\nFermeture de la connection'
+	print '\nFermeture de la connexion'
 	connexion_avec_passerelle.close()
 
 print "Exit main program"
