@@ -8,11 +8,11 @@ import trame
 import datetime
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
-hote = '134.214.106.23'
-#hote = 'localhost'
+#hote = '134.214.106.23'
+hote = 'localhost'
 # Mettre ici le port de la passerelle sur lequel se connecter.
-port = 5000
-#port = 4000
+#port = 5000
+port = 12900
 
 print "Lancement du Serveur"
 
@@ -37,7 +37,8 @@ identifiants = [int(el,16) for el in identifiants]
 
 threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
 threadCommand.start()
-        
+
+#Process qui va vérifier les trames provenant de la passerelle       
 try: 
 	while True:
 	    msg_recu = connexion_avec_passerelle.recv(28)	    
@@ -60,6 +61,13 @@ try:
 	        print ("ID {}".format(hex(infosTrame.idBytes)))
 	        print ("DB {}".format(hex(infosTrame.dataBytes)))
 	        print ("Heure {}".format(infosTrame.heure))
+
+	        #Insérer la trame dans la BI
+
+	        #Mettre le checkStatus du thread de commande à 1
+	        threadCommand.checkStatus = 1
+	        #Note : il est possible que l'on se retrouve avec deux
+	        # timers au lieu d'un avec cet appel... => double check de la BI
 
 except KeyboardInterrupt:
 	print '\nFermeture de la connexion'

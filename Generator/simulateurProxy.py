@@ -20,14 +20,14 @@ socketSimulateur.listen(5)
 socketClient, infoClient = socketSimulateur.accept()
 
 #Envoi message de confirmation
-socketClient.send(b"connected")
+#socketClient.send(b"connected")
 
 while True :
 
 	wait = random.randint(1,10)
 
 	try:
-		#Envoi d'une trame parassite
+		#Envoi d'une trame parasite
 		trame = gen.genericFrame()
 		trame = trame.encode()
 		socketClient.send(trame)
@@ -51,6 +51,6 @@ while True :
 		time.sleep(wait);
 
 	except KeyboardInterrupt:
-		print '\nFermeture de la connection'
+		print '\nFermeture de la connexion'
 		socketSimulateur.close()
 		break
