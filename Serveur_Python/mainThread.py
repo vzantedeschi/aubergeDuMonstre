@@ -9,18 +9,12 @@ import datetime
 import interpreteur
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
-<<<<<<< HEAD
 hote = '134.214.106.23'
+hote = 'localhost'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
-=======
-#hote = '134.214.106.23'
-hote = 'localhost'
-# Mettre ici le port de la passerelle sur lequel se connecter.
-#port = 5000
-port = 12900
->>>>>>> 17e3727c04134ea753d3c531620d058eca6f2c2d
+port = 12800
 
 print "Lancement du Serveur"
 
