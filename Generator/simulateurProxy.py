@@ -47,28 +47,31 @@ while True :
 		socketClient.send(trame)
 
 		print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
-		print "1. Quelqu'un entre dans une piece"
-		print "2. On allume la lumiere dans un piece"
-		print "3. On etend la lumiere dans une piece"
-		print "4. "
 
-		event = int(input())
+		event = 4
+		while event > 3 :
+			print "1. Quelqu'un entre dans une piece"
+			print "2. On allume la lumiere dans un piece"
+			print "3. On etend la lumiere dans une piece"
+			event = int(input())
 
-		print "\nDans quelle piece?"
-		print "1. Couloir"
-		print "2. Cuisine"
-		print "3. Salon"
-
-		piece = int(input())
+		piece = 4
+		while piece > 3 :
+			print "\nDans quelle piece?"
+			print "1. Couloir"
+			print "2. Cuisine"
+			print "3. Salon"
+			piece = int(input())
 
 		if event not in [2,3] :
 			
-			print "\nQuel personnage?"
-			print "1. Meduse"
-			print "2. Vampire"
-			print "3. Un inconnu"
-
-			perso = int(input())
+			perso = 4
+			while perso > 3 :
+				print "\nQuel personnage?"
+				print "1. Meduse"
+				print "2. Vampire"
+				print "3. Un inconnu"
+				perso = int(input())
 		
 		trame = ""
 
