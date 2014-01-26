@@ -9,7 +9,7 @@ class generateurTrames():
         ###modifsCyp
         syncBytes = "A55A"
         h_seq_length = "0B"
-        self.enteteTrames = syncBytes+h_seq_length
+        self.enteteTrames = syncBytes + h_seq_length
         ###
         
         fic_id.close()
@@ -26,7 +26,7 @@ class generateurTrames():
             elif (type == 'presence') :
                 self.presence = id
 
-    #Generation des trames parassites
+    #Generation des trames parasites
     def genericFrame(self) :
         org = "06"
         dataBytes = "23000000"
@@ -58,6 +58,27 @@ class generateurTrames():
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
+    #Generation des trames du capteur de presence
+    def presenceDetected(self) :
+        org = "07"
+        dataBytes = "B7D6000D"
+        idBytes = self.presence
+        message = org+dataBytes+idBytes
+        status = "00"
+        checksum = "47"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def nothingDetected(self) :
+        org = "07"
+        dataBytes = "B9B3000F"
+        idBytes = self.presence
+        message = org+dataBytes+idBytes
+        status = "00"
+        checksum = "28"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
     def getCapteurs(self) :
         print "liste des capteurs en memoire :"
         print "capteur d'ouverture fenetre ", self.fenetre
@@ -78,3 +99,7 @@ if __name__ == "__main__" :
 
     print '\n***Test 3 : generation de trames parasites***'
     print "trame => ", gen.genericFrame()
+
+    print '\n***Test 4 : generation de trames du capteur de presence***'
+    print "il y a quelqu'un => ", gen.presenceDetected()
+    print "il y a personne => ", gen.nothingDetected()
