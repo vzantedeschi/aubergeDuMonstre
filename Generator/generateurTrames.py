@@ -1,4 +1,5 @@
-# 
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 class generateurTrames():
 
@@ -6,11 +7,9 @@ class generateurTrames():
         fic_id = open(identifiants,"r")
         liste = fic_id.readlines()
         
-        ###modifsCyp
         syncBytes = "A55A"
         h_seq_length = "0B"
         self.enteteTrames = syncBytes+h_seq_length
-        ###
         
         fic_id.close()
 
@@ -28,12 +27,12 @@ class generateurTrames():
 
     #Generation des trames parasites
     def genericFrame(self) :
-        org = "06"
+        org = "05"
         dataBytes = "23000000"
         idBytes = "00000000"
         message = org+dataBytes+idBytes
         status = "20"
-        checksum = "24"
+        checksum = "53"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
@@ -44,7 +43,10 @@ class generateurTrames():
         idBytes = self.interrupteur
         message = org+dataBytes+idBytes
         status = "20"
-        checksum = "24"
+        # checksum est censé être l'addition des octets en hexadécimal sur un octet de HSEQ à status
+        #checksum = hex(int(org,16)+int(status,16)+int("10",16)+int(idBytes[0:2],16)+int(idBytes[2:4],16)+int(idBytes[4:6],16)+int(idBytes[6:8],16))
+        #print checksum
+        checksum = "03"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
@@ -54,7 +56,7 @@ class generateurTrames():
         idBytes = self.interrupteur
         message = org+dataBytes+idBytes
         status = "20"
-        checksum = "24"
+        checksum = "23"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 

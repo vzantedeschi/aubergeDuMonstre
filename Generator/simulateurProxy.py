@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import socket
 import select
 import sys
@@ -20,10 +23,12 @@ socketSimulateur.listen(5)
 socketClient, infoClient = socketSimulateur.accept()
 
 #Envoi message de confirmation
+#provoque une erreur lors du test des identifiants dans le main
 #socketClient.send(b"connected")
 
 while True :
 
+        # temps aléatoire d'attente entre deux messages
 	wait = random.randint(1,10)
 
 	try:
@@ -43,7 +48,7 @@ while True :
 		trame = trame.encode()
 		socketClient.send(trame)
 
-		#Envoi d'une trame parassite
+		#Envoi d'une trame parasite
 		trame = gen.genericFrame()
 		trame = trame.encode()
 		socketClient.send(trame)

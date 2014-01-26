@@ -6,6 +6,7 @@ import threadsDefined
 import socket
 import trame
 import datetime
+import interpreteur
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
 #hote = '134.214.106.23'
@@ -46,7 +47,7 @@ try:
 	    print msg_recu
 	    
 	    # Recupere l'identifiant du capteur
-	    ident = msg_recu[16:24]
+	    ident = msg_recu[16:24] 
 	    
 	    # Si le capteur appartient a ceux etudies on traite la trame
 	    if int(ident,16) in identifiants :
@@ -62,7 +63,8 @@ try:
 	        print ("DB {}".format(hex(infosTrame.dataBytes)))
 	        print ("Heure {}".format(infosTrame.heure))
 
-	        #Insérer la trame dans la BI
+	        # Insérer la trame dans la BI
+	        interpreteur.Interpretation(infosTrame)
 
 	        #Mettre le checkStatus du thread de commande à 1
 	        threadCommand.checkStatus = 1
