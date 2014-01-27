@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import datetime
 SIZE = 28
 
@@ -14,7 +17,7 @@ class Trame:
         - idBytes (int) changement (avant de type string) !!!
         - status (int)
         - checksum (int)
-        - teachIn (bool) vrai si EEP envoye
+        - eepSent (bool) vrai si EEP envoye
         - valide (bool) vrai si la trame est composee de 28 caracteres hexadecimaux
         - date (datetime.date)
         - heure (datetime.time)
@@ -23,7 +26,7 @@ class Trame:
         
     """
     def __init__(self, trame, temps):
-        self.teachIn = False
+        self.eepSent = False
         self.valide = True
              
         if (trame != None) and (len(trame) == SIZE):    
@@ -35,10 +38,14 @@ class Trame:
                 self.length = hSeqAndLength & 0x1f
                 self.org = int(trame[6:8], 16)
                 
-                #remise en ordre des octets DATA_BYTES
+                #### a priori pas utile d'inverser l'ordre des octets ####
+                """#remise en ordre des octets DATA_BYTES
                 dataByte0 = trame[8:10] #utile pour le mode
-                db = "%s%s%s%s" % (trame[14:16], trame[12:14], trame[10:12], dataByte0)            
-                self.dataBytes = int(db, 16)    
+                db = "%s%s%s%s" % (trame[14:16], trame[12:14], trame[10:12], dataByte0)  """   
+                
+                dataByte0 = trame[14:16] #utile pour le mode
+                #db = "%s%s%s%s" % (trame[8:10], trame[10:12], trame[12:14], dataByte0)
+                self.dataBytes = int(trame[8:16], 16)    
                 
                 self.idBytes = int(trame[16:24], 16)
                 self.status = int(trame[24:26], 16)
@@ -46,11 +53,12 @@ class Trame:
                 self.date = temps.date()
                 self.heure = temps.time()
                 
-                #verification du mode (normal ou teach-in)
-                bit3 = (int(dataByte0, 16) >> 3) & 1
-                bit7 = (int(dataByte0, 16) >> 7) & 1
-                if (bit3 == 0) and (bit7 == 1):
-                    self.teachIn = True
+                #verification du mode (normal ou teach-in avec eep envoye)
+                if self.org == 0x07:
+		  bit3 = (int(dataByte0, 16) >> 3) & 1            
+		  bit7 = (int(dataByte0, 16) >> 7) & 1
+		  if (bit3 == 0) and (bit7 == 1):
+                    self.eepSent = True
             
             except (ValueError, AttributeError):
                 self.valide = False
@@ -68,6 +76,14 @@ class Trame:
             self.idBytes = None
             self.status = None
             self.checksum = None
-            self.teachIn = None
+            self.eepSent = None
             self.date = None
             self.heure = None
+
+"""if __name__ == "__main__":
+  test = "A55A0B070084990F0004E9570001"
+  date = datetime.datetime(2014, 1, 12, 18, 59, 30)
+        
+  result = Trame(test, date)
+  print hex(result.dataBytes)
+  print result.syncBytes"""
