@@ -49,7 +49,7 @@ try:
 	    # Recupere l'identifiant du capteur
 	    ident = msg_recu[16:24] 
 	    
-	    # Si le capteur appartient a ceux etudies on traite la trame
+	    # Si le capteur appartient a ceux etudiés on traite la trame
 	    if int(ident,16) in identifiants :
 	        # Recupere la date et l'heure de reception
 	        now = datetime.datetime.now()
@@ -66,9 +66,9 @@ try:
 	        # Insérer la trame dans la BI
 	        interpreteur.Interpretation(infosTrame)
 
-	        #Mettre le checkStatus du thread de commande à 1
+	        # Mettre le checkStatus du thread de commande à 1
 	        threadCommand.checkStatus = 1
-	        #Note : il est possible que l'on se retrouve avec deux
+	        # Note : il est possible que l'on se retrouve avec deux
 	        # timers au lieu d'un avec cet appel... => double check de la BI
 
 except KeyboardInterrupt:
