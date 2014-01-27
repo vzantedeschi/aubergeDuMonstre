@@ -65,9 +65,10 @@ try:
 	        print ("Heure {}".format(infosTrame.heure))
 
 	        # Insérer la trame dans la BI
-	        interpreteur.Interpretation(infosTrame)
+	        trameInterpretee = interpreteur.Interpretation(infosTrame)
+	        ### ICI METTRE DANS LA BDD ###
 
-	        # Mettre le checkStatus du thread de commande à 1
+	        # Met le checkStatus du thread de commande à 1
 	        threadCommand.checkStatus = 1
 	        # Note : il est possible que l'on se retrouve avec deux
 	        # timers au lieu d'un avec cet appel... => double check de la BI
