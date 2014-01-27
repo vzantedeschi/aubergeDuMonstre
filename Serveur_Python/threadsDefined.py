@@ -44,7 +44,9 @@ class ThreadCommand(threading.Thread):
                 t = threading.Timer(2,TimerFunc,[self])
                 t.start()
 
-                #inspecte la BI
+                #inspecte la BI (ou appeller la base de règle qui inspecte la BI)
+                ## pour la démo simplement évalue si il y a dans la bdd une trame
+                ##du capteur de présence et envoi un message à la tablette si oui
 
                 self.checkStatus = 0
        
