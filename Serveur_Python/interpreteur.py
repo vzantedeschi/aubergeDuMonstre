@@ -44,11 +44,11 @@ class Interpretation:
 	#recuperation de DB0.1 donnant la presence
         self.donnees = not((trame.dataBytes & 0x00000002) >> 1)
 """	
-      elif self.typeCapteur == Capteurs.TEMP:
+      elif self.typeCapteur == 'TEMP':
 	#recuperation de la temperature
-      elif self.typeCapteur == Capteurs.HUMID:
+      elif self.typeCapteur == 'HUMID':
 	#recuperation du taux d'humidite
-      elif self.typeCapteur == Capteurs.RFID:
+      elif self.typeCapteur == 'RFID':
 	#recuperation des donnees rfid
 """
 

@@ -40,7 +40,7 @@ class ThreadCommand(threading.Thread):
         
         while 1:
             if self.checkStatus == 1:
-                #Timer avec 2sec de période
+                #Timer avec 2sec de période remettant le checkstatus à 1
                 t = threading.Timer(2,TimerFunc,[self])
                 t.start()
 
