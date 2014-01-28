@@ -4,6 +4,7 @@
 class Commande():
     def __init__(self):
 
+		##premier test : est ce qu il y a du mouvement depuis peu de temps ?
         ### ICI EXAMINER LA BDD ###
 
         ### Il me faut le format des informations de sortie pour savoir

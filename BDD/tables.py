@@ -4,22 +4,28 @@
 import mongoengine
 import datetime
 
-class Piece(mongoengine.Document):
-	piece_id = mongoengine.IntField(required=True, unique=True)
-	name = mongoengine.StringField(required = True)
-	actionneurs = mongoengine.ListField(field = None)
-	capteurs = mongoengine.ListField(field = None)
-
 class Capteur(mongoengine.Document):
 	capteur_id = mongoengine.IntField(required=True, unique=True)
 	date = mongoengine.DateTimeField(required = True)
+	traite = mongoengine.BooleanField(required = True)
 	meta = {'allow_inheritance': True}
+	
 	
 class Actionneur(mongoengine.Document):
 	actionneur_id = mongoengine.IntField(required=True, unique=True)
 	date = mongoengine.DateTimeField(required = True)
 	meta = {'allow_inheritance': True}
 
+class Piece(mongoengine.Document):
+	piece_id = mongoengine.IntField(required=True, unique=True)
+	name = mongoengine.StringField(required = True)
+	actionneurs = mongoengine.SortedListField(mongoengine.ReferenceField(Capteur), ordering='date')
+	capteurs = mongoengine.SortedListField(mongoengine.ReferenceField(Actionneur), ordering='date')
+
+	
+class Personne(mongoengine.Document):
+	personne_id = mongoengine.IntField(required=True, unique=True)
+	nom = mongoengine.StringField(required = False)
 	
 class Presence(Capteur):
 	pass
