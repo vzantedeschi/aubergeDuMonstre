@@ -33,8 +33,6 @@ fic_id = open("../identifiants.txt","r")
 identifiants = fic_id.readlines()
 fic_id.close()
 
-SYNC_BYTES = "A55A"
-H_SEQ = "0B"
 identifiants = [int(el,16) for el in identifiants]
 
 threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
@@ -64,7 +62,7 @@ try:
 	        print ("DB {}".format(hex(infosTrame.dataBytes)))
 	        print ("Heure {}".format(infosTrame.heure))
 
-	        # Insérer la trame dans la BI
+	        # Insère la trame dans la BI
 	        trameInterpretee = interpreteur.Interpretation(infosTrame)
 	        ### ICI METTRE DANS LA BDD ###
 

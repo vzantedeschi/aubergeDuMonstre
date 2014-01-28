@@ -5,6 +5,7 @@ import threading
 import time
 import signal
 import os
+import baseRegle
 
 ## Functions ##
 
@@ -32,27 +33,33 @@ class ThreadCommand(threading.Thread):
         self.socket = socket
         self.setDaemon(True)
         
-        # le checkStatus passe à 1 quand le thread doit lire la BI
+        # Le checkStatus passe à 1 quand le thread doit lire la BI
         self.checkStatus = 0
-        print self.checkStatus
         
     def run(self):
-        
         while 1:
-            if self.checkStatus == 1:
-                #Timer avec 2sec de période remettant le checkstatus à 1
-                t = threading.Timer(2,TimerFunc,[self])
-                t.start()
+            try:
+                if self.checkStatus == 1:
+                    # Timer avec 2sec de période remettant le checkstatus à 1
+                    t = threading.Timer(10,TimerFunc,[self])
+                    t.start()
 
-                #inspecte la BI (ou appeller la base de règle qui inspecte la BI)
-                ## pour la démo simplement évalue si il y a dans la bdd une trame
-                ##du capteur de présence et envoi un message à la tablette si oui
+                    # Fais appel à la base de règle pour générer une commande
+                    commande = baseRegle.Commande()
 
-                self.checkStatus = 0
-       
-        #print "Envoi de message"
-        #trame de test"
-        #self.socket.send('A55A6B05100000000021CBE3205F')
+                    ### ICI TRAITER LA COMMANDE SELON SON TYPE ###
+                    if commande.type == 'PRES':
+                        print 'commande de présence envoyée'
+                        ## ENVOYER A L'APPLI WEB ##
+                    elif commande.type == 'OTHER':
+                        print 'pas de commande implémentée'
+                        ## TODO
+
+                    # Met le checkstatus à 0 pour éviter de reparcourir la BI
+                    self.checkStatus = 0
+            except KeyboardInterrupt:
+                t.cancel()
+                break
 
 class ThreadSender(threading.Thread):
 
