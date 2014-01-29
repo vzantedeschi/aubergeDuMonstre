@@ -39,15 +39,15 @@ class Interpretation:
       if self.typeCapteur == 'PRES':
 	#recuperation de DB0.1 donnant la presence
         self.donnees = not((trame.dataBytes & 0x00000002) >> 1)
-        
-"""	
+        	
       elif self.typeCapteur == 'TEMP':
 	#recuperation de la temperature
+        
       elif self.typeCapteur == 'HUMID':
 	#recuperation du taux d'humidite
+        
       elif self.typeCapteur == 'RFID':
 	#recuperation des donnees rfid
-"""
 
 if __name__ == "__main__" :
     print '#################TESTS UNITAIRES##################'

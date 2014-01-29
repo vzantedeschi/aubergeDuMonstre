@@ -17,7 +17,7 @@ print trame
 connexionProxy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connexionProxy.connect((hote,port))
 
-trame = trame.encode()
+#trame = trame.encode()
 connexionProxy.send(trame)
 
 

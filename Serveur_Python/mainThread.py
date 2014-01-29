@@ -78,11 +78,20 @@ try:
             # Insère la trame dans la BI
             trameInterpretee = interpreteur.Interpretation(infosTrame)
             
-            ### ICI METTRE DANS LA BDD ###
+            ### INSERTION DANS LA BDD ###
             if trameInterpretee.typeCapteur == 'PRES':
                 if trameInterpretee.donnees == 1:
                     capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
                     capteur_presence.save()
+                    
+            elif trameInterpretee.typeCapteur == 'TEMP':
+                #insertion des informations de température
+                
+            elif trameInterpretee.typeCapteur == 'HUMID':
+                #insertion des informations d'humidité
+                
+            elif trameInterpretee.typeCapteur == 'RFID':
+                #insertion des informations de RFID
 
             # Met le checkStatus du thread de commande à 1
             threadCommand.checkStatus = 1
