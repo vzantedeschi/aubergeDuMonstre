@@ -18,7 +18,7 @@ hote = 'localhost'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
-port = 13000
+port = 12900
 
 print "Lancement du Serveur"
 
@@ -34,13 +34,15 @@ except socket.error :
     exit()
 
 ########### CONNEXION BDD ###############
-db = mongoengine.connect('GHome_BDD')
-db.drop_database('GHome_BDD')
+db_connec = mongoengine.connect('GHome_BDD')
+db = db_connec.GHome_BDD
 
 ########### INITIALISATION BDD #############
 #now = datetime.datetime.now()
-capteur_presence1 = tables.Presence(capteur_id = '00054155', date = 0, traite = True)
-db.presence.save(capteur_presence1)
+capteur_presence1 = tables.Presence(capteur_id = "00054155", date = 0, traite = True)
+#capteur_presence1 = {capteur_id:"00054155",date:"0",traite:"True"}
+collection = db.presenc
+collection.save(capteur_presence1)
 
 fic_id = open("../identifiants.txt","r")
 identifiants = fic_id.readlines()
