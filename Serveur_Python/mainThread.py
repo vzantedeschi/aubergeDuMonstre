@@ -18,7 +18,7 @@ hote = 'localhost'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
-port = 12900
+port = 12800
 
 print "Lancement du Serveur"
 
@@ -39,10 +39,11 @@ db = db_connec.GHome_BDD
 
 ########### INITIALISATION BDD #############
 #now = datetime.datetime.now()
-capteur_presence1 = tables.Presence(capteur_id = "00054155", date = 0, traite = True)
+capteur_presence1 = tables.Presence(capteur_id = 00054155, date = 0, traite = True)
 #capteur_presence1 = {capteur_id:"00054155",date:"0",traite:"True"}
 collection = db.presenc
-collection.save(capteur_presence1)
+#collection.save(capteur_presence1)
+capteur_presence1.save()
 
 fic_id = open("../identifiants.txt","r")
 identifiants = fic_id.readlines()
@@ -81,8 +82,8 @@ try:
             trameInterpretee = interpreteur.Interpretation(infosTrame)
             ### ICI METTRE DANS LA BDD ###
             if trameInterpretee.typeCapteur == 'PRES':
-                    capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, date = trameInterpretee.date, traite = False)
-                    db.presence.save(capteur_presence)
+                    capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, date = 1, traite = False)
+                    capteur_presence.save()
 
             # Met le checkStatus du thread de commande à 1
             threadCommand.checkStatus = 1
