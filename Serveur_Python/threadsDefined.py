@@ -19,9 +19,6 @@ class ThreadAppliWebListener(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         
-        # Termine le thread en même temps que le main
-        self.setDaemon(True)
-        
     def run(self):
         while 1:
             print "Web Listener"
@@ -31,7 +28,6 @@ class ThreadCommand(threading.Thread):
     def __init__(self,socket):
         threading.Thread.__init__(self)
         self.socket = socket
-        self.setDaemon(True)
         
         # Le checkStatus passe à 1 quand le thread doit lire la BI
         self.checkStatus = 0
@@ -49,10 +45,10 @@ class ThreadCommand(threading.Thread):
 
                     ### ICI TRAITER LA COMMANDE SELON SON TYPE ###
                     if commande.type == 'PRES':
-                        print 'commande de présence envoyée'
+                        print 'commande suivant une intrusion envoyee'
                         ## ENVOYER A L'APPLI WEB ##
                     elif commande.type == 'OTHER':
-                        print 'pas de commande implémentée'
+                        print 'pas de commande implementee'
                         ## TODO
 
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
@@ -60,13 +56,3 @@ class ThreadCommand(threading.Thread):
             except KeyboardInterrupt:
                 t.cancel()
                 break
-
-class ThreadSender(threading.Thread):
-
-    def __init__(self,socket):
-        threading.Thread.__init__(self)
-        self.socket = socket
-        self.setDaemon(True)
-        
-    def run(self):
-        print "Sender"

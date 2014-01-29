@@ -18,16 +18,12 @@ class Interpretation:
   
     if(trame.valide):
       self.id = trame.idBytes
-      self.date = trame.date
-      self.heure = trame.heure
-      
-      #verification du type du capteur grace a l'id (qd la bdd sera faite)
+      self.annee = trame.date.year
+      self.mois = trame.date.month
+      self.jour = trame.date.day
+      self.heure = trame.heure.hour*3600 + trame.heure.minute*60 + trame.heure.second
 
-      #### Peut être fait en utilisant le format de fichier et de lecture du
-      #### générateur de trames (fichier contenant le type de capteur)
-      
-      #self.typeCapteur = Capteurs.PRES #a supprimer plus tard
-
+      #verification du type du capteur grace a l'id
       fic_id = open("identifiants.txt","r")
       liste = fic_id.readlines()
         

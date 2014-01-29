@@ -15,6 +15,7 @@ import tables
 # Mettre ici l'adresse IP de la passerelle EnOcean
 hote = '134.214.106.23'
 hote = 'localhost'
+#hote = '192.168.137.1'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
@@ -38,11 +39,7 @@ db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
 ########### INITIALISATION BDD #############
-#now = datetime.datetime.now()
-capteur_presence1 = tables.Presence(capteur_id = 00054155, date = 0, traite = True)
-#capteur_presence1 = {capteur_id:"00054155",date:"0",traite:"True"}
-collection = db.presence
-#collection.save(capteur_presence1)
+capteur_presence1 = tables.Presence(capteur_id = 00054155, annee = 0, mois = 0, jour = 0, heure = 0, traite = True)
 capteur_presence1.save()
 
 fic_id = open("../identifiants.txt","r")
@@ -80,9 +77,11 @@ try:
 
             # Insère la trame dans la BI
             trameInterpretee = interpreteur.Interpretation(infosTrame)
+            
             ### ICI METTRE DANS LA BDD ###
             if trameInterpretee.typeCapteur == 'PRES':
-                    capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, date = 1, traite = False)
+                if trameInterpretee.donnees == 1:
+                    capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
                     capteur_presence.save()
 
             # Met le checkStatus du thread de commande à 1
