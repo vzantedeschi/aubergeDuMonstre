@@ -18,7 +18,7 @@ hote = 'localhost'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
-port = 12800
+port = 13700
 
 print "Lancement du Serveur"
 
@@ -41,7 +41,7 @@ db = db_connec.GHome_BDD
 #now = datetime.datetime.now()
 capteur_presence1 = tables.Presence(capteur_id = 00054155, date = 0, traite = True)
 #capteur_presence1 = {capteur_id:"00054155",date:"0",traite:"True"}
-collection = db.presenc
+collection = db.presence
 #collection.save(capteur_presence1)
 capteur_presence1.save()
 
