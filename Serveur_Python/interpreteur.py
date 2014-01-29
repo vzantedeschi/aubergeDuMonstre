@@ -43,6 +43,7 @@ class Interpretation:
       if self.typeCapteur == 'PRES':
 	#recuperation de DB0.1 donnant la presence
         self.donnees = not((trame.dataBytes & 0x00000002) >> 1)
+        
 """	
       elif self.typeCapteur == 'TEMP':
 	#recuperation de la temperature
