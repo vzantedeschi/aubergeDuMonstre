@@ -15,7 +15,7 @@ def envoiTramesAbsence():
 	socketClient.send(trame)
 
 hote = 'localhost'
-port = 12900
+port = 12800
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
