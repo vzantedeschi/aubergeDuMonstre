@@ -30,7 +30,7 @@ class Commande():
             self.type = 'PRES'
             # Modifier l'information de la BDD pour mettre "traite" à True
             ## CETTE !ù$mkdokdz LIGNE NE MARCHE PAS
-            db.capteur.update({"u'traite'":False},{ "$set": {"u'traite'":True} },upsert=False,multi=True)
+            db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
         else:
             print 'autre type de commande'
             self.type = 'OTHER'
