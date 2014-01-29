@@ -4,13 +4,13 @@
 import mongoengine
 import datetime
 
-class Capteur():
+class Capteur(mongoengine.Document):
 	capteur_id = mongoengine.IntField(required=True)
 	date = mongoengine.IntField(required = True)
 	traite = mongoengine.BooleanField(required = True)
 	meta = {'allow_inheritance': True}
 		
-class Actionneur():
+class Actionneur(mongoengine.Document):
 	actionneur_id = mongoengine.IntField(required=True)
 	date = mongoengine.IntField(required = True)
 	meta = {'allow_inheritance': True}
@@ -25,34 +25,34 @@ class Personne(mongoengine.Document):
 	personne_id = mongoengine.IntField(required=True)
 	nom = mongoengine.StringField(required = False)
 	
-class Presence(Capteur, mongoengine.Document):
+class Presence(Capteur):
 	pass
 	
-class Temperature(Capteur, mongoengine.Document):
+class Temperature(Capteur):
 	valeur = mongoengine.IntField(required = True)
 
-class Humidite(Capteur, mongoengine.Document):
+class Humidite(Capteur):
 	valeur = mongoengine.IntField(required = True)	
 
-class RFID (Capteur, mongoengine.Document):
+class RFID (Capteur):
 	resident_id = mongoengine.StringField(required = True)
 
-class FermetureRideau(Actionneur, mongoengine.Document):
+class FermetureRideau(Actionneur):
 	rideauOuvert = mongoengine.BooleanField(required = True)
 
-class AntiIncendie (Actionneur, mongoengine.Document):
+class AntiIncendie (Actionneur):
 	antiIncendieDeclenche = mongoengine.BooleanField(required = True)
 
-class Clim(Actionneur, mongoengine.Document):
+class Clim(Actionneur):
 	climActivee = mongoengine.BooleanField(required = True)
 
-class FermeturePorte (Actionneur, mongoengine.Document):
+class FermeturePorte (Actionneur):
 	porteFermee = mongoengine.BooleanField(required = True)
 
-class FermetureVolet(Actionneur, mongoengine.Document):
+class FermetureVolet(Actionneur):
 	voletOuvert = mongoengine.BooleanField(required = True)
 
-class Interrupteur (Actionneur, mongoengine.Document):
+class Interrupteur (Actionneur):
 	interrupteurDeclenche = mongoengine.BooleanField(required = True)
 
 
