@@ -82,16 +82,16 @@ try:
             if trameInterpretee.typeCapteur == 'PRES':
                 if trameInterpretee.donnees == 1:
                     capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
-                    capteur_presence.save()
-                    
+                    capteur_presence.save()                    
             elif trameInterpretee.typeCapteur == 'TEMP':
                 #insertion des informations de température
-                
+                print "1"
             elif trameInterpretee.typeCapteur == 'HUMID':
                 #insertion des informations d'humidité
-                
+                print "2"
             elif trameInterpretee.typeCapteur == 'RFID':
                 #insertion des informations de RFID
+                print "3"
 
             # Met le checkStatus du thread de commande à 1
             threadCommand.checkStatus = 1

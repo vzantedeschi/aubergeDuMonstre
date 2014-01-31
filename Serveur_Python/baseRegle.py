@@ -32,8 +32,15 @@ class Commande():
             # Modifier l'information de la BDD pour mettre "traite" à True            
             db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
 
-        elif (typeInfo ==="Capteur.Temperature"):
+        elif (typeInfo =="Capteur.Temperature"):
             #Détermine la commande et mettre "traite" à True
+            print "température"
+        elif (typeInfo =="Capteur.Humidite"):
+            #Détermine la commande et mettre "traite" à True
+            print "humidité"
+        elif (typeInfo =="Capteur.RFID"):
+            #Détermine la commande et mettre "traite" à True
+            print "RFID"
 
         else:
             print 'Autre type de commande'

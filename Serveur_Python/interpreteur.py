@@ -42,12 +42,13 @@ class Interpretation:
         	
       elif self.typeCapteur == 'TEMP':
 	#recuperation de la temperature
-        
+        print "température"
       elif self.typeCapteur == 'HUMID':
 	#recuperation du taux d'humidite
-        
+        print "humidité"
       elif self.typeCapteur == 'RFID':
 	#recuperation des donnees rfid
+        print "RFID"
 
 if __name__ == "__main__" :
     print '#################TESTS UNITAIRES##################'
