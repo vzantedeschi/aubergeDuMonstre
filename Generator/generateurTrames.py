@@ -25,6 +25,9 @@ class generateurTrames():
             elif (type == 'presence') :
                 self.presence = id
 
+            elif (type == 'temperature') :
+                self.temperature = id
+
     #Generation des trames parasites
     def genericFrame(self) :
         org = "05"
@@ -81,11 +84,25 @@ class generateurTrames():
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
+    
+    #Generation des trames du capteur de température
+    def currentTemperature(self) : 
+        org = "07"
+        dataBytes = "0084990F"
+        idBytes = self.temperature
+        message = org+dataBytes+idBytes
+        status = "00"
+        checksum = "01"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+        
     def getCapteurs(self) :
         print "liste des capteurs en memoire :"
         print "capteur d'ouverture fenetre ", self.fenetre
         print "capteur de detection de presence ", self.presence
         print "interrupteur sans fils ", self.interrupteur 
+        print "capteur de temperature ", self.temperature
+    
 
 if __name__ == "__main__" :
     print '#################TESTS UNITAIRES##################'
@@ -105,3 +122,6 @@ if __name__ == "__main__" :
     print '\n***Test 4 : generation de trames du capteur de presence***'
     print "il y a quelqu'un => ", gen.presenceDetected()
     print "il y a personne => ", gen.nothingDetected()
+
+    print '\n***Test 5 : generation de trames du capteur de temperature***'
+    print "il fait 24.5 degres => ", gen.currentTemperature()

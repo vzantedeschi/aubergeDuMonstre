@@ -10,9 +10,9 @@ import threading
 import generateurTrames
 
 def envoiTramesAbsence():
-	trame = gen.nothingDetected()
-	trame = trame.encode()
-	socketClient.send(trame)
+    trame = gen.nothingDetected()
+    trame = trame.encode()
+    socketClient.send(trame)
 
 hote = 'localhost'
 port = 13700
@@ -39,59 +39,63 @@ print "\nA travers ce menu, vous pourrez simuler des scenarios"
 #Envoi de trames
 while True :
 
-	try:
-		#Envoi d'une trame parasite
-		trame = gen.genericFrame()
-		trame = trame.encode()
-		socketClient.send(trame)
+    try:
+        #Envoi d'une trame parasite
+        trame = gen.genericFrame()
+        trame = trame.encode()
+        socketClient.send(trame)
 
-		print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
+        print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
 
-		event = 4
-		while event > 3 :
-			print "1. Quelqu'un entre dans une piece"
-			print "2. On allume la lumiere dans un piece"
-			print "3. On eteind la lumiere dans une piece"
-			event = int(input())
+        event = 5
+        while event > 4 :
+            print "1. Quelqu'un entre dans une piece"
+            print "2. On allume la lumiere dans un piece"
+            print "3. On eteind la lumiere dans une piece"
+            print "4. La temperature passe a 24.5 degres"
+            event = int(input())
 
-		piece = 4
-		while piece > 3 :
-			print "\nDans quelle piece?"
-			print "1. Couloir"
-			print "2. Cuisine"
-			print "3. Salon"
-			piece = int(input())
+        piece = 4
+        while piece > 3 :
+            print "\nDans quelle piece?"
+            print "1. Couloir"
+            print "2. Cuisine"
+            print "3. Salon"
+            piece = int(input())
 
-		if event not in [2,3] :
-			
-			perso = 4
-			while perso > 3 :
-				print "\nQuel personnage?"
-				print "1. Meduse"
-				print "2. Vampire"
-				print "3. Un inconnu"
-				perso = int(input())
-		
-		trame = ""
+        if event not in [2,3,4] :
+            
+            perso = 4
+            while perso > 3 :
+                print "\nQuel personnage?"
+                print "1. Meduse"
+                print "2. Vampire"
+                print "3. Un inconnu"
+                perso = int(input())
+        
+        trame = ""
 
-		if event == 1 :
-			trame = gen.presenceDetected()
+        if event == 1 :
+            trame = gen.presenceDetected()
 
-		elif event == 2 :
-			trame = gen.pressON()
+        elif event == 2 :
+            trame = gen.pressON()
 
-		elif event == 3 :
-			trame = gen.pressOFF()
+        elif event == 3 :
+            trame = gen.pressOFF()
+            
+        elif event == 4 : 
+            trame = gen.currentTemperature()
 
-		trame = trame.encode()
-		print 'Scenario cree, trame envoyee'
-		socketClient.send(trame)		
+        trame = trame.encode()
+        print 'Scenario cree, trame envoyee'
+        socketClient.send(trame)        
 
 
-	except KeyboardInterrupt:
-		print '\nFermeture de la connexion'
-		socketSimulateur.close()
+    except KeyboardInterrupt:
+        print '\nFermeture de la connexion'
+        socketSimulateur.close()
 
-		#Arret du timer
-		t.cancel()
-		break
+        #Arret du timer
+        t.cancel()
+        break

@@ -28,7 +28,6 @@ class Interpretation:
       liste = fic_id.readlines()
         
       fic_id.close()
-
       for capt in liste:
           type, id = capt.split()
           if self.id == int(id,16):
@@ -45,13 +44,14 @@ class Interpretation:
 		#recuperation de la temperature
 		self.donnees = ((trame.dataBytes)*40)/250
 		print (self.donnees)
+        
 		#self.donnees = 
       elif self.typeCapteur == 'HUMID':
 	#recuperation du taux d'humidite
-        print "humidité"
+          print "humidité"
       elif self.typeCapteur == 'RFID':
 	#recuperation des donnees rfid
-        print "RFID"
+          print "RFID"
 
 if __name__ == "__main__" :
     print '#################TESTS UNITAIRES##################'

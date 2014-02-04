@@ -66,7 +66,7 @@ try:
             # Recupere la date et l'heure de reception
             now = datetime.datetime.now()
 
-            print("Reçu {}".format(msg_recu))
+            print("Recu {}".format(msg_recu))
 
             # Passage par le parser
             infosTrame = trame.Trame(msg_recu,now)
