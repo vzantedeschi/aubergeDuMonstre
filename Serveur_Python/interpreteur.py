@@ -39,10 +39,13 @@ class Interpretation:
       if self.typeCapteur == 'PRES':
 	#recuperation de DB0.1 donnant la presence
         self.donnees = not((trame.dataBytes & 0x00000002) >> 1)
-        	
+        #print (trame.dataBytes)
+		
       elif self.typeCapteur == 'TEMP':
-	#recuperation de la temperature
-        print "température"
+		#recuperation de la temperature
+		self.donnees = ((trame.dataBytes)*40)/250
+		print (self.donnees)
+		#self.donnees = 
       elif self.typeCapteur == 'HUMID':
 	#recuperation du taux d'humidite
         print "humidité"

@@ -45,7 +45,8 @@ class Trame:
                 
                 dataByte0 = trame[14:16] #utile pour le mode
                 #db = "%s%s%s%s" % (trame[8:10], trame[10:12], trame[12:14], dataByte0)
-                self.dataBytes = int(trame[8:16], 16)    
+                self.dataBytes = int(trame[8:16], 16)  
+				
                 
                 self.idBytes = int(trame[16:24], 16)
                 self.status = int(trame[24:26], 16)

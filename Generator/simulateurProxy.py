@@ -29,7 +29,7 @@ socketClient, infoClient = socketSimulateur.accept()
 
 gen = generateurTrames.generateurTrames("identifiants.txt")
 
-#Creation d'un timer pour l'envoi de trames nulles du capteur de presence toute les 2 minutes
+#Creation d'un timer pour l'envoi de trames nulles du capteur de presence toutes les 2 minutes
 t = threading.Timer(120, envoiTramesAbsence)
 t.start()
 
@@ -51,7 +51,7 @@ while True :
 		while event > 3 :
 			print "1. Quelqu'un entre dans une piece"
 			print "2. On allume la lumiere dans un piece"
-			print "3. On etend la lumiere dans une piece"
+			print "3. On eteind la lumiere dans une piece"
 			event = int(input())
 
 		piece = 4
