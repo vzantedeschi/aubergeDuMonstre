@@ -48,11 +48,12 @@ while True :
         print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
 
         event = 5
-        while event > 4 :
+        while event > 5 :
             print "1. Quelqu'un entre dans une piece"
             print "2. On allume la lumiere dans un piece"
             print "3. On eteind la lumiere dans une piece"
             print "4. La temperature passe a 24.5 degres"
+            print "5. Une fenetre est ouverte dans une piece"
             event = int(input())
 
         piece = 4
@@ -63,7 +64,7 @@ while True :
             print "3. Salon"
             piece = int(input())
 
-        if event not in [2,3,4] :
+        if event not in [2,3,4,5] :
             
             perso = 4
             while perso > 3 :
@@ -72,6 +73,15 @@ while True :
                 print "2. Vampire"
                 print "3. Un inconnu"
                 perso = int(input())
+
+        if event not in [1,2,3,4] :
+
+            mouv = 3
+            while mouv > 2:
+                print "\nOuverte ou fermee?"
+                print "1. Ouverte"
+                print "2. Fermee"
+                mouv = int(input())
         
         trame = ""
 
@@ -86,6 +96,12 @@ while True :
             
         elif event == 4 : 
             trame = gen.currentTemperature()
+
+        elif event == 5 and mouv == 1 :
+            trame = gen.contactFenetreOuverte
+
+        elif event == 5 and mouv == 2 :
+            trame = gen.contactFenetreFermee
 
         trame = trame.encode()
         print 'Scenario cree, trame envoyee'

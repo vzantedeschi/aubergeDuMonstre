@@ -48,6 +48,10 @@ fic_id.close()
 
 identifiants = [int(el,16) for el in identifiants]
 
+# TESTS POUR ENVOI TRAME #
+#connexion_avec_passerelle.send( 'A55A6B053000000FF9F1E0053000' )
+#
+
 threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
 threadCommand.start()
 

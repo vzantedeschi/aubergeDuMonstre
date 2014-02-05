@@ -28,14 +28,18 @@ class generateurTrames():
             elif (type == 'temperature') :
                 self.temperature = id
 
+        self.rfid[1] = "01010101"
+        self.rfid[2] = "02020202"
+        self.rfid[3] = "03030303"
+
     #Generation des trames parasites
     def genericFrame(self) :
         org = "05"
         dataBytes = "23000000"
         idBytes = "00000000"
         message = org+dataBytes+idBytes
-        status = "20"
-        checksum = "53"
+        status = "30"
+        checksum = "58"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
@@ -45,11 +49,11 @@ class generateurTrames():
         dataBytes = "10000000"
         idBytes = self.interrupteur
         message = org+dataBytes+idBytes
-        status = "20"
+        status = "30"
         # checksum est censé être l'addition des octets en hexadécimal sur un octet de HSEQ à status
         #checksum = hex(int(org,16)+int(status,16)+int("10",16)+int(idBytes[0:2],16)+int(idBytes[2:4],16)+int(idBytes[4:6],16)+int(idBytes[6:8],16))
         #print checksum
-        checksum = "03"
+        checksum = "13"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
@@ -58,8 +62,8 @@ class generateurTrames():
         dataBytes = "30000000"
         idBytes = self.interrupteur
         message = org+dataBytes+idBytes
-        status = "20"
-        checksum = "23"
+        status = "30"
+        checksum = "33"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
@@ -69,8 +73,8 @@ class generateurTrames():
         dataBytes = "B7D6000D"
         idBytes = self.presence
         message = org+dataBytes+idBytes
-        status = "00"
-        checksum = "47"
+        status = "30"
+        checksum = "6C"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
@@ -79,20 +83,49 @@ class generateurTrames():
         dataBytes = "B9B3000F"
         idBytes = self.presence
         message = org+dataBytes+idBytes
-        status = "00"
-        checksum = "28"
+        status = "30"
+        checksum = "4D"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
-
-    
+ 
     #Generation des trames du capteur de température
     def currentTemperature(self) : 
         org = "07"
-        dataBytes = "2284990F"
+        dataBytes = "0084990F"
         idBytes = self.temperature
         message = org+dataBytes+idBytes
-        status = "00"
-        checksum = "01"
+        status = "30"
+        checksum = "A7"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def contactFenetreOuverte(self) :
+        org = "07"
+        dataBytes = "00000009"
+        idBytes self.fenetre
+        message = org+dataBytes+idBytes
+        status = "30"
+        cheksum = "82"
+        queueTrame = status+checksum
+        return self.enteteTrame + message + queueTrame
+
+    def contactFenetreFermee(self) :
+        org = "07"
+        dataBytes = "00000008"
+        idBytes self.fenetre
+        message = org+dataBytes+idBytes
+        status = "30"
+        cheksum = "81"
+        queueTrame = status+checksum
+        return self.enteteTrame + message + queueTrame
+
+    def rfid(self,i) :
+        org = "07"
+        dataBytes = "CCCCCCCC"
+        idBytes = self.rfid[i]
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "00"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
         
