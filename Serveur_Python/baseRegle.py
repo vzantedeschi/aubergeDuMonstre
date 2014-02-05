@@ -9,8 +9,7 @@ class Commande():
 
         typeInfo = 'None'
 
-		##premier test : est ce qu il y a du mouvement depuis peu de temps ?
-        ### ICI EXAMINER LA BDD ###
+        ### Examiner la BD ###
         db_connec = mongoengine.connect('GHome_BDD')
         db = db_connec.GHome_BDD
         
@@ -31,6 +30,7 @@ class Commande():
             print 'Presence detectee'
             self.type = 'PRES'
             # Il faudrait tester si une trame RFID a été envoyée aussi
+            
 
         elif (typeInfo =="Capteur.Temperature"):
             #Détermine la commande et mettre "traite" à True
@@ -51,5 +51,5 @@ class Commande():
             self.type = 'OTHER'
 			
         if (item != None):
-			# Modifier l'information de la BDD pour mettre "traite" à True            
-			db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+	    # Modifier l'information de la BDD pour mettre "traite" à True            
+	    db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)

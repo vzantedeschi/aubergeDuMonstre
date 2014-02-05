@@ -14,12 +14,12 @@ import tables
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
 hote = '134.214.106.23'
-hote = 'localhost'
+#hote = 'localhost'
 #hote = '192.168.137.1'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
-port = 13900
+#port = 13900
 
 print "Lancement du Serveur"
 
@@ -52,10 +52,14 @@ for capt in liste:
     type, id = capt.split()
     identifiants.append(int(id,16))
 
-# was previously identifiants = [int(el,16) for el in identifiants]
-
-# TESTS POUR ENVOI TRAME #
-#connexion_avec_passerelle.send( 'A55A6B053000000FF9F1E0053000' )
+#
+#
+#
+# TESTS POUR ENVOI TRAME (APPAREILLAGE) #
+connexion_avec_passerelle.send( 'A55A6B0570000000FF9F1E0530D1' )
+#
+#
+#
 #
 
 threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
