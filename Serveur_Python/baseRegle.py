@@ -16,12 +16,14 @@ class Commande():
         
         # Risque de nous donner une liste => problèmes
         liste = db.capteur.find({u'traite':False},{u'_cls':1})
-        
+        item = None
         # Permet d'examiner les informations nouvelles dans la BDD
-        for item in liste:
+        for anItem in liste:
+            item = anItem
             print item
             typeInfo = item['_cls']
             print typeInfo
+			
         
         ### Il me faut le format des informations de sortie pour savoir
         ### sur quoi faire une condition
@@ -43,5 +45,6 @@ class Commande():
             print 'Autre type de commande'
             self.type = 'OTHER'
 			
-		# Modifier l'information de la BDD pour mettre "traite" à True            
-        db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+        if (item != None):
+			# Modifier l'information de la BDD pour mettre "traite" à True            
+			db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
