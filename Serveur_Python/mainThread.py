@@ -19,7 +19,7 @@ hote = 'localhost'
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
-port = 13700
+port = 13900
 
 print "Lancement du Serveur"
 

@@ -43,5 +43,5 @@ class Commande():
             print 'Autre type de commande'
             self.type = 'OTHER'
 			
-		# Modifier l'information de la BDD pour mettre "traite" à True            
+        # Modifier l'information de la BDD pour mettre "traite" à True            
         db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)

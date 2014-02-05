@@ -28,9 +28,7 @@ class generateurTrames():
             elif (type == 'TEMP') :
                 self.temperature = id
 
-        self.rfid[1] = "01010101"
-        self.rfid[2] = "02020202"
-        self.rfid[3] = "03030303"
+        self.rfid = "01010101"
 
     #Generation des trames parasites
     def genericFrame(self) :
@@ -102,27 +100,27 @@ class generateurTrames():
     def contactFenetreOuverte(self) :
         org = "07"
         dataBytes = "00000009"
-        idBytes self.fenetre
+        idBytes = self.fenetre
         message = org+dataBytes+idBytes
         status = "30"
-        cheksum = "82"
+        checksum = "82"
         queueTrame = status+checksum
-        return self.enteteTrame + message + queueTrame
+        return self.enteteTrames + message + queueTrame
 
     def contactFenetreFermee(self) :
         org = "07"
         dataBytes = "00000008"
-        idBytes self.fenetre
+        idBytes = self.fenetre
         message = org+dataBytes+idBytes
         status = "30"
-        cheksum = "81"
+        checksum = "81"
         queueTrame = status+checksum
-        return self.enteteTrame + message + queueTrame
+        return self.enteteTrames + message + queueTrame
 
     def rfid(self,i) :
         org = "07"
         dataBytes = "CCCCCCCC"
-        idBytes = self.rfid[i]
+        idBytes = self.rfid
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "00"

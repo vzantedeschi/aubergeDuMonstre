@@ -15,7 +15,7 @@ def envoiTramesAbsence():
     socketClient.send(trame)
 
 hote = 'localhost'
-port = 13700
+port = 13900
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,7 +47,7 @@ while True :
 
         print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
 
-        event = 5
+        event = 6
         while event > 5 :
             print "1. Quelqu'un entre dans une piece"
             print "2. On allume la lumiere dans un piece"
@@ -98,10 +98,10 @@ while True :
             trame = gen.currentTemperature()
 
         elif event == 5 and mouv == 1 :
-            trame = gen.contactFenetreOuverte
+            trame = gen.contactFenetreOuverte()
 
         elif event == 5 and mouv == 2 :
-            trame = gen.contactFenetreFermee
+            trame = gen.contactFenetreFermee()
 
         trame = trame.encode()
         print 'Scenario cree, trame envoyee'
