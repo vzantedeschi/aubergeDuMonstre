@@ -26,11 +26,22 @@ class Commande():
         ### Il me faut le format des informations de sortie pour savoir
         ### sur quoi faire une condition
         if (typeInfo == "Capteur.Presence"):
-            print 'Présence détectée'
+            print 'Presence detectee'
             self.type = 'PRES'
-            # Modifier l'information de la BDD pour mettre "traite" à True
-            ## CETTE !ù$mkdokdz LIGNE NE MARCHE PAS
+            
+            # Modifier l'information de la BDD pour mettre "traite" à True            
             db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+
+        elif (typeInfo =="Capteur.Temperature"):
+            #Détermine la commande et mettre "traite" à True
+            print "température"
+        elif (typeInfo =="Capteur.Humidite"):
+            #Détermine la commande et mettre "traite" à True
+            print "humidité"
+        elif (typeInfo =="Capteur.RFID"):
+            #Détermine la commande et mettre "traite" à True
+            print "RFID"
+
         else:
-            print 'autre type de commande'
+            print 'Autre type de commande'
             self.type = 'OTHER'

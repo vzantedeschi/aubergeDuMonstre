@@ -6,13 +6,19 @@ import datetime
 
 class Capteur(mongoengine.Document):
 	capteur_id = mongoengine.IntField(required=True)
-	date = mongoengine.IntField(required = True)
+	annee = mongoengine.IntField(required = True)
+	mois = mongoengine.IntField(required = True)
+	jour = mongoengine.IntField(required = True)
+	heure = mongoengine.IntField(required = True)
 	traite = mongoengine.BooleanField(required = True)
 	meta = {'allow_inheritance': True}
 		
 class Actionneur(mongoengine.Document):
 	actionneur_id = mongoengine.IntField(required=True)
-	date = mongoengine.IntField(required = True)
+	annee = mongoengine.IntField(required = True)
+	mois = mongoengine.IntField(required = True)
+	jour = mongoengine.IntField(required = True)
+	heure = mongoengine.IntField(required = True)
 	meta = {'allow_inheritance': True}
 
 class Piece(mongoengine.Document):

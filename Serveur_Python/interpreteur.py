@@ -18,21 +18,16 @@ class Interpretation:
   
     if(trame.valide):
       self.id = trame.idBytes
-      self.date = trame.date
-      self.heure = trame.heure
-      
-      #verification du type du capteur grace a l'id (qd la bdd sera faite)
+      self.annee = trame.date.year
+      self.mois = trame.date.month
+      self.jour = trame.date.day
+      self.heure = trame.heure.hour*3600 + trame.heure.minute*60 + trame.heure.second
 
-      #### Peut être fait en utilisant le format de fichier et de lecture du
-      #### générateur de trames (fichier contenant le type de capteur)
-      
-      #self.typeCapteur = Capteurs.PRES #a supprimer plus tard
-
+      #verification du type du capteur grace a l'id
       fic_id = open("identifiants.txt","r")
       liste = fic_id.readlines()
         
       fic_id.close()
-
       for capt in liste:
           type, id = capt.split()
           if self.id == int(id,16):
@@ -43,15 +38,20 @@ class Interpretation:
       if self.typeCapteur == 'PRES':
 	#recuperation de DB0.1 donnant la presence
         self.donnees = not((trame.dataBytes & 0x00000002) >> 1)
-        
-"""	
+        #print (trame.dataBytes)
+		
       elif self.typeCapteur == 'TEMP':
-	#recuperation de la temperature
+		#recuperation de la temperature
+		self.donnees = ((trame.dataBytes)*40)/250
+		print (self.donnees)
+        
+		#self.donnees = 
       elif self.typeCapteur == 'HUMID':
 	#recuperation du taux d'humidite
+          print "humidité"
       elif self.typeCapteur == 'RFID':
 	#recuperation des donnees rfid
-"""
+          print "RFID"
 
 if __name__ == "__main__" :
     print '#################TESTS UNITAIRES##################'
