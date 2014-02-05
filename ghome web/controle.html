@@ -41,32 +41,35 @@
 			</ul> 
 		</div>
 
-		<div id="f1">
-			<!-- presence d'un onsubmit="valider()" affichera un message d'erreur ou de confirmation d'envoi-->
-			<form method="POST" action="./controle.html">
-				<!-- presence d'un onclick="choixActionneur(piece)" affichera les actionneurs de la piece selectionnee-->
-				<!--affichage des pieces grace a requete, et non en dur-->
-				<select name="piece">
-					<option value="pieceUne">Piece 1</option>
-					<option value="pieceDeux">Piece 2</option>
-					<option value="pieceTrois">Piece 3</option>
-					<option value="pieceQuatre">Piece 4</option>
-					<option value="pieceCinq">Piece 5</option>
-				</select>
+		<div id="cadre">
+
+			<div id="f1">
+				<!-- presence d'un onsubmit="valider()" affichera un message d'erreur ou de confirmation d'envoi-->
+				<form method="POST" action="./controle.html">
+					<!-- presence d'un onclick="choixActionneur(piece)" affichera les actionneurs de la piece selectionnee-->
+					<!--affichage des pieces grace a requete, et non en dur-->
+					<select name="piece">
+						<option value="pieceUne">Piece 1</option>
+						<option value="pieceDeux">Piece 2</option>
+						<option value="pieceTrois">Piece 3</option>
+						<option value="pieceQuatre">Piece 4</option>
+						<option value="pieceCinq">Piece 5</option>
+					</select>
 
 
-				<select name="actionneur">
-					<option value="actionneurUn">Actionneur 1</option>
-					<option value="actionneurDeux">Actionneur 2</option>
-				</select>
+					<select name="actionneur">
+						<option value="actionneurUn">Actionneur 1</option>
+						<option value="actionneurDeux">Actionneur 2</option>
+					</select>
 
-				<br><br>
+					<br><br>
 
-				<input type="radio" value="On" id="on" name="onOff"> On 
-				<input type="radio" value="Off" id="off" name="onOff"> Off <br><br><br>
-				<input type="submit" value="Envoyer" name="boutonEnv" onclick="valider()">
+					<input type="radio" value="On" id="on" name="onOff"> On 
+					<input type="radio" value="Off" id="off" name="onOff"> Off <br><br><br>
+					<input type="submit" value="Envoyer" name="boutonEnv" onclick="valider()">
 
-			</form>
+				</form>
+			</div>
 		</div>
 
 		<div id="pied">
