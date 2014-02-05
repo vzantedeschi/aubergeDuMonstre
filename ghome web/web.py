@@ -11,7 +11,10 @@ def hello():
     return render_template('index.html', clients=clients)
 
 @app.route('/surveillance.html')
-def surveillance(p):
-    return render_template('surveillance.html', presence=p)
-
-app.run(debug=True)
+def surveillance():
+	p = False
+	return render_template('surveillance.html', presence = p)
+	
+if __name__ == '__main__' :
+	app.run(threaded=True)
+	print "ok"

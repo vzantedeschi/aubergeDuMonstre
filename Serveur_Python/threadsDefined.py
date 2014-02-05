@@ -6,8 +6,31 @@ import time
 import signal
 import os
 import baseRegle
-sys.path.append('../ghome web/')
-import web
+
+from flask import Flask, render_template, request
+import requests
+import json
+
+presence = False
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    clients = [1, 2, 3]
+    return render_template('index.html', clients=clients)
+
+@app.route('/surveillance.html')
+def surveillance():
+    return render_template('surveillance.html', presence = presence)
+
+@app.route('/presence')
+def get_presence():
+    global presence
+    presence = not presence
+    return json.dumps(presence)
+
+
 
 ## Functions ##
 
@@ -22,14 +45,15 @@ class ThreadAppliWebListener(threading.Thread):
         threading.Thread.__init__(self)
         
     def run(self):
-        while 1:
-            print "Web Listener"
+        app.run(threaded=True)
             
 class ThreadCommand(threading.Thread):
 
     def __init__(self,socket):
         threading.Thread.__init__(self)
         self.socket = socket
+        webList = ThreadAppliWebListener()
+        webList.start()
         # Le checkStatus passe à 1 quand le thread doit lire la BI
         self.checkStatus = 0
         
@@ -47,12 +71,12 @@ class ThreadCommand(threading.Thread):
                     ### ICI TRAITER LA COMMANDE SELON SON TYPE ###
                     if commande.type == 'PRES':
                         print 'commande suivant une intrusion envoyee'
-                        web.surveillance(True)
+                        presence = True
 
                         ## ENVOYER A L'APPLI WEB ##
                     elif commande.type == 'OTHER':
                         print 'pas de commande implementee'
-                        web.surveillance(False)
+                        presence = False
                         ## TODO
 
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
@@ -60,3 +84,5 @@ class ThreadCommand(threading.Thread):
             except KeyboardInterrupt:
                 t.cancel()
                 break
+if __name__ == '__main__':
+    app.run(debug=True)

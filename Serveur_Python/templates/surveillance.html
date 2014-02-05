@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block body %}
+
+{% include "header.html" %}
+
+<div class="row">
+	<div class="alert alert-success">
+		<strong>Bravo !</strong> Ceci est un message.
+    </div>
+
+
+	<div class="col-md-4">
+		<span id="valeur-presence">{{presence}}</span>
+	</div>
+
+	<div class="col-md-8">
+		<canvas id="maison">
+
+		</canvas>
+	</div>
+
+</div>
+
+{% endblock body %}
+
+
+{% block javascript %}
+{% endblock %}
