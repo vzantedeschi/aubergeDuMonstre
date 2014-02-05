@@ -55,6 +55,12 @@
 
 }
 
+#formulaire {
+	position: absolute;
+	margin-left: 500px;
+	margin-top: 150px;
+}
+
 #entete {
 	position: absolute;
 	top: 0px;
