@@ -2,63 +2,72 @@
 	float: left;
 	width: 200px;
 	border: 1px solid black;
-	margin-top: 150px;
+	margin-top: 250px;
 }
 
 
 #un {
 	position:absolute;
-	border: 1px solid blue;
+	border: 1px solid black;
 	width: 300px;
 	height: 300px;
-	margin-left: 300px;
-	margin-top: 150px;
+	margin-left: 50px;
+	margin-top: 50px;
 }
 
 #deux {
 	position: absolute;
-	border: 1px solid blue;
+	border: 1px solid black;
 	width: 300px;
 	height: 300px;
-	margin-top: 150px;
-	margin-left: 650px;
+	margin-top: 50px;
+	margin-left: 400px;
 
 }
 
 #trois {
 	position: absolute;
-	border: 1px solid blue;
+	border: 1px solid black;
 	width: 300px;
 	height: 300px;
-	margin-top: 150px;
-	margin-left: 1000px;
+	margin-top: 50px;
+	margin-left: 750px;
 
 }
 
 #quatre {
 	position: absolute;
-	border: 1px solid blue;
+	border: 1px solid black;
 	width: 300px;
 	height: 300px;
-	margin-top: 500px;
-	margin-left: 450px;
+	margin-top: 400px;
+	margin-left: 150px;
 
 }
 
 #cinq {
 	position: absolute;
-	border: 1px solid blue;
+	border: 1px solid black;
 	width: 300px;
 	height: 300px;
-	margin-top: 500px;
-	margin-left: 850px;
+	margin-top: 400px;
+	margin-left: 650px;
 
+}
+
+#cadre {
+	position: absolute;
+	margin-left: 250px;
+	margin-top: 200px;
+	border: 1px solid black;
+	width: 1100px;
+	height: 750px;
 }
 
 #f1 {
 	position: absolute;
-	margin-left: 500px;
-	margin-top: 150px;
+	margin-left: 50px;
+	margin-top: 50px;
 }
 
 #entete {
@@ -70,7 +79,7 @@
 
 #pied { 
 	position: absolute;
-	top: 850px;
+	top: 950px;
 	width: 100%;
 	text-align: center;
 	clear: both;
