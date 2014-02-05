@@ -72,7 +72,7 @@ try:
             infosTrame = trame.Trame(msg_recu,now)
 
             print ("ID {}".format(hex(infosTrame.idBytes)))
-            print ("DB {}".format(hex(infosTrame.dataBytes)))
+            print ("DB ", infosTrame.dataBytes)
             print ("Heure {}".format(infosTrame.heure))
 
             # Insère la trame dans la BI
@@ -85,13 +85,13 @@ try:
                     capteur_presence.save()                    
             elif trameInterpretee.typeCapteur == 'TEMP':
                 #insertion des informations de température
-                print "1"
+                print "1 = temp"
             elif trameInterpretee.typeCapteur == 'HUMID':
                 #insertion des informations d'humidité
-                print "2"
+                print "2 = humid"
             elif trameInterpretee.typeCapteur == 'RFID':
                 #insertion des informations de RFID
-                print "3"
+                print "3 = rfid"
 
             # Met le checkStatus du thread de commande à 1
             threadCommand.checkStatus = 1

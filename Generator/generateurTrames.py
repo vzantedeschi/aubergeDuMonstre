@@ -88,7 +88,7 @@ class generateurTrames():
     #Generation des trames du capteur de température
     def currentTemperature(self) : 
         org = "07"
-        dataBytes = "0084990F"
+        dataBytes = "2284990F"
         idBytes = self.temperature
         message = org+dataBytes+idBytes
         status = "00"
