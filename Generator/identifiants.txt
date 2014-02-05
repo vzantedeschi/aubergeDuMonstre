@@ -1,4 +1,0 @@
-fenetre 00893386
-interrupteur 0021CBE2
-presence 00054155
-temperature 0004E957

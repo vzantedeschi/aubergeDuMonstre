@@ -35,10 +35,10 @@ class Presence(Capteur):
 	pass
 	
 class Temperature(Capteur):
-	valeur = mongoengine.IntField(required = True)
+	valeur = mongoengine.FloatField(required = True)
 
 class Humidite(Capteur):
-	valeur = mongoengine.IntField(required = True)	
+	valeur = mongoengine.FloatField(required = True)	
 
 class RFID (Capteur):
 	resident_id = mongoengine.StringField(required = True)

@@ -43,10 +43,16 @@ capteur_presence1 = tables.Presence(capteur_id = 00054155, annee = 0, mois = 0, 
 capteur_presence1.save()
 
 fic_id = open("../identifiants.txt","r")
-identifiants = fic_id.readlines()
+liste = fic_id.readlines()
 fic_id.close()
 
-identifiants = [int(el,16) for el in identifiants]
+identifiants = []
+
+for capt in liste:
+    type, id = capt.split()
+    identifiants.append(int(id,16))
+
+# was previously identifiants = [int(el,16) for el in identifiants]
 
 threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
 threadCommand.start()
@@ -84,7 +90,7 @@ try:
                     capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
                     capteur_presence.save()                    
             elif trameInterpretee.typeCapteur == 'TEMP':
-                #insertion des informations de température
+                    #capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee traite = False)
                 print "1 = temp"
             elif trameInterpretee.typeCapteur == 'HUMID':
                 #insertion des informations d'humidité
