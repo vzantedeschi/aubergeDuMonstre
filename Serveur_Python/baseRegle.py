@@ -27,14 +27,19 @@ class Commande():
         ### sur quoi faire une condition
         if (typeInfo == "Capteur.Presence"):
             print 'Presence detectee'
-            self.type = 'PRES'                        
+            self.type = 'PRES'
+            # Il faudrait tester si une trame RFID a été envoyée aussi
 
         elif (typeInfo =="Capteur.Temperature"):
             #Détermine la commande et mettre "traite" à True
             print "température"
+            # Si la température passe en-dessous d'un certain seuil, allumer la clim
+            
         elif (typeInfo =="Capteur.Humidite"):
             #Détermine la commande et mettre "traite" à True
             print "humidité"
+            #Si l'humidité passe en-dessous d'un certain seuil, déclencher le système incendie
+            
         elif (typeInfo =="Capteur.RFID"):
             #Détermine la commande et mettre "traite" à True
             print "RFID"
