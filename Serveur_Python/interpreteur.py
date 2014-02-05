@@ -36,21 +36,24 @@ class Interpretation:
       
       #stockage des donnes selon le type du capteur
       if self.typeCapteur == 'PRES':
-	#recuperation de DB0.1 donnant la presence
+    #recuperation de DB0.1 donnant la presence
+        trame.dataBytes = int (trame.dataBytes, 16)
         self.donnees = not((trame.dataBytes & 0x00000002) >> 1)
         #print (trame.dataBytes)
-		
-      elif self.typeCapteur == 'TEMP':
-		#recuperation de la temperature
-		self.donnees = ((trame.dataBytes)*40)/250
-		print (self.donnees)
         
-		#self.donnees = 
-      elif self.typeCapteur == 'HUMID':
-	#recuperation du taux d'humidite
-          print "humidité"
+      elif self.typeCapteur == 'TEMP':
+        #recuperation de la temperature
+        trame.tempBytes = int(trame.dataBytes[4:6], 16) 
+        trame.humBytes = int(trame.dataBytes[2:4], 16) 
+        trame.tempBytes = float(trame.tempBytes)
+        trame.humBytes = float(trame.humBytes)
+        self.tempDonnees = ((trame.tempBytes)*40)/250
+        self.humDonnees = ((trame.humBytes)*100)/250
+        print ("Temperature : ", self.tempDonnees)
+        print ("Humidite : " , self.humDonnees)
+        
       elif self.typeCapteur == 'RFID':
-	#recuperation des donnees rfid
+    #recuperation des donnees rfid
           print "RFID"
 
 if __name__ == "__main__" :
