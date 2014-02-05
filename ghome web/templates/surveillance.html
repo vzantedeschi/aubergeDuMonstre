@@ -14,6 +14,8 @@
 	    <script type="text/javascript" src="http://www.bitstorm.org/jquery/color-animation/jquery.animate-colors-min.js">
 	    </script>
 	 
+	    <script type="text/javascript" src="http://192.168.1.231:8080/socket.io/socket.io.js">
+	    </script>
 
 	    <script></script>
 
@@ -21,18 +23,35 @@
 	<body>
 		<div id="entete">
 			<h1>GHome</h1>
-			<h2>Bienvenue dans l'auberge du monstre</h2>
+			<h2>Tableau de surveillance</h2>
 		</div>
 
 		<div id ="menu">
 			<ul>
-				{% for client in clients %}
-					<span class="name">{{client}}</span>
-				{% endfor %}
 				<li><a href="./index.html">Accueil</a></li>
 				<li><a href="./surveillance.html">Tableau de surveillance</a></li>
 				<li><a href="./controle.html">Tableau de controle</a></li>	
 			</ul> 
+		</div>
+
+		<div id="un">
+			presence = {{presence}}
+		</div>	
+
+		<div id="deux">
+			ble
+		</div>
+
+		<div id="trois">
+			bli
+		</div>
+
+		<div id="quatre">
+			blo
+		</div>
+
+		<div id="cinq">
+			blu
 		</div>
 
 		<div id="pied">

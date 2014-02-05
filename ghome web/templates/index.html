@@ -6,16 +6,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />  
 		<meta http-equiv="Content-Language" content="fr"/>
 
-		<link href="style.css" rel="stylesheet">
-
-	    <script type="text/javascript" src="http://www.bitstorm.org/jquery/jquery-1.9.1.min.js"/>
-	    </script>
-	 
-	    <script type="text/javascript" src="http://www.bitstorm.org/jquery/color-animation/jquery.animate-colors-min.js">
-	    </script>
-	 
-	    <script type="text/javascript" src="http://192.168.1.231:8080/socket.io/socket.io.js">
-	    </script>
+		<link href="/static/style.css" rel="stylesheet">
 
 	    <script></script>
 
@@ -23,35 +14,18 @@
 	<body>
 		<div id="entete">
 			<h1>GHome</h1>
-			<h2>Tableau de surveillance</h2>
+			<h2>Bienvenue dans l'auberge du monstre</h2>
 		</div>
 
 		<div id ="menu">
 			<ul>
+				{% for client in clients %}
+					<li class="name">{{client}}</li>
+				{% endfor %}
 				<li><a href="./index.html">Accueil</a></li>
 				<li><a href="./surveillance.html">Tableau de surveillance</a></li>
 				<li><a href="./controle.html">Tableau de controle</a></li>	
 			</ul> 
-		</div>
-
-		<div id="un">
-			bla
-		</div>	
-
-		<div id="deux">
-			ble
-		</div>
-
-		<div id="trois">
-			bli
-		</div>
-
-		<div id="quatre">
-			blo
-		</div>
-
-		<div id="cinq">
-			blu
 		</div>
 
 		<div id="pied">

@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import sys
 import threading
 import time
 import signal
 import os
 import baseRegle
+sys.path.append('../ghome web/')
+import web
 
 ## Functions ##
 
@@ -28,7 +30,6 @@ class ThreadCommand(threading.Thread):
     def __init__(self,socket):
         threading.Thread.__init__(self)
         self.socket = socket
-        
         # Le checkStatus passe à 1 quand le thread doit lire la BI
         self.checkStatus = 0
         
@@ -46,9 +47,12 @@ class ThreadCommand(threading.Thread):
                     ### ICI TRAITER LA COMMANDE SELON SON TYPE ###
                     if commande.type == 'PRES':
                         print 'commande suivant une intrusion envoyee'
+                        web.surveillance(True)
+
                         ## ENVOYER A L'APPLI WEB ##
                     elif commande.type == 'OTHER':
                         print 'pas de commande implementee'
+                        web.surveillance(False)
                         ## TODO
 
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
