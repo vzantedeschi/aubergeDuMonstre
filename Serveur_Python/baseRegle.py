@@ -27,10 +27,7 @@ class Commande():
         ### sur quoi faire une condition
         if (typeInfo == "Capteur.Presence"):
             print 'Presence detectee'
-            self.type = 'PRES'
-            
-            # Modifier l'information de la BDD pour mettre "traite" à True            
-            db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+            self.type = 'PRES'                        
 
         elif (typeInfo =="Capteur.Temperature"):
             #Détermine la commande et mettre "traite" à True
@@ -45,3 +42,6 @@ class Commande():
         else:
             print 'Autre type de commande'
             self.type = 'OTHER'
+			
+		# Modifier l'information de la BDD pour mettre "traite" à True            
+        db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
