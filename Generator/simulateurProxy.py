@@ -27,7 +27,7 @@ socketSimulateur.listen(5)
 #Recuperation du port de communication du client
 socketClient, infoClient = socketSimulateur.accept()
 
-gen = generateurTrames.generateurTrames("identifiants.txt")
+gen = generateurTrames.generateurTrames("../identifiants.txt")
 
 #Creation d'un timer pour l'envoi de trames nulles du capteur de presence toutes les 2 minutes
 t = threading.Timer(120, envoiTramesAbsence)

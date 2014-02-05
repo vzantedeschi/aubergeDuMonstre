@@ -16,16 +16,16 @@ class generateurTrames():
         for capt in liste:
             type, id = capt.split()
 
-            if (type == 'fenetre') :
+            if (type == 'FEN') :
                 self.fenetre = id
 
-            elif (type == 'interrupteur') :
+            elif (type == 'INTR') :
                 self.interrupteur = id
 
-            elif (type == 'presence') :
+            elif (type == 'PRES') :
                 self.presence = id
 
-            elif (type == 'temperature') :
+            elif (type == 'TEMP') :
                 self.temperature = id
 
         self.rfid[1] = "01010101"

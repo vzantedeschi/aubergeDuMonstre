@@ -24,7 +24,7 @@ class Interpretation:
       self.heure = trame.heure.hour*3600 + trame.heure.minute*60 + trame.heure.second
 
       #verification du type du capteur grace a l'id
-      fic_id = open("identifiants.txt","r")
+      fic_id = open("../identifiants.txt","r")
       liste = fic_id.readlines()
         
       fic_id.close()
@@ -36,8 +36,9 @@ class Interpretation:
       
       #stockage des donnes selon le type du capteur
       if self.typeCapteur == 'PRES':
-    #recuperation de DB0.1 donnant la presence
+        #recuperation de DB0.1 donnant la presence
         trame.dataBytes = int (trame.dataBytes, 16)
+        #si l avant dernier bit est a 0 alors c est une presence, s il est a 1 c est une absence
         self.donnees = not((trame.dataBytes & 0x00000002) >> 1)
         #print (trame.dataBytes)
         
