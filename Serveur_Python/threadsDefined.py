@@ -30,12 +30,13 @@ def get_presence():
     presence = not presence
     return json.dumps(presence)
 
-
-
-## Functions ##
+## Functions Server ##
 
 def TimerFunc(thread):
     thread.checkStatus = 1
+
+def RFIDFunc(thread):
+    thread.rfidDetected = False
 
 ## Threads ##
         
@@ -52,10 +53,15 @@ class ThreadCommand(threading.Thread):
     def __init__(self,socket):
         threading.Thread.__init__(self)
         self.socket = socket
+        
         webList = ThreadAppliWebListener()
         webList.start()
+        
         # Le checkStatus passe à 1 quand le thread doit lire la BI
         self.checkStatus = 0
+
+        # Aucune puce RFID détectée
+        self.rfidDetected = False
         
     def run(self):
         while 1:
@@ -69,20 +75,37 @@ class ThreadCommand(threading.Thread):
                     commande = baseRegle.Commande()
 
                     ### ICI TRAITER LA COMMANDE SELON SON TYPE ###
-                    if commande.type == 'PRES':
-                        print 'commande suivant une intrusion envoyee'
+                    if commande.type == 'RFID' :
+                        print 'Commande suivant detection RFID envoyee'
+                        self.rfidDetected = True
+                        # Mise en place d'un timer qui indique
+                        # qu'il n'attend plus une détection de présence au bout
+                        # de 20 secondes
+                        timerRFID = threading.Timer(20,RFIDFunc,[self])
+                        timerRFID.start()
+                        
+                    elif commande.type == 'PRES' :
+                        print 'Commande suivant une intrusion envoyee'
                         presence = True
 
-                        ## ENVOYER A L'APPLI WEB ##
+                        if self.rfidDetected = False :
+                            ## ENVOYER A L'APPLI WEB ##
+
+                            ## REPONSE APPLI WEB ##
+                            if (True) :
+                                ## Allume l'interrupteur simulant les volets ##
+                                print "Verrouillage activé : volets en cours de fermeture"
+                                self.socket.send( 'A55A6B0570000000FF9F1E0530D1' )
+
                     elif commande.type == 'OTHER':
-                        print 'pas de commande implementee'
+                        print 'Pas de commande implementee'
                         presence = False
-                        ## TODO
 
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
                     self.checkStatus = 0
             except KeyboardInterrupt:
                 t.cancel()
                 break
+            
 if __name__ == '__main__':
     app.run(debug=True)

@@ -14,12 +14,14 @@ import tables
 
 # Mettre ici l'adresse IP de la passerelle EnOcean
 hote = '134.214.106.23'
-#hote = 'localhost'
-#hote = '192.168.137.1'
+hote = 'localhost'
+
+# Connexion à un hôte distant mais pas la passerelle
+#hote = '192.168.137.1' 
 
 # Mettre ici le port de la passerelle sur lequel se connecter.
 port = 5000
-#port = 13900
+port = 13900
 
 print "Lancement du Serveur"
 
@@ -56,7 +58,7 @@ for capt in liste:
 #
 #
 # TESTS POUR ENVOI TRAME (APPAREILLAGE) #
-connexion_avec_passerelle.send( 'A55A6B0570000000FF9F1E0530D1' )
+#connexion_avec_passerelle.send( 'A55A6B0570000000FF9F1E0530D1' )
 #
 #
 #
@@ -65,7 +67,7 @@ connexion_avec_passerelle.send( 'A55A6B0570000000FF9F1E0530D1' )
 threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
 threadCommand.start()
 
-#Process qui va vérifier les trames provenant de la passerelle       
+# Process qui va vérifier les trames provenant de la passerelle       
 try: 
     while True:
         msg_recu = connexion_avec_passerelle.recv(28)       
@@ -85,32 +87,33 @@ try:
             # Passage par le parser
             infosTrame = trame.Trame(msg_recu,now)
 
-            print ("ID {}".format(hex(infosTrame.idBytes)))
-            print ("DB ", infosTrame.dataBytes)
-            print ("Heure {}".format(infosTrame.heure))
+            if infosTrame.valide == True :
+                print ("ID {}".format(hex(infosTrame.idBytes)))
+                print ("DB ", infosTrame.dataBytes)
+                print ("Heure {}".format(infosTrame.heure))
 
-            # Insère la trame dans la BI
-            trameInterpretee = interpreteur.Interpretation(infosTrame)
-            
-            ### INSERTION DANS LA BDD ###
-            if trameInterpretee.typeCapteur == 'PRES':
-                if trameInterpretee.donnees == 1:
-                    capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
-                    capteur_presence.save()                    
-            elif trameInterpretee.typeCapteur == 'TEMP':
-                    #capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee traite = False)
-                print "1 = temp"
-            elif trameInterpretee.typeCapteur == 'HUMID':
-                #insertion des informations d'humidité
-                print "2 = humid"
-            elif trameInterpretee.typeCapteur == 'RFID':
-                #insertion des informations de RFID
-                print "3 = rfid"
+                if infosTrame.eepSent == False :
+                    # Interprète les informations contenues dans la Trame
+                    trameInterpretee = interpreteur.Interpretation(infosTrame)
+                    
+                    ### INSERTION DANS LA BDD ###
+                    if trameInterpretee.typeCapteur == 'PRES':
+                        if trameInterpretee.donnees == 1:
+                            capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
+                            capteur_presence.save()
+                            
+                    elif trameInterpretee.typeCapteur == 'TEMP':
+                        #capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee, traite = False)
+                        print "1 = temp"
+                        
+                    elif trameInterpretee.typeCapteur == 'RFID':
+                        #capteur_rfid = tables.RFID(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee, traite = False)
+                        print "3 = rfid"
 
-            # Met le checkStatus du thread de commande à 1
-            threadCommand.checkStatus = 1
-            # Note : il est possible que l'on se retrouve avec deux
-            # timers au lieu d'un avec cet appel... => double check de la BI
+                    # Met le checkStatus du thread de commande à 1
+                    threadCommand.checkStatus = 1
+                    # Note : il est possible que l'on se retrouve avec deux
+                    # timers au lieu d'un avec cet appel... => double check de la BI
 
 except KeyboardInterrupt:
     print '\nFermeture de la connexion'

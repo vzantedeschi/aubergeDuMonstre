@@ -86,7 +86,24 @@ while True :
         trame = ""
 
         if event == 1 :
-            trame = gen.presenceDetected()
+            if perso == 3:
+                trame = gen.presenceDetected()
+            elif perso == 1 :
+                ## A TERME, METTRE PLUSIEURS RFID (passage de paramètres dans cette fonction)
+                ## IL Y AURA AUSSI PLUSIEURS CAPTEURS DE TYPE FENETRE AVEC UN ID CHACUN,
+                ## ON POURRAIT ASSOCIER CHAQUE ID A UNE PIECE
+                trame = gen.rfidDetected()
+                trame = trame.encode()
+                socketClient.send(trame)
+                time.sleep(3)
+                trame = gen.presenceDetected()
+            elif perso == 2 :
+                trame = gen.rfidDetected()
+                time.sleep(3)
+                trame = trame.encode()
+                socketClient.send(trame)
+                time.sleep(3)
+                trame = gen.presenceDetected()
 
         elif event == 2 :
             trame = gen.pressON()

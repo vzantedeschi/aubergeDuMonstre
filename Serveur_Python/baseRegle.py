@@ -30,21 +30,20 @@ class Commande():
             print 'Presence detectee'
             self.type = 'PRES'
             # Il faudrait tester si une trame RFID a été envoyée aussi
-            
+            # On va considérer que la trame RFID sera toujours traitée avant
+            # la trame de présence (pas le même cycle!)
 
         elif (typeInfo =="Capteur.Temperature"):
             #Détermine la commande et mettre "traite" à True
-            print "température"
-            # Si la température passe en-dessous d'un certain seuil, allumer la clim
-            
-        elif (typeInfo =="Capteur.Humidite"):
-            #Détermine la commande et mettre "traite" à True
-            print "humidité"
-            #Si l'humidité passe en-dessous d'un certain seuil, déclencher le système incendie
+            print "Température & Humidité"
+            # Si la température passe en-dessous d'un certain seuil, allumer
+            # la clim
+            # Si l'humidité passe en-dessous d'un certain seuil, déclencher
+            # le système incendie
             
         elif (typeInfo =="Capteur.RFID"):
-            #Détermine la commande et mettre "traite" à True
             print "RFID"
+            self.type = 'RFID'
 
         else:
             print 'Autre type de commande'

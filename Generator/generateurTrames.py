@@ -117,7 +117,7 @@ class generateurTrames():
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def rfid(self,i) :
+    def rfidDetected(self) :
         org = "07"
         dataBytes = "CCCCCCCC"
         idBytes = self.rfid
