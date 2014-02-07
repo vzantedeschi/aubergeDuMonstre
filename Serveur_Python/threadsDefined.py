@@ -88,7 +88,7 @@ class ThreadCommand(threading.Thread):
                         print 'Commande suivant une intrusion envoyee'
                         presence = True
 
-                        if self.rfidDetected = False :
+                        if self.rfidDetected == False :
                             ## ENVOYER A L'APPLI WEB ##
 
                             ## REPONSE APPLI WEB ##
