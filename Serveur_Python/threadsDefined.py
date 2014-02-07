@@ -24,6 +24,10 @@ def hello():
 def surveillance():
     return render_template('surveillance.html', presence = presence)
 
+@app.route('/controle.html')
+def controle():
+    return render_template('controle.html')
+
 @app.route('/presence')
 def get_presence():
     global presence
