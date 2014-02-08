@@ -12,30 +12,46 @@ import mongoengine
 sys.path.append('../BDD')
 import tables
 
-# Mettre ici l'adresse IP de la passerelle EnOcean
-hote = '134.214.106.23'
-hote = 'localhost'
-
-# Connexion à un hôte distant mais pas la passerelle
-#hote = '192.168.137.1' 
-
-# Mettre ici le port de la passerelle sur lequel se connecter.
-port = 5000
-port = 13800
-
-print "Lancement du Serveur"
-
 ############# CONNEXION PASSERELLE ###################
 connexion_avec_passerelle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+connected = False
+while connected == False:
+    
+    print "\nOu voulez-vous vous connecter?"
+    
+    passerelleChoisie = 3
+    while passerelleChoisie > 3 :
+        print "1. Passerelle EnOcean"
+        print "2. Simulateur Proxy"
+        passerelleChoisie = int(input())
 
-try :
-    connexion_avec_passerelle.connect((hote, port))
-    print("Connexion établie avec la passerelle sur le port {}".format(port))
-
-except socket.error :
-    print("Impossible de se connecter au proxy")
-    exit()
-
+    if passerelleChoisie == 1:
+        try :
+            hote = '134.214.106.23'
+            port = 5000
+            connexion_avec_passerelle.connect((hote, port))
+            print("Connexion etablie avec la passerelle sur le port {}".format(port))
+            connected = True
+            
+        except socket.error :
+            print("Impossible de se connecter au proxy")
+            exit()
+    else :
+        print "\nSur quelle adresse IP? (localhost autorisé)"
+        hote = raw_input(">> ")
+        #print "\nSur quel port?"
+        #port = int(input())
+        port = 13800
+        try :
+            connexion_avec_passerelle.connect((hote, port))
+            print("Connexion établie avec la passerelle sur le port {}".format(port))
+            connected = True
+            
+        except socket.error :
+            print("Impossible de se connecter au proxy")
+            exit()
+    
+        
 ########### CONNEXION BDD ###############
 db_connec = mongoengine.connect('GHome_BDD')
 db_connec.drop_database('GHome_BDD')
@@ -65,7 +81,7 @@ for capt in liste:
 #
 #
 
-threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
+threadCommand = threadsDefined.ThreadCommand()
 threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
