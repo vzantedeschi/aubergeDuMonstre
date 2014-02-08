@@ -102,13 +102,32 @@ try:
             print("Recu {}".format(msg_recu))
 
             # Passage par le parser
-            infosTrame = trame.Trame(msg_recu,now)
+            infosTrame = trame.Trame(msg_recu,now)          
 
             if infosTrame.valide == True :
                 print ("ID {}".format(hex(infosTrame.idBytes)))
                 print ("DB ", infosTrame.dataBytes)
                 print ("Heure {}".format(infosTrame.heure))
+                
+                
+                # a quelle(s) piece(s) correcpond ce capteur
+                PieceConcernee = 0
+                pieces_fic = open("../pieces.txt","r")
+                liste = pieces_fic.readlines()
+                for ligne in liste:
+                    idPiece, idCapt = ligne.split()
+                    if infosTrame.idBytes == int(idCapt,16):
+                        pieceConcernee = idPiece
+                        print "piece : ", pieceConcernee
 
+                nomPieces_fic = open("../nomPieces.txt","r")
+                liste = nomPieces_fic.readlines()
+                for ligne in liste:
+                    idPiece, nomPiece = ligne.split()
+                    if pieceConcernee == int(idPiece,16):
+                        nomPieceConcernee = nomPiece
+                        print "piece ", pieceConcernee, "  : ", nomPieceConcernee
+                
                 if infosTrame.eepSent == False :
                     # Interprète les informations contenues dans la Trame
                     trameInterpretee = interpreteur.Interpretation(infosTrame)
@@ -117,6 +136,7 @@ try:
                     if trameInterpretee.typeCapteur == 'PRES':
                         if trameInterpretee.donnees == 1:
                             capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
+                            piece = tables.Piece(piece_id = idPiece,
                             capteur_presence.save()
                             
                     elif trameInterpretee.typeCapteur == 'TEMP':
