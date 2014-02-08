@@ -38,6 +38,7 @@ except socket.error :
 
 ########### CONNEXION BDD ###############
 db_connec = mongoengine.connect('GHome_BDD')
+db_connec.drop_database('GHome_BDD')
 db = db_connec.GHome_BDD
 
 ########### INITIALISATION BDD #############
@@ -103,7 +104,10 @@ try:
                             capteur_presence.save()
                             
                     elif trameInterpretee.typeCapteur == 'TEMP':
-                        #capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee, traite = False)
+                        capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee.tempDonnees, traite = False)
+                        capteur_humidite = tables.Humidite(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee.humDonnees, traite = False)
+                        capteur_temperature.save()
+                        capteur_humidite.save()
                         print "1 = temp"
                         
                     elif trameInterpretee.typeCapteur == 'RFID':
