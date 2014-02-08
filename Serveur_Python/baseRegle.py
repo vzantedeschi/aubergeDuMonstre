@@ -22,7 +22,7 @@ class Commande():
             print item
             typeInfo = item['_cls']
             print typeInfo
-			
+            
         
         ### Il me faut le format des informations de sortie pour savoir
         ### sur quoi faire une condition
@@ -36,12 +36,12 @@ class Commande():
         elif (typeInfo =="Capteur.Temperature"):
             #Détermine la commande et mettre "traite" à True
             print "Température & Humidité"
-			
+            
             # Si la température passe en-dessous d'un certain seuil, allumer
             # la clim
             # Si l'humidité passe en-dessous d'un certain seuil, déclencher
             # le système incendie
-			self.type = 'TEMP'
+            self.type = 'TEMP'
             
         elif (typeInfo =="Capteur.RFID"):
             print "RFID"
@@ -50,7 +50,7 @@ class Commande():
         else:
             print 'Autre type de commande'
             self.type = 'OTHER'
-			
+            
         if (item != None):
-	    # Modifier l'information de la BDD pour mettre "traite" à True            
-	    db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+        # Modifier l'information de la BDD pour mettre "traite" à True            
+			db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
