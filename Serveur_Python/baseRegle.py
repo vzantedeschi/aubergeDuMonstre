@@ -36,10 +36,12 @@ class Commande():
         elif (typeInfo =="Capteur.Temperature"):
             #Détermine la commande et mettre "traite" à True
             print "Température & Humidité"
+			
             # Si la température passe en-dessous d'un certain seuil, allumer
             # la clim
             # Si l'humidité passe en-dessous d'un certain seuil, déclencher
             # le système incendie
+			self.type = 'TEMP'
             
         elif (typeInfo =="Capteur.RFID"):
             print "RFID"
