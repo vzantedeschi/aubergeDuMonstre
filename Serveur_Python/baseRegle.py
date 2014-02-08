@@ -41,7 +41,7 @@ class Commande():
             # la clim
             # Si l'humidité passe en-dessous d'un certain seuil, déclencher
             # le système incendie
-............self.type = 'TEMP'
+            self.type = 'TEMP'
             
         elif (typeInfo =="Capteur.RFID"):
             print "RFID"
