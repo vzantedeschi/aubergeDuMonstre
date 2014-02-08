@@ -41,7 +41,7 @@ db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
 ########### INITIALISATION BDD #############
-capteur_presence1 = tables.Presence(capteur_id = 00054155, annee = 0, mois = 0, jour = 0, heure = 0, traite = True)
+capteur_presence1 = tables.Presence(capteur_id = 00054155, capteur_type = "PRES", annee = 0, mois = 0, jour = 0, heure = 0, traite = True)
 capteur_presence1.save()
 
 fic_id = open("../identifiants.txt","r")
@@ -99,7 +99,7 @@ try:
                     ### INSERTION DANS LA BDD ###
                     if trameInterpretee.typeCapteur == 'PRES':
                         if trameInterpretee.donnees == 1:
-                            capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
+                            capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, capteur_type = "PRES", annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
                             capteur_presence.save()
                             
                     elif trameInterpretee.typeCapteur == 'TEMP':
