@@ -12,32 +12,49 @@ import mongoengine
 sys.path.append('../BDD')
 import tables
 
-# Mettre ici l'adresse IP de la passerelle EnOcean
-hote = '134.214.106.23'
-hote = 'localhost'
-
-# Connexion à un hôte distant mais pas la passerelle
-#hote = '192.168.137.1' 
-
-# Mettre ici le port de la passerelle sur lequel se connecter.
-port = 5000
-port = 13900
-
-print "Lancement du Serveur"
-
 ############# CONNEXION PASSERELLE ###################
 connexion_avec_passerelle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+connected = False
+while connected == False:
+    
+    print "\nOu voulez-vous vous connecter?"
+    
+    passerelleChoisie = 3
+    while passerelleChoisie > 3 :
+        print "1. Passerelle EnOcean"
+        print "2. Simulateur Proxy"
+        passerelleChoisie = int(input())
 
-try :
-    connexion_avec_passerelle.connect((hote, port))
-    print("Connexion établie avec la passerelle sur le port {}".format(port))
-
-except socket.error :
-    print("Impossible de se connecter au proxy")
-    exit()
-
+    if passerelleChoisie == 1:
+        try :
+            hote = '134.214.106.23'
+            port = 5000
+            connexion_avec_passerelle.connect((hote, port))
+            print("Connexion etablie avec la passerelle sur le port {}".format(port))
+            connected = True
+            
+        except socket.error :
+            print("Impossible de se connecter au proxy")
+            exit()
+    else :
+        print "\nSur quelle adresse IP? (localhost autorisé)"
+        hote = raw_input(">> ")
+        #print "\nSur quel port?"
+        #port = int(input())
+        port = 13800
+        try :
+            connexion_avec_passerelle.connect((hote, port))
+            print("Connexion établie avec la passerelle sur le port {}".format(port))
+            connected = True
+            
+        except socket.error :
+            print("Impossible de se connecter au proxy")
+            exit()
+    
+        
 ########### CONNEXION BDD ###############
 db_connec = mongoengine.connect('GHome_BDD')
+db_connec.drop_database('GHome_BDD')
 db = db_connec.GHome_BDD
 
 fic_id = open("../identifiants.txt","r")
@@ -60,7 +77,7 @@ for capt in liste:
 #
 #
 
-threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
+threadCommand = threadsDefined.ThreadCommand()
 threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
@@ -81,13 +98,32 @@ try:
             print("Recu {}".format(msg_recu))
 
             # Passage par le parser
-            infosTrame = trame.Trame(msg_recu,now)
+            infosTrame = trame.Trame(msg_recu,now)          
 
             if infosTrame.valide == True :
                 print ("ID {}".format(hex(infosTrame.idBytes)))
                 print ("DB ", infosTrame.dataBytes)
                 print ("Heure {}".format(infosTrame.heure))
+                
+                
+                # a quelle(s) piece(s) correcpond ce capteur
+                PieceConcernee = 0
+                pieces_fic = open("../pieces.txt","r")
+                liste = pieces_fic.readlines()
+                for ligne in liste:
+                    idPiece, idCapt = ligne.split()
+                    if infosTrame.idBytes == int(idCapt,16):
+                        pieceConcernee = idPiece
+                        print "piece : ", pieceConcernee
 
+                nomPieces_fic = open("../nomPieces.txt","r")
+                liste = nomPieces_fic.readlines()
+                for ligne in liste:
+                    idPiece, nomPiece = ligne.split()
+                    if pieceConcernee == int(idPiece,16):
+                        nomPieceConcernee = nomPiece
+                        print "piece ", pieceConcernee, "  : ", nomPieceConcernee
+                
                 if infosTrame.eepSent == False :
                     # Interprète les informations contenues dans la Trame
                     trameInterpretee = interpreteur.Interpretation(infosTrame)
@@ -99,7 +135,10 @@ try:
                             capteur_presence.save()
                             
                     elif trameInterpretee.typeCapteur == 'TEMP':
-                        #capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee, traite = False)
+                        capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee.tempDonnees, traite = False)
+                        capteur_humidite = tables.Humidite(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee.humDonnees, traite = False)
+                        capteur_temperature.save()
+                        capteur_humidite.save()
                         print "1 = temp"
                         
                     elif trameInterpretee.typeCapteur == 'RFID':

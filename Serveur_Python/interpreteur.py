@@ -25,6 +25,7 @@ class Interpretation:
 
       #verification du type du capteur grace a l'id
       fic_id = open("../identifiants.txt","r")
+	  
       liste = fic_id.readlines()
         
       fic_id.close()
