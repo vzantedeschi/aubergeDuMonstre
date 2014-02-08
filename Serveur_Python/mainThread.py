@@ -51,21 +51,13 @@ while connected == False:
             print("Impossible de se connecter au proxy")
             exit()
     
-        
+print 'ok'       
 ########### CONNEXION BDD ###############
 db_connec = mongoengine.connect('GHome_BDD')
-db_connec.drop_database('GHome_BDD')
-db = db_connec.GHome_BDD
 
-fic_id = open("../identifiants.txt","r")
-liste = fic_id.readlines()
-fic_id.close()
-
-identifiants = []
-
-for capt in liste:
-    type, id = capt.split()
-    identifiants.append(int(id,16))
+#récupération identifiants dans la base
+identifiants = tables.Capteur.objects
+identifiants = map(lambda i : i.capteur_id, identifiants)
 
 #
 #
@@ -77,12 +69,13 @@ for capt in liste:
 #
 #
 
-threadCommand = threadsDefined.ThreadCommand()
-threadCommand.start()
+#threadCommand = threadsDefined.ThreadCommand()
+#threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
 try: 
     while True:
+        print 'reception'
         msg_recu = connexion_avec_passerelle.recv(28)       
         msg_recu = msg_recu.decode()
         print msg_recu
@@ -105,29 +98,19 @@ try:
                 print ("DB ", infosTrame.dataBytes)
                 print ("Heure {}".format(infosTrame.heure))
                 
-                
-                # a quelle(s) piece(s) correcpond ce capteur
-                PieceConcernee = 0
-                pieces_fic = open("../pieces.txt","r")
-                liste = pieces_fic.readlines()
-                for ligne in liste:
-                    idPiece, idCapt = ligne.split()
-                    if infosTrame.idBytes == int(idCapt,16):
-                        pieceConcernee = idPiece
-                        print "piece : ", pieceConcernee
-
-                nomPieces_fic = open("../nomPieces.txt","r")
-                liste = nomPieces_fic.readlines()
-                for ligne in liste:
-                    idPiece, nomPiece = ligne.split()
-                    if pieceConcernee == int(idPiece,16):
-                        nomPieceConcernee = nomPiece
-                        print "piece ", pieceConcernee, "  : ", nomPieceConcernee
-                
                 if infosTrame.eepSent == False :
                     # Interprète les informations contenues dans la Trame
                     trameInterpretee = interpreteur.Interpretation(infosTrame)
                     
+                    # a quelle piece correspond ce capteur
+                    # !!!solution temporaire : il doit y avoir une façon plus propre et directe
+                    print 'Pièce concernée'
+                    capteur = tables.Capteur.objects(capteur_id = trameInterpretee.id).first()
+                    pieces = tables.Piece.objects
+                    for p in pieces :
+                        if capteur in p.capteurs :
+                            print "piece ", p.piece_id, "  : ", p.name
+
                     ### INSERTION DANS LA BDD ###
                     if trameInterpretee.typeCapteur == 'PRES':
                         if trameInterpretee.donnees == 1:
@@ -146,7 +129,7 @@ try:
                         print "3 = rfid"
 
                     # Met le checkStatus du thread de commande à 1
-                    threadCommand.checkStatus = 1
+                    #threadCommand.checkStatus = 1
                     # Note : il est possible que l'on se retrouve avec deux
                     # timers au lieu d'un avec cet appel... => double check de la BI
 
