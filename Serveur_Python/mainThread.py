@@ -40,10 +40,6 @@ except socket.error :
 db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
-########### INITIALISATION BDD #############
-capteur_presence1 = tables.Presence(capteur_id = 00054155, capteur_type = "PRES", annee = 0, mois = 0, jour = 0, heure = 0, traite = True)
-capteur_presence1.save()
-
 fic_id = open("../identifiants.txt","r")
 liste = fic_id.readlines()
 fic_id.close()

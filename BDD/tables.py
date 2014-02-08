@@ -5,7 +5,7 @@ import mongoengine
 import datetime
 
 class Capteur(mongoengine.Document):
-	capteur_id = mongoengine.StringField(primary_key=True)
+	capteur_id = mongoengine.IntField(primary_key=True)
 	capteur_type = mongoengine.StringField(required=True)
 	annee = mongoengine.IntField(required = True)
 	mois = mongoengine.IntField(required = True)
