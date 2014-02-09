@@ -113,7 +113,12 @@ while True :
 
                     if event == 1 :
                         if perso == 3:
-                            trame = gen.presenceDetected()
+                            if piece == 1:
+                                trame = gen.presenceDetected()
+                            elif piece == 2:
+                                print "Pas de capteurs dans cette piece"
+                            elif piece == 3:
+                                print "Pas de capteurs dans cette piece"
                         elif perso == 1 :
                             ## A TERME, METTRE PLUSIEURS RFID (passage de paramètres dans cette fonction)
                             ## IL Y AURA AUSSI PLUSIEURS CAPTEURS DE TYPE FENETRE AVEC UN ID CHACUN,
@@ -122,29 +127,64 @@ while True :
                             trame = trame.encode()
                             socketClient.send(trame)
                             time.sleep(3)
-                            trame = gen.presenceDetected()
+                            if piece == 1:
+                                trame = gen.presenceDetected()
+                            elif piece == 2:
+                                print "Pas de capteurs dans cette piece"
+                            elif piece == 3:
+                                print "Pas de capteurs dans cette piece"
+                                
                         elif perso == 2 :
                             trame = gen.rfidDetected()
                             time.sleep(3)
                             trame = trame.encode()
                             socketClient.send(trame)
                             time.sleep(3)
-                            trame = gen.presenceDetected()
-
+                            if piece == 1:
+                                trame = gen.presenceDetected()
+                            elif piece == 2:
+                                print "Pas de capteurs dans cette piece"
+                            elif piece == 3:
+                                print "Pas de capteurs dans cette piece"
+                                
                     elif event == 2 :
-                        trame = gen.pressON()
-
+                        if piece == 1:
+                            trame = gen.pressON()
+                        elif piece == 2:
+                            print "Pas de capteurs dans cette piece"
+                        elif piece == 3:
+                            print "Pas de capteurs dans cette piece"
                     elif event == 3 :
-                        trame = gen.pressOFF()
-                        
-                    elif event == 4 : 
-                        trame = gen.currentTemperature()
+                        if piece == 1:
+                            trame = gen.pressOFF()
+                        elif piece == 2:
+                            print "Pas de capteurs dans cette piece"
+                        elif piece == 3:
+                            print "Pas de capteurs dans cette piece"
+                    
+                    elif event == 4 :
+                        if piece == 1:
+                            trame = gen.currentTemperature()
+                        elif piece == 2:
+                            print "Pas de capteurs dans cette piece"
+                        elif piece == 3:
+                            print "Pas de capteurs dans cette piece"
 
                     elif event == 5 and mouv == 1 :
-                        trame = gen.contactFenetreOuverte()
+                        if piece == 1:
+                            trame = gen.contactFenetreOuverte()
+                        elif piece == 2:
+                            print "Pas de capteurs dans cette piece"
+                        elif piece == 3:
+                            print "Pas de capteurs dans cette piece"
 
                     elif event == 5 and mouv == 2 :
-                        trame = gen.contactFenetreFermee()
+                        if piece == 1:
+                            trame = gen.contactFenetreFermee()
+                        elif piece == 2:
+                            print "Pas de capteurs dans cette piece"
+                        elif piece == 3:
+                            print "Pas de capteurs dans cette piece"
 
                     trame = trame.encode()
                     print 'Scenario cree, trame envoyee'
