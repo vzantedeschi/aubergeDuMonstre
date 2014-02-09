@@ -61,6 +61,7 @@ initBase.initialize()
 #récupération identifiants dans la base
 identifiants = tables.Capteur.objects
 identifiants = map(lambda i : i.capteur_id, identifiants)
+print identifiants
 
 #
 #
