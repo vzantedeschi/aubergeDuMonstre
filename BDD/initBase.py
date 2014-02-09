@@ -17,7 +17,7 @@ def initialize() :
 	db.drop_database('GHome_BDD')
 
 	#Initialisation pièces
-	fic_id = open('pieces.txt',"r")
+	fic_id = open('../pieces.txt',"r")
 	liste = fic_id.readlines()
 	fic_id.close()
 
@@ -28,7 +28,7 @@ def initialize() :
 	    piece.save()
 
 	#Initialisation capteurs
-	fic_id = open('capteurs.txt',"r")
+	fic_id = open('../capteurs.txt',"r")
 	liste = fic_id.readlines()
 	fic_id.close()
 

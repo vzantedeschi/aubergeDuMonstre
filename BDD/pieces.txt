@@ -1,3 +1,0 @@
-1 Couloir
-2 Cuisine
-3 Salon

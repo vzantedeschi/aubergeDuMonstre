@@ -11,6 +11,7 @@ import pymongo
 import mongoengine
 sys.path.append('../BDD')
 import tables
+import initBase
 
 ############# CONNEXION PASSERELLE ###################
 connexion_avec_passerelle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,6 +55,8 @@ while connected == False:
 print 'ok'       
 ########### CONNEXION BDD ###############
 db_connec = mongoengine.connect('GHome_BDD')
+
+initBase.initialize()
 
 #récupération identifiants dans la base
 identifiants = tables.Capteur.objects
