@@ -11,49 +11,57 @@ import pymongo
 import mongoengine
 sys.path.append('../BDD')
 import tables
-
-# Mettre ici l'adresse IP de la passerelle EnOcean
-hote = '134.214.106.23'
-hote = 'localhost'
-
-# Connexion à un hôte distant mais pas la passerelle
-#hote = '192.168.137.1' 
-
-# Mettre ici le port de la passerelle sur lequel se connecter.
-port = 5000
-port = 13800
-
-print "Lancement du Serveur"
+import initBase
 
 ############# CONNEXION PASSERELLE ###################
 connexion_avec_passerelle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+connected = False
+while connected == False:
+    
+    print "\nOu voulez-vous vous connecter?"
+    
+    passerelleChoisie = 3
+    while passerelleChoisie > 3 :
+        print "1. Passerelle EnOcean"
+        print "2. Simulateur Proxy"
+        passerelleChoisie = int(input())
 
-try :
-    connexion_avec_passerelle.connect((hote, port))
-    print("Connexion établie avec la passerelle sur le port {}".format(port))
-
-except socket.error :
-    print("Impossible de se connecter au proxy")
-    exit()
-
+    if passerelleChoisie == 1:
+        try :
+            hote = '134.214.106.23'
+            port = 5000
+            connexion_avec_passerelle.connect((hote, port))
+            print("Connexion etablie avec la passerelle sur le port {}".format(port))
+            connected = True
+            
+        except socket.error :
+            print("Impossible de se connecter au proxy")
+            exit()
+    else :
+        print "\nSur quelle adresse IP? (localhost autorisé)"
+        hote = raw_input(">> ")
+        #print "\nSur quel port?"
+        #port = int(input())
+        port = 13800
+        try :
+            connexion_avec_passerelle.connect((hote, port))
+            print("Connexion établie avec la passerelle sur le port {}".format(port))
+            connected = True
+            
+        except socket.error :
+            print("Impossible de se connecter au proxy")
+            exit()
+    
+print 'ok'       
 ########### CONNEXION BDD ###############
 db_connec = mongoengine.connect('GHome_BDD')
-db_connec.drop_database('GHome_BDD')
-db = db_connec.GHome_BDD
 
-########### INITIALISATION BDD #############
-capteur_presence1 = tables.Presence(capteur_id = 00054155, annee = 0, mois = 0, jour = 0, heure = 0, traite = True)
-capteur_presence1.save()
+initBase.initialize()
 
-fic_id = open("../identifiants.txt","r")
-liste = fic_id.readlines()
-fic_id.close()
-
-identifiants = []
-
-for capt in liste:
-    type, id = capt.split()
-    identifiants.append(int(id,16))
+#récupération identifiants dans la base
+identifiants = tables.Capteur.objects
+identifiants = map(lambda i : i.capteur_id, identifiants)
+print identifiants
 
 #
 #
@@ -65,12 +73,13 @@ for capt in liste:
 #
 #
 
-threadCommand = threadsDefined.ThreadCommand(connexion_avec_passerelle)
-threadCommand.start()
+#threadCommand = threadsDefined.ThreadCommand()
+#threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
 try: 
     while True:
+        print 'reception'
         msg_recu = connexion_avec_passerelle.recv(28)       
         msg_recu = msg_recu.decode()
         print msg_recu
@@ -93,8 +102,16 @@ try:
                 print ("DB ", infosTrame.dataBytes)
                 print ("Heure {}".format(infosTrame.heure))
 
-
-                # a quelle(s) piece(s) correcpond ce capteur
+                # a quelle piece correspond ce capteur v2
+                # !!!solution temporaire : il doit y avoir une façon plus propre et directe
+                print 'Pièce concernée'
+                capteur = tables.Capteur.objects(capteur_id = trameInterpretee.id).first()
+                pieces = tables.Piece.objects
+                for p in pieces :
+                    if capteur in p.capteurs :
+                        print "piece ", p.piece_id, "  : ", p.name
+                        
+                # a quelle(s) piece(s) correcpond ce capteur v1
                 PieceConcernee = 0
                 pieces_fic = open("../pieces.txt","r")
                 liste = pieces_fic.readlines()
@@ -138,6 +155,7 @@ try:
                 threadCommand.checkStatus = 1
                 # Note : il est possible que l'on se retrouve avec deux
                 # timers au lieu d'un avec cet appel... => double check de la BI
+
 
 except KeyboardInterrupt:
     print '\nFermeture de la connexion'

@@ -5,18 +5,43 @@ updatePresence = function() {
 }
 
 $(document).ready(function() {
-	setInterval(updatePresence, 1000);
 
+	//Timer for variables update
+	setInterval(updatePresence, 1000); 
 
-	// Creates canvas 320 × 200 at 10, 50
-	var paper = Raphael(10, 50, 320, 200);
+	//design constants
+	var WIDTH = $(window).width() * 0.9; 
+	var HEIGHT = $(window).height() * 0.6;
+	var diffH = $(window).height() - HEIGHT;
+	var diffW = $(window).width() - WIDTH;
+	//Draw maison 
+	paper = new Raphael(diffW,diffH,WIDTH,HEIGHT);
 
-	// Creates circle at x = 50, y = 40, with radius 10
-	var circle = paper.circle(50, 40, 10);
-	// Sets the fill attribute of the circle to red (#f00)
-	circle.attr("fill", "#f00");
+	//rooms
+	createRect(0,0,WIDTH,HEIGHT);
+	createRect(100,100,100,50);
+	createRect(100,100,100,50);
+	createRect(100,100,100,50);
+	createRect(100,100,100,50);
 
-	// Sets the stroke attribute of the circle to white
-	circle.attr("stroke", "#fff");
+	function createRect(x,y,width,height)
+	{
+	    var rect = paper.rect(x,y,width,height).attr({"fill":"white","stroke":"red"});
+
+	    //Adds a listener to the rect
+	    addHoverListener(rect);
+	   
+	}
+
+	function addHoverListener(obj)
+	{
+	    obj.mouseover(function(event){
+	                    obj.attr({"fill":"red"});
+	    });
+	   
+	    obj.mouseout(function(event){
+	       obj.attr({"fill":"white"});
+	     });
+	}
 
 })

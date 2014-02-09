@@ -6,6 +6,7 @@ import time
 import signal
 import os
 import baseRegle
+import socket
 
 from flask import Flask, render_template, request
 import requests
@@ -54,9 +55,19 @@ class ThreadAppliWebListener(threading.Thread):
             
 class ThreadCommand(threading.Thread):
 
-    def __init__(self,socket):
+    def __init__(self):
         threading.Thread.__init__(self)
-        self.socket = socket
+        
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        hote = '134.214.106.23'
+        port = 5000
+        self.connected = False
+        
+        try :
+            self.socket.connect((hote, port))
+            self.connected = True
+        except socket.error :
+            print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
         
         webList = ThreadAppliWebListener()
         webList.start()
@@ -68,8 +79,8 @@ class ThreadCommand(threading.Thread):
         self.rfidDetected = False
         
     def run(self):
-        while 1:
-            try:
+        while True :
+            try :
                 if self.checkStatus == 1:
                     # Timer avec 2sec de période remettant le checkstatus à 1
                     t = threading.Timer(10,TimerFunc,[self])
@@ -80,7 +91,7 @@ class ThreadCommand(threading.Thread):
 
                     ### ICI TRAITER LA COMMANDE SELON SON TYPE ###
                     if commande.type == 'RFID' :
-                        print 'Commande suivant detection RFID envoyee'
+                        print 'Commande suivant detection RFID en cours'
                         self.rfidDetected = True
                         # Mise en place d'un timer qui indique
                         # qu'il n'attend plus une détection de présence au bout
@@ -89,7 +100,7 @@ class ThreadCommand(threading.Thread):
                         timerRFID.start()
                         
                     elif commande.type == 'PRES' :
-                        print 'Commande suivant une intrusion envoyee'
+                        print 'Commande suivant une presence en cours'
                         presence = True
 
                         if self.rfidDetected == False :
@@ -97,9 +108,11 @@ class ThreadCommand(threading.Thread):
 
                             ## REPONSE APPLI WEB ##
                             if (True) :
-                                ## Allume l'interrupteur simulant les volets ##
-                                print "Verrouillage activé : volets en cours de fermeture"
-                                self.socket.send( 'A55A6B0570000000FF9F1E0530D1' )
+                                # Allume l'interrupteur simulant les volets
+                                print "Verrouillage active : volets en cours de fermeture"
+                                # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+                                if self.connected == True :
+                                    self.socket.send( 'A55A6B0570000000FF9F1E0530D1' )
 
                     elif commande.type == 'OTHER':
                         print 'Pas de commande implementee'

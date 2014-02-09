@@ -5,7 +5,8 @@ import mongoengine
 import datetime
 
 class Capteur(mongoengine.Document):
-	capteur_id = mongoengine.IntField(required=True)
+	capteur_id = mongoengine.IntField(primary_key=True)
+	capteur_type = mongoengine.StringField(required=True)
 	annee = mongoengine.IntField(required = True)
 	mois = mongoengine.IntField(required = True)
 	jour = mongoengine.IntField(required = True)
@@ -24,8 +25,8 @@ class Actionneur(mongoengine.Document):
 class Piece(mongoengine.Document):
 	piece_id = mongoengine.IntField(required=True)
 	name = mongoengine.StringField(required = True)
-	actionneurs = mongoengine.SortedListField(mongoengine.ReferenceField(Capteur), ordering='date')
-	capteurs = mongoengine.SortedListField(mongoengine.ReferenceField(Actionneur), ordering='date')
+	actionneurs = mongoengine.SortedListField(mongoengine.ReferenceField('Actionneur'))
+	capteurs = mongoengine.SortedListField(mongoengine.ReferenceField('Capteur'))
 	
 class Personne(mongoengine.Document):
 	personne_id = mongoengine.IntField(required=True)
@@ -60,6 +61,7 @@ class FermetureVolet(Actionneur):
 
 class Interrupteur (Actionneur):
 	interrupteurDeclenche = mongoengine.BooleanField(required = True)
+
 
 
 
