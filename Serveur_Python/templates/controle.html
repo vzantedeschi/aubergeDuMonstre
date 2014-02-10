@@ -1,80 +1,73 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" >
-	<head>
+{% extends "base.html" %}
 
-		<title>GHome</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />  
-		<meta http-equiv="Content-Language" content="fr"/>
+{% block style %}
+<link href="style.css" rel="stylesheet">
+{% endblock %}
 
-		<link href="style.css" rel="stylesheet">
+{% block body %}
 
-		<script type="text/javascript">
-			function valider() {
-				
-				if(document.getElementById('on').checked==true){
-					alert("L'" + document.forms[0].actionneur.value + " de la " + document.forms[0].piece.value + " est en position ON");
-				}
-				else {
-					if(document.getElementById('off').checked==true){
-						alert("L'" + document.forms[0].actionneur.value + " de la " + document.forms[0].piece.value + " est en position OFF");
-					}
-					else {
-						alert("Selectionnez on ou off.")
-					}
-				}
+{% include "header.html" %}
 
+<div id="entete">
+	<h1>\n</h1>
+	<h2>Tableau de controle</h2>
+</div>
+
+<div id="cadre">
+
+	<div id="f1">
+		<!-- presence d'un onsubmit="valider()" affichera un message d'erreur ou de confirmation d'envoi-->
+		<form method="POST" action="./controle">
+			<!-- presence d'un onclick="choixActionneur(piece)" affichera les actionneurs de la piece selectionnee-->
+			<!--affichage des pieces grace a requete, et non en dur-->
+			<select name="piece">
+				<option value="pieceUne">Piece 1</option>
+				<option value="pieceDeux">Piece 2</option>
+				<option value="pieceTrois">Piece 3</option>
+				<option value="pieceQuatre">Piece 4</option>
+				<option value="pieceCinq">Piece 5</option>
+			</select>
+
+
+			<select name="actionneur">
+				<option value="actionneurUn">Actionneur 1</option>
+				<option value="actionneurDeux">Actionneur 2</option>
+			</select>
+
+			<br><br>
+
+			<input type="radio" value="On" id="on" name="onOff"> On 
+			<input type="radio" value="Off" id="off" name="onOff"> Off <br><br><br>
+			<input type="submit" value="Envoyer" name="boutonEnv" onclick="valider()">
+
+		</form>
+	</div>
+</div>
+
+<div id="pied">
+	<p>Copyright By H4213</p>
+</div>
+
+{% endblock body %}
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+	function valider() {
+		
+		if(document.getElementById('on').checked==true){
+			alert("L'" + document.forms[0].actionneur.value + " de la " + document.forms[0].piece.value + " est en position ON");
+		}
+		else {
+			if(document.getElementById('off').checked==true){
+				alert("L'" + document.forms[0].actionneur.value + " de la " + document.forms[0].piece.value + " est en position OFF");
 			}
-		</script>
+			else {
+				alert("Selectionnez on ou off.")
+			}
+		}
 
-	</head>
-	<body>
-		<div id="entete">
-			<h1>GHome</h1>
-			<h2>Tableau de controle</h2>
-		</div>
-
-		<div id ="menu">
-			<ul>
-				<li><a href="./index.html">Accueil</a></li>
-				<li><a href="./surveillance.html">Tableau de surveillance</a></li>
-				<li><a href="./controle.html">Tableau de controle</a></li>	
-			</ul> 
-		</div>
-
-		<div id="cadre">
-
-			<div id="f1">
-				<!-- presence d'un onsubmit="valider()" affichera un message d'erreur ou de confirmation d'envoi-->
-				<form method="POST" action="./controle.html">
-					<!-- presence d'un onclick="choixActionneur(piece)" affichera les actionneurs de la piece selectionnee-->
-					<!--affichage des pieces grace a requete, et non en dur-->
-					<select name="piece">
-						<option value="pieceUne">Piece 1</option>
-						<option value="pieceDeux">Piece 2</option>
-						<option value="pieceTrois">Piece 3</option>
-						<option value="pieceQuatre">Piece 4</option>
-						<option value="pieceCinq">Piece 5</option>
-					</select>
-
-
-					<select name="actionneur">
-						<option value="actionneurUn">Actionneur 1</option>
-						<option value="actionneurDeux">Actionneur 2</option>
-					</select>
-
-					<br><br>
-
-					<input type="radio" value="On" id="on" name="onOff"> On 
-					<input type="radio" value="Off" id="off" name="onOff"> Off <br><br><br>
-					<input type="submit" value="Envoyer" name="boutonEnv" onclick="valider()">
-
-				</form>
-			</div>
-		</div>
-
-		<div id="pied">
-			<p>Copyright By H4213</p>
-		</div>
-
-	</body>    
-</html>
+	}
+</script>
+{% endblock %}
