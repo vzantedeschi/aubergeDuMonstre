@@ -78,7 +78,6 @@ threadCommand.start()
 # Process qui va vérifier les trames provenant de la passerelle       
 try: 
     while True:
-        print 'reception'
         msg_recu = connexion_avec_passerelle.recv(28)       
         msg_recu = msg_recu.decode()
         print msg_recu
@@ -101,6 +100,10 @@ try:
                 print ("DB ", infosTrame.dataBytes)
                 print ("Heure {}".format(infosTrame.heure))
 
+                if infosTrame.eepSent == False :
+                    # Interprète les informations contenues dans la Trame
+                    trameInterpretee = interpreteur.Interpretation(infosTrame)
+                    
                 # a quelle piece correspond ce capteur v2
                 # !!!solution temporaire : il doit y avoir une façon plus propre et directe
                 print 'Pièce concernée'
@@ -110,38 +113,16 @@ try:
                     if capteur in p.capteurs :
                         print "piece ", p.piece_id, "  : ", p.name
                         
-                # a quelle(s) piece(s) correcpond ce capteur v1
-                PieceConcernee = 0
-                pieces_fic = open("../pieces.txt","r")
-                liste = pieces_fic.readlines()
-                for ligne in liste:
-                    idPiece, idCapt = ligne.split()
-                    if infosTrame.idBytes == int(idCapt,16):
-                        pieceConcernee = idPiece
-                        #print "piece : ", pieceConcernee
-
-                nomPieces_fic = open("../nomPieces.txt","r")
-                liste = nomPieces_fic.readlines()
-                for ligne in liste:
-                    idPiece, nomPiece = ligne.split()
-                    if pieceConcernee == idPiece:
-                        nomPieceConcernee = nomPiece
-                        print "piece ", pieceConcernee, "  : ", nomPieceConcernee
-
-                if infosTrame.eepSent == False :
-                    # Interprète les informations contenues dans la Trame
-                    trameInterpretee = interpreteur.Interpretation(infosTrame)
 
                 ### INSERTION DANS LA BDD ###
                 if trameInterpretee.typeCapteur == 'PRES':
                     if trameInterpretee.donnees == 1:
-                        capteur_presence = tables.Presence(capteur_id = trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, traite = False)
-                        #piece = tables.Piece(piece_id = idPiece,
+                        capteur_presence = tables.Presence(piece_id = p.piece_id, date = now, traite = False)
                         capteur_presence.save()
 
                 elif trameInterpretee.typeCapteur == 'TEMP':
-                    capteur_temperature = tables.Temperature(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee.tempDonnees, traite = False)
-                    capteur_humidite = tables.Humidite(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee.humDonnees, traite = False)
+                    capteur_temperature = tables.Temperature(piece_id = p.piece_id, date = now, traite = False, valeur = trameInterpretee.tempDonnees)
+                    capteur_humidite = tables.Humidite(piece_id = p.piece_id, date = now, traite = False, valeur = trameInterpretee.humDonnees)
                     capteur_temperature.save()
                     capteur_humidite.save()
                     print "1 = temp"      
