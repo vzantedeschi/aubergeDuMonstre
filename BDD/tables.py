@@ -71,7 +71,7 @@ if __name__ == '__main__' :
 		etat.save()
 		time.sleep(1)
 
-	liste = Etat.objects.order_by('-date')
+	liste = Etat.objects(piece_id = 1).order_by('-date')
 
 	for l in liste :
 		print 'etat : ' + str(l.date)

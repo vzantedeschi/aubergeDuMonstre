@@ -93,36 +93,26 @@ try:
             print("Recu {}".format(msg_recu))
 
             # Passage par le parser
-            infosTrame = trame.Trame(msg_recu,now)          
+            infosTrame = trame.Trame(msg_recu)          
 
             if infosTrame.valide == True :
                 print ("ID {}".format(hex(infosTrame.idBytes)))
                 print ("DB ", infosTrame.dataBytes)
-                print ("Heure {}".format(infosTrame.heure))
+                print ("Heure {}".format(now.time()))
 
                 if infosTrame.eepSent == False :
                     # Interprète les informations contenues dans la Trame
-                    trameInterpretee = interpreteur.Interpretation(infosTrame)
-                    
-                # a quelle piece correspond ce capteur v2
-                # !!!solution temporaire : il doit y avoir une façon plus propre et directe
-                print 'Pièce concernée'
-                capteur = tables.Capteur.objects(capteur_id = trameInterpretee.id).first()
-                pieces = tables.Piece.objects
-                for p in pieces :
-                    if capteur in p.capteurs :
-                        print "piece ", p.piece_id, "  : ", p.name
-                        
+                    trameInterpretee = interpreteur.Interpretation(infosTrame)                        
 
                 ### INSERTION DANS LA BDD ###
                 if trameInterpretee.typeCapteur == 'PRES':
                     if trameInterpretee.donnees == 1:
-                        capteur_presence = tables.Presence(piece_id = p.piece_id, date = now, traite = False)
+                        capteur_presence = tables.Presence(piece_id = trameInterpretee.piece_id, date = now, traite = False)
                         capteur_presence.save()
 
                 elif trameInterpretee.typeCapteur == 'TEMP':
-                    capteur_temperature = tables.Temperature(piece_id = p.piece_id, date = now, traite = False, valeur = trameInterpretee.tempDonnees)
-                    capteur_humidite = tables.Humidite(piece_id = p.piece_id, date = now, traite = False, valeur = trameInterpretee.humDonnees)
+                    capteur_temperature = tables.Temperature(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.tempDonnees)
+                    capteur_humidite = tables.Humidite(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.humDonnees)
                     capteur_temperature.save()
                     capteur_humidite.save()
                     print "1 = temp"      

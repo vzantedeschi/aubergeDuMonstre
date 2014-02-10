@@ -3,7 +3,11 @@
 
 import trame
 import datetime
-
+import sys
+import mongoengine
+sys.path.append('../BDD')
+import tables
+import initBase
 
 ### plus nécessaire si on lit un fichier
 def enum(*sequential, **named):
@@ -17,23 +21,21 @@ class Interpretation:
   def __init__(self, trame):
   
     if(trame.valide):
-      self.id = trame.idBytes
-      self.annee = trame.date.year
-      self.mois = trame.date.month
-      self.jour = trame.date.day
-      self.heure = trame.heure.hour*3600 + trame.heure.minute*60 + trame.heure.second
+      db_connec = mongoengine.connect('GHome_BDD')
 
-      #verification du type du capteur grace a l'id
-      fic_id = open("../identifiants.txt","r")
-	  
-      liste = fic_id.readlines()
-        
-      fic_id.close()
-      for capt in liste:
-          type, id = capt.split()
-          if self.id == int(id,16):
-              self.typeCapteur = type
-              print self.typeCapteur
+      self.id = trame.idBytes
+
+      # a quelle piece correspond ce capteur v2
+      # !!!solution temporaire : il doit y avoir une façon plus propre et directe
+      print 'Pièce concernée'
+      capteur = tables.Capteur.objects(capteur_id = self.id).first()
+      self.typeCapteur = capteur.capteur_type
+      pieces = tables.Piece.objects
+      for p in pieces :
+        if capteur in p.capteurs :
+            print "piece ", p.piece_id, "  : ", p.name
+
+      self.piece_id = p.piece_id
       
       #stockage des donnes selon le type du capteur
       if self.typeCapteur == 'PRES':
@@ -63,11 +65,10 @@ class Interpretation:
 
 if __name__ == "__main__" :
     print '################# TESTS UNITAIRES ##################'
-    
-    date = datetime.datetime(2014, 1, 12, 18, 59, 30)
+    initBase.initialize()
     chaine = 'A55A0B07C7FF000D000541550080'
     print chaine
-    tr = trame.Trame(chaine, date)
+    tr = trame.Trame(chaine)
 
     interpretation = Interpretation(tr)
     
@@ -78,7 +79,7 @@ if __name__ == "__main__" :
       
     chaine = 'A55A0B07C7FF000F000541550080'
     print chaine
-    tr = trame.Trame(chaine, date)
+    tr = trame.Trame(chaine)
 
     interpretation = Interpretation(tr)
     

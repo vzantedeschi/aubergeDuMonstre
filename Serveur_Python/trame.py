@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import datetime
 SIZE = 28
 
 class Trame:
@@ -19,13 +18,11 @@ class Trame:
         - checksum (int)
         - eepSent (bool) vrai si EEP envoye
         - valide (bool) vrai si la trame est composee de 28 caracteres hexadecimaux
-        - date (datetime.date)
-        - heure (datetime.time)
 
         Si la trame n'est pas valide, tous les attributs valent None sauf valide (False)
         
     """
-    def __init__(self, trame, temps):
+    def __init__(self, trame):
         self.eepSent = False
         self.valide = True
              
@@ -53,8 +50,6 @@ class Trame:
                 self.idBytes = int(trame[16:24], 16)
                 self.status = int(trame[24:26], 16)
                 self.checksum = int(trame[26:28], 16)
-                self.date = temps.date()
-                self.heure = temps.time()
                 
                 #verification du mode (normal ou teach-in avec eep envoye)
                 if self.org == 0x07:
@@ -80,13 +75,10 @@ class Trame:
             self.status = None
             self.checksum = None
             self.eepSent = None
-            self.date = None
-            self.heure = None
 
-"""if __name__ == "__main__":
-  test = "A55A0B070084990F0004E9570001"
-  date = datetime.datetime(2014, 1, 12, 18, 59, 30)
+if __name__ == "__main__":
+    test = "A55A0B070084990F0004E9570001"
         
-  result = Trame(test, date)
-  print hex(result.dataBytes)
-  print result.syncBytes"""
+    result = Trame(test)
+    print hex(result.dataBytes)
+    print result.syncBytes
