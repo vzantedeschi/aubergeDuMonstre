@@ -59,18 +59,7 @@ class ThreadCommand(threading.Thread):
         threading.Thread.__init__(self)
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        hote = '134.214.106.23'
-        port = 5000
         self.connected = False
-        
-        try :
-            self.socket.connect((hote, port))
-            self.connected = True
-        except socket.error :
-            print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
-        
-        webList = ThreadAppliWebListener()
-        webList.start()
         
         # Le checkStatus passe à 1 quand le thread doit lire la BI
         self.checkStatus = 0
@@ -79,6 +68,17 @@ class ThreadCommand(threading.Thread):
         self.rfidDetected = False
         
     def run(self):
+        hote = '134.214.106.23'
+        port = 5000
+        try :
+            self.socket.connect((hote, port))
+            self.connected = True
+        except socket.error :
+            print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
+
+        webList = ThreadAppliWebListener()
+        webList.start()
+
         while True :
             try :
                 if self.checkStatus == 1:

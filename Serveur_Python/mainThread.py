@@ -72,9 +72,8 @@ print identifiants
 #
 #
 #
-
-#threadCommand = threadsDefined.ThreadCommand()
-#threadCommand.start()
+threadCommand = threadsDefined.ThreadCommand()
+threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
 try: 
