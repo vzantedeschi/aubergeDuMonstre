@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block style %}
-<link href="style.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -12,16 +11,20 @@
 
 	<div class="page-header" id="banner">
 		<div class="row">
-		  <div class="col-lg-6">
+
+		  <div class="col-12 col-sm-12 col-lg-12">
 		    <h1>Bienvenue dans l'auberge du monstre !</h1>
 		    <p class="lead">GHome project</p>
 		  </div>
-		  <div class="col-lg-6">
+
+		  <div class="text-center">
+		  	<img src="../static/img/auberge.png" alt="img_auberge" class="img-thumbnail">
 		  </div>
+
 		</div>
 	</div>
 </div>
-<div id="pied">
+<div class="text-center">
 	<p>Copyright By H4213</p>
 </div>
 {% endblock body %}
