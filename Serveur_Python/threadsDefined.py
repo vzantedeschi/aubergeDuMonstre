@@ -16,17 +16,15 @@ import requests
 import json
 
 presence = False
-
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    clients = [1, 2, 3]
-    return render_template('index.html', clients=clients)
+    return render_template('index.html')
 
 @app.route('/surveillance')
 def surveillance():
-    return render_template('surveillance.html', presence = presence)
+    return render_template('surveillance.html')
 
 @app.route('/controle')
 def controle():
@@ -77,9 +75,9 @@ class ThreadCommand(threading.Thread):
         hote = '134.214.106.23'
         port = 5000
         try :
-            self.socket.connect((hote, port))
+            #self.socket.connect((hote, port))
             print("Connexion établie avec la passerelle sur le port {}".format(port))
-            self.connected = True
+            #self.connected = True
         except socket.error :
             print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
 
@@ -158,7 +156,6 @@ class ThreadCommand(threading.Thread):
 
                     elif commande.type == 'OTHER':
                         print 'Pas de commande implementee'
-                        presence = False
 
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
                     self.checkStatus = 0

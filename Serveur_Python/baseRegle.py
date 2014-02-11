@@ -17,7 +17,7 @@ class Commande():
         db_connec = mongoengine.connect('GHome_BDD')
         db = db_connec.GHome_BDD
         
-        liste = db.devices.find({u'traite':False})
+        liste = db.donnee.find({u'traite':False})
         item = None
 
         # Permet d'examiner les informations nouvelles dans la BDD
@@ -29,11 +29,11 @@ class Commande():
         
         ### Il me faut le format des informations de sortie pour savoir
         ### sur quoi faire une condition
-        if (typeInfo == "Devices.Presence"):
+        if (typeInfo == "Donnee.Presence"):
             print 'Presence detectee'
             self.type = 'PRES'
 
-        elif (typeInfo == "Devices.Temperature"):
+        elif (typeInfo == "Donnee.Temperature"):
             #Détermine la commande et mettre "traite" à True
             print "Temperature"
             self.type = 'TEMP'
@@ -54,7 +54,7 @@ class Commande():
             self.climActive = elem[u'climActivee']
             print self.climActive
 
-        elif (typeInfo == "Devices.Humidite"):
+        elif (typeInfo == "Donnee.Humidite"):
             print "Humidite"
             self.type = 'HUMID'
             
@@ -74,13 +74,13 @@ class Commande():
             self.antiIncendieActive = elem[u'antiIncendieDeclenche']
             print self.antiIncendieActive
             
-        elif (typeInfo =="Devices.RFID"):
+        elif (typeInfo =="Donnee.RFID"):
             print "RFID"
             self.type = 'RFID'
             self.resident = item[u'resident_id']
             print self.resident
 
-        elif (typeInfo =="Devices.Interrupteur"):
+        elif (typeInfo =="Donnee.Interrupteur"):
             print "Interrupteur"
             self.type = 'INTR'
 

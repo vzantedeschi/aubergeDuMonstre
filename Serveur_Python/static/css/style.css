@@ -141,3 +141,12 @@ body {
   border: 1px solid #881C30;
   color: #FCEDF0;
 }
+
+#surv {
+  display: block;
+  bottom: 0%;
+  position: relative;
+  margin-top: -150px; /* negative value of footer height */
+  height: 150px;
+  clear:both;
+}
