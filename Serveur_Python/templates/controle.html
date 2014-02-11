@@ -57,6 +57,7 @@
 		
 		if(document.getElementById('on').checked==true){
 			alert("L'" + document.forms[0].actionneur.value + " de la " + document.forms[0].piece.value + " est en position ON");
+			document.getElementById(id).innerHTML = message;
 		}
 		else {
 			if(document.getElementById('off').checked==true){
