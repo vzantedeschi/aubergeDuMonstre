@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import sys
 import threading
 import time
@@ -7,6 +8,8 @@ import signal
 import os
 import baseRegle
 import socket
+import mongoengine
+import pymongo
 
 from flask import Flask, render_template, request
 import requests
@@ -59,6 +62,9 @@ class ThreadCommand(threading.Thread):
         threading.Thread.__init__(self)
         
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # La variable "connected" servira à savoir au cour du programme si on peut
+        # envoyer des trames aux actionneurs ou si on s'en tient à des affichages écran
+        # dans le cas où l'on n'a pas accès au réseau GHome
         self.connected = False
         
         # Le checkStatus passe à 1 quand le thread doit lire la BI
@@ -72,12 +78,16 @@ class ThreadCommand(threading.Thread):
         port = 5000
         try :
             self.socket.connect((hote, port))
+            print("Connexion établie avec la passerelle sur le port {}".format(port))
             self.connected = True
         except socket.error :
             print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
 
         webList = ThreadAppliWebListener()
         webList.start()
+
+        db_connec = mongoengine.connect('GHome_BDD')
+        db = db_connec.GHome_BDD
 
         while True :
             try :
@@ -112,25 +122,39 @@ class ThreadCommand(threading.Thread):
                                 print "Verrouillage active : volets en cours de fermeture"
                                 # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
                                 if self.connected == True :
-                                    self.socket.send( 'A55A6B0570000000FF9F1E0530D1' )
+                                    print "Envoi au proxy"
+                                    self.socket.send( 'A55A6B0550000000FF9F1E0530B1' )
                                     
                     elif commande.type == 'TEMP' :
                         print 'Commande suivant un changement de temperature en cours'
 
                         ## Valeur 19 à modifier dans une interface graphique par exemple
-                        if commande.val > 19 :
+                        ## La trame crée est fausse, c'est un exemple
+                        if commande.val > 19 and commande.climActive == False :
                             print "Activation de la climatisation"
+                            # Modifier l'information de la BDD pour mettre "climActive" à True
+                            print "J'Y SUIS"
+                            db.etat.update({"_cls" : "Etat.Clim", u'piece_id' : commande.piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
                             if self.connected == True :
                                 self.socket.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
+                        elif commande.val <= 19 and commande.climActive == True :
+                            print "Desactivation de la climatisation"
+                            if self.connected == True :
+                                self.socket.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
                                 
                     elif commande.type == 'HUMID' :
                         print 'Commande suivant un changement de humidite en cours'
 
                         ## Valeur 70 à modifier dans une interface graphique par exemple
-                        if commande.val < 70 :
+                        ## La trame crée est fausse, c'est un exemple
+                        if commande.val < 70 and commande.antiIncendieActive == False:
                             print "Activation du systeme anti-incendie"
                             if self.connected == True :
                                 self.socket.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
+                        elif commande.val > 70 and commande.antiIncendieActive == True:
+                            print "Desactivation du systeme anti-incendie"
+                            if self.connected == True :
+                                self.socket.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
 
                     elif commande.type == 'OTHER':
                         print 'Pas de commande implementee'

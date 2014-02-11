@@ -15,7 +15,7 @@ def envoiTramesAbsence():
     socketClient.send(trame)
 
 hote = 'localhost'
-port = 13900
+port = 14000
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,7 +31,8 @@ socketClient, infoClient = socketSimulateur.accept()
 okProxy = True
 try :
     socketProxy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #socketProxy.connect(("134.214.106.23", 5000))
+    socketProxy.connect(("134.214.106.23", 5000))
+    print("Connexion établie avec la passerelle sur le port {}".format(port))
 except socket.error :
     print("Impossible de se connecter au proxy")
     print("L'appareillage ne sera pas possible")
@@ -61,6 +62,7 @@ while True :
             message = raw_input(">> ")
             print "\nPassez l'actionneur en mode Learn-In puis taper sur ""Entree"""
             event = raw_input()
+            socketProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
                     
         elif event == 2 :
             while True :
