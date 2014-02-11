@@ -21,7 +21,7 @@ while connected == False:
     print "\nOu voulez-vous vous connecter?"
     
     passerelleChoisie = 3
-    while passerelleChoisie > 3 :
+    while passerelleChoisie > 2 :
         print "1. Passerelle EnOcean"
         print "2. Simulateur Proxy"
         passerelleChoisie = int(input())
@@ -42,7 +42,7 @@ while connected == False:
         hote = raw_input(">> ")
         #print "\nSur quel port?"
         #port = int(input())
-        port = 13900
+        port = 14000
         try :
             connexion_avec_passerelle.connect((hote, port))
             print("Connexion établie avec la passerelle sur le port {}".format(port))

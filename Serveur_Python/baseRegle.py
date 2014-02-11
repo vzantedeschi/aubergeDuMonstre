@@ -4,6 +4,9 @@
 import mongoengine
 import pymongo
 import time
+import sys
+sys.path.append('../BDD')
+import tables
 
 class Commande():
     def __init__(self):
@@ -20,9 +23,9 @@ class Commande():
         # Permet d'examiner les informations nouvelles dans la BDD
         for anItem in liste:
             item = anItem
+            print "\n"
             print item
             typeInfo = item[u'_cls']
-            print typeInfo
         
         ### Il me faut le format des informations de sortie pour savoir
         ### sur quoi faire une condition
@@ -34,14 +37,42 @@ class Commande():
             #Détermine la commande et mettre "traite" à True
             print "Temperature"
             self.type = 'TEMP'
+            
             self.val = item[u'valeur']
             print self.val
+
+            self.piece_id = item[u'piece_id']
+            print self.piece_id
+            
+            pieces = tables.Piece.objects
+            for p in pieces :
+                if self.piece_id == p.piece_id :
+                    etats = db.etat.find({u'_cls':"Etat.Clim", u'piece_id': item[u'piece_id']})
+                    for elem in etats:
+                        print elem
+
+            self.climActive = elem[u'climActivee']
+            print self.climActive
 
         elif (typeInfo == "Devices.Humidite"):
             print "Humidite"
             self.type = 'HUMID'
+            
             self.val = item[u'valeur']
             print self.val
+
+            self.piece_id = item[u'piece_id']
+            print self.piece_id
+            
+            pieces = tables.Piece.objects
+            for p in pieces :
+                if self.piece_id == p.piece_id :
+                    etats = db.etat.find({u'_cls':"Etat.AntiIncendie", u'piece_id': item[u'piece_id']})
+                    for elem in etats:
+                        print elem
+
+            self.antiIncendieActive = elem[u'antiIncendieDeclenche']
+            print self.antiIncendieActive
             
         elif (typeInfo =="Devices.RFID"):
             print "RFID"
