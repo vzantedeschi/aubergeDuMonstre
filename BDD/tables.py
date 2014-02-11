@@ -23,29 +23,29 @@ class Personne(Document):
 	nom = StringField(required = False)
 
 class Etat(Document):
-        piece_id = IntField(required = True)
-        meta = {'allow_inheritance': True}
+    piece_id = IntField(required = True)
+    meta = {'allow_inheritance': True}
 
-class Devices(Document) :
+class Donnee(Document) :
 	piece_id = IntField(required = True)
 	date = DateTimeField(required = True)
 	traite = BooleanField(required = True)
 	meta = {'allow_inheritance': True}
 
-## Les classes héritant de Devices sont les capteurs
-class Presence(Devices):
+## Les classes héritant de Donnee sont les données récupérées des trames reçues
+class Presence(Donnee):
 	pass
 
-class Interrupteur(Devices):
-        pass
+class Interrupteur(Donnee):
+    pass
 	
-class Temperature(Devices):
+class Temperature(Donnee):
 	valeur = FloatField(required = True)
 
-class Humidite(Devices):
+class Humidite(Donnee):
 	valeur = FloatField(required = True)	
 
-class RFID (Devices):
+class RFID (Donnee):
 	resident_id = IntField(required = True)
 
 ## Les classes héritant de Etat sont les booléens représentant l'état de la maison
@@ -76,7 +76,7 @@ if __name__ == '__main__' :
 	db.drop_database('GHome_BDD')
 
 	for i in range(10) :
-		etat = Clim(piece_id = 1, date = datetime.datetime.now(), traite = False, climActivee = True)
+		etat = Clim(piece_id = 1, date = datetime.datetime.now(), climActivee = True)
 		etat.save()
 		time.sleep(1)
 
