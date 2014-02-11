@@ -28,7 +28,11 @@ class generateurTrames():
             elif (type == 'TEMP') :
                 self.temperature = id
 
-        self.rfid = "01010101"
+            elif (type == 'RFID1') :
+                self.rfid1 = id
+
+            elif (type == 'RFID2') :
+                self.rfid2 = id
 
     #Generation des trames parasites
     def genericFrame(self) :
@@ -97,9 +101,10 @@ class generateurTrames():
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
+    #Generation des trames du capteur de fenetre
     def contactFenetreOuverte(self) :
         org = "07"
-        dataBytes = "00000009"
+        dataBytes = "00000008"
         idBytes = self.fenetre
         message = org+dataBytes+idBytes
         status = "30"
@@ -109,7 +114,7 @@ class generateurTrames():
 
     def contactFenetreFermee(self) :
         org = "07"
-        dataBytes = "00000008"
+        dataBytes = "00000009"
         idBytes = self.fenetre
         message = org+dataBytes+idBytes
         status = "30"
@@ -117,10 +122,21 @@ class generateurTrames():
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def rfidDetected(self) :
+    #Generation des trames de puces rfid
+    def rfid1Detected(self) :
         org = "07"
-        dataBytes = "CCCCCCCC"
-        idBytes = self.rfid
+        dataBytes = "00000001"
+        idBytes = self.rfid1
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "00"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def rfid2Detected(self) :
+        org = "07"
+        dataBytes = "00000002"
+        idBytes = self.rfid2
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "00"
@@ -133,6 +149,7 @@ class generateurTrames():
         print "capteur de detection de presence ", self.presence
         print "interrupteur sans fils ", self.interrupteur 
         print "capteur de temperature ", self.temperature
+        print "capteur de puce rfid ", self.rfid1, self.rfid2
     
 
 if __name__ == "__main__" :

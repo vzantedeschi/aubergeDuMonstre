@@ -113,6 +113,24 @@ class ThreadCommand(threading.Thread):
                                 # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
                                 if self.connected == True :
                                     self.socket.send( 'A55A6B0570000000FF9F1E0530D1' )
+                                    
+                    elif commande.type == 'TEMP' :
+                        print 'Commande suivant un changement de temperature en cours'
+
+                        ## Valeur 19 à modifier dans une interface graphique par exemple
+                        if commande.val > 19 :
+                            print "Activation de la climatisation"
+                            if self.connected == True :
+                                self.socket.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
+                                
+                    elif commande.type == 'HUMID' :
+                        print 'Commande suivant un changement de humidite en cours'
+
+                        ## Valeur 70 à modifier dans une interface graphique par exemple
+                        if commande.val < 70 :
+                            print "Activation du systeme anti-incendie"
+                            if self.connected == True :
+                                self.socket.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
 
                     elif commande.type == 'OTHER':
                         print 'Pas de commande implementee'

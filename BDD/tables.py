@@ -38,7 +38,7 @@ class Humidite(Etat):
 	valeur = FloatField(required = True)	
 
 class RFID (Etat):
-	resident_id = StringField(required = True)
+	resident_id = IntField(required = True)
 
 class FermetureRideau(Etat):
 	rideauOuvert = BooleanField(required = True)

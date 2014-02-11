@@ -15,7 +15,7 @@ def envoiTramesAbsence():
     socketClient.send(trame)
 
 hote = 'localhost'
-port = 13800
+port = 13900
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -120,10 +120,9 @@ while True :
                             elif piece == 3:
                                 print "Pas de capteurs dans cette piece"
                         elif perso == 1 :
-                            ## A TERME, METTRE PLUSIEURS RFID (passage de paramètres dans cette fonction)
                             ## IL Y AURA AUSSI PLUSIEURS CAPTEURS DE TYPE FENETRE AVEC UN ID CHACUN,
                             ## ON POURRAIT ASSOCIER CHAQUE ID A UNE PIECE
-                            trame = gen.rfidDetected()
+                            trame = gen.rfid1Detected()
                             trame = trame.encode()
                             socketClient.send(trame)
                             time.sleep(3)
@@ -135,7 +134,7 @@ while True :
                                 print "Pas de capteurs dans cette piece"
                                 
                         elif perso == 2 :
-                            trame = gen.rfidDetected()
+                            trame = gen.rfid2Detected()
                             time.sleep(3)
                             trame = trame.encode()
                             socketClient.send(trame)

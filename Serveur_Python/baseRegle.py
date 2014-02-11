@@ -3,6 +3,7 @@
 
 import mongoengine
 import pymongo
+import time
 
 class Commande():
     def __init__(self):
@@ -13,44 +14,45 @@ class Commande():
         db_connec = mongoengine.connect('GHome_BDD')
         db = db_connec.GHome_BDD
         
-        # Risque de nous donner une liste => problèmes
-        liste = db.capteur.find({u'traite':False},{u'_cls':1})
+        liste = db.etat.find({u'traite':False})
         item = None
+
         # Permet d'examiner les informations nouvelles dans la BDD
         for anItem in liste:
             item = anItem
             print item
-            typeInfo = item['_cls']
+            typeInfo = item[u'_cls']
             print typeInfo
-            
         
         ### Il me faut le format des informations de sortie pour savoir
         ### sur quoi faire une condition
-        if (typeInfo == "Capteur.Presence"):
+        if (typeInfo == "Etat.Presence"):
             print 'Presence detectee'
             self.type = 'PRES'
-            # Il faudrait tester si une trame RFID a été envoyée aussi
-            # On va considérer que la trame RFID sera toujours traitée avant
-            # la trame de présence (pas le même cycle!)
 
-        elif (typeInfo =="Capteur.Temperature"):
+        elif (typeInfo == "Etat.Temperature"):
             #Détermine la commande et mettre "traite" à True
-            print "Température & Humidité"
-            
-            # Si la température passe en-dessous d'un certain seuil, allumer
-            # la clim
-            # Si l'humidité passe en-dessous d'un certain seuil, déclencher
-            # le système incendie
+            print "Temperature"
             self.type = 'TEMP'
+            self.val = item[u'valeur']
+            print self.val
+
+        elif (typeInfo == "Etat.Humidite"):
+            print "Humidite"
+            self.type = 'HUMID'
+            self.val = item[u'valeur']
+            print self.val
             
-        elif (typeInfo =="Capteur.RFID"):
+        elif (typeInfo =="Etat.RFID"):
             print "RFID"
             self.type = 'RFID'
+            self.resident = item[u'resident_id']
+            print self.resident
 
         else:
             print 'Autre type de commande'
             self.type = 'OTHER'
             
         if (item != None):
-        # Modifier l'information de la BDD pour mettre "traite" à True            
-			db.capteur.update({"_id" : item['_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+            # Modifier l'information de la BDD pour mettre "traite" à True            
+            db.etat.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)

@@ -42,7 +42,7 @@ while connected == False:
         hote = raw_input(">> ")
         #print "\nSur quel port?"
         #port = int(input())
-        port = 13800
+        port = 13900
         try :
             connexion_avec_passerelle.connect((hote, port))
             print("Connexion établie avec la passerelle sur le port {}".format(port))
@@ -114,12 +114,11 @@ try:
                     capteur_temperature = tables.Temperature(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.tempDonnees)
                     capteur_humidite = tables.Humidite(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.humDonnees)
                     capteur_temperature.save()
-                    capteur_humidite.save()
-                    print "1 = temp"      
+                    capteur_humidite.save()     
 
                 elif trameInterpretee.typeCapteur == 'RFID':
-                    #capteur_rfid = tables.RFID(capteur_id =trameInterpretee.id, annee = trameInterpretee.annee, mois = trameInterpretee.mois, jour = trameInterpretee.jour, heure = trameInterpretee.heure, valeur = trameInterpretee, traite = False)
-                    print "3 = rfid"
+                    capteur_rfid = tables.RFID(piece_id =trameInterpretee.piece_id, date = now, traite = False, resident_id = trameInterpretee.perso)
+                    capteur_rfid.save()
 
                 # Met le checkStatus du thread de commande à 1
                 threadCommand.checkStatus = 1

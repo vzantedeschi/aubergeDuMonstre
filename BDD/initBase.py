@@ -36,7 +36,7 @@ def initialize() :
 	    pi, typeC, ident = l.split()
 	    pi = int(pi)
 	    ident = int(ident,16)
-	    capteur = tables.Capteur(capteur_id = ident, capteur_type = typeC, annee = 0, mois = 0, jour = 0, heure = 0, traite = True)
+	    capteur = tables.Capteur(capteur_id = ident, capteur_type = typeC)
 	    capteur.save()
 
 	    piece = tables.Piece.objects(piece_id = pi).first()
