@@ -21,11 +21,11 @@ def hello():
     clients = [1, 2, 3]
     return render_template('index.html', clients=clients)
 
-@app.route('/surveillance.html')
+@app.route('/surveillance')
 def surveillance():
     return render_template('surveillance.html', presence = presence)
 
-@app.route('/controle.html')
+@app.route('/controle')
 def controle():
     return render_template('controle.html')
 
