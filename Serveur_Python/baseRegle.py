@@ -14,7 +14,7 @@ class Commande():
         db_connec = mongoengine.connect('GHome_BDD')
         db = db_connec.GHome_BDD
         
-        liste = db.etat.find({u'traite':False})
+        liste = db.devices.find({u'traite':False})
         item = None
 
         # Permet d'examiner les informations nouvelles dans la BDD
@@ -26,28 +26,32 @@ class Commande():
         
         ### Il me faut le format des informations de sortie pour savoir
         ### sur quoi faire une condition
-        if (typeInfo == "Etat.Presence"):
+        if (typeInfo == "Devices.Presence"):
             print 'Presence detectee'
             self.type = 'PRES'
 
-        elif (typeInfo == "Etat.Temperature"):
+        elif (typeInfo == "Devices.Temperature"):
             #Détermine la commande et mettre "traite" à True
             print "Temperature"
             self.type = 'TEMP'
             self.val = item[u'valeur']
             print self.val
 
-        elif (typeInfo == "Etat.Humidite"):
+        elif (typeInfo == "Devices.Humidite"):
             print "Humidite"
             self.type = 'HUMID'
             self.val = item[u'valeur']
             print self.val
             
-        elif (typeInfo =="Etat.RFID"):
+        elif (typeInfo =="Devices.RFID"):
             print "RFID"
             self.type = 'RFID'
             self.resident = item[u'resident_id']
             print self.resident
+
+        elif (typeInfo =="Devices.Interrupteur"):
+            print "Interrupteur"
+            self.type = 'INTR'
 
         else:
             print 'Autre type de commande'
@@ -55,4 +59,4 @@ class Commande():
             
         if (item != None):
             # Modifier l'information de la BDD pour mettre "traite" à True            
-            db.etat.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+            db.devices.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)

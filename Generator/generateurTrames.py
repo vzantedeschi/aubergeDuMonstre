@@ -27,6 +27,7 @@ class generateurTrames():
 
             elif (type == 'TEMP') :
                 self.temperature = id
+                self.humidite = id
 
             elif (type == 'RFID1') :
                 self.rfid1 = id
@@ -95,6 +96,17 @@ class generateurTrames():
         org = "07"
         dataBytes = "0084990F"
         idBytes = self.temperature
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "A7"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    #Generation des trames du capteur d'humidité
+    def currentHumidite(self) : 
+        org = "07"
+        dataBytes = "0084990F"
+        idBytes = self.humidite
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "A7"

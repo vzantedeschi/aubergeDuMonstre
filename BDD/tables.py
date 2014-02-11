@@ -22,24 +22,33 @@ class Personne(Document):
 	personne_id = IntField(primary_key=True)
 	nom = StringField(required = False)
 
-class Etat(Document) :
+class Etat(Document):
+        piece_id = IntField(required = True)
+        meta = {'allow_inheritance': True}
+
+class Devices(Document) :
 	piece_id = IntField(required = True)
 	date = DateTimeField(required = True)
 	traite = BooleanField(required = True)
 	meta = {'allow_inheritance': True}
 
-class Presence(Etat):
+## Les classes héritant de Devices sont les capteurs
+class Presence(Devices):
 	pass
+
+class Interrupteur(Devices):
+        pass
 	
-class Temperature(Etat):
+class Temperature(Devices):
 	valeur = FloatField(required = True)
 
-class Humidite(Etat):
+class Humidite(Devices):
 	valeur = FloatField(required = True)	
 
-class RFID (Etat):
+class RFID (Devices):
 	resident_id = IntField(required = True)
 
+## Les classes héritant de Etat sont les booléens représentant l'état de la maison
 class FermetureRideau(Etat):
 	rideauOuvert = BooleanField(required = True)
 
@@ -55,8 +64,8 @@ class FermeturePorte (Etat):
 class FermetureVolet(Etat):
 	voletOuvert = BooleanField(required = True)
 
-class Interrupteur (Etat):
-	interrupteurDeclenche = BooleanField(required = True)
+class Prise (Etat):
+	priseDeclenchee = BooleanField(required = True)
 
 
 if __name__ == '__main__' :

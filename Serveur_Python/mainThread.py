@@ -51,8 +51,7 @@ while connected == False:
         except socket.error :
             print("Impossible de se connecter au proxy")
             exit()
-    
-print 'ok'       
+   
 ########### CONNEXION BDD ###############
 db_connec = mongoengine.connect('GHome_BDD')
 
@@ -72,6 +71,7 @@ print identifiants
 #
 #
 #
+
 threadCommand = threadsDefined.ThreadCommand()
 threadCommand.start()
 
@@ -112,13 +112,17 @@ try:
 
                 elif trameInterpretee.typeCapteur == 'TEMP':
                     capteur_temperature = tables.Temperature(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.tempDonnees)
-                    capteur_humidite = tables.Humidite(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.humDonnees)
                     capteur_temperature.save()
-                    capteur_humidite.save()     
+                    capteur_humidite = tables.Humidite(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.humDonnees)
+                    capteur_humidite.save()
 
                 elif trameInterpretee.typeCapteur == 'RFID':
                     capteur_rfid = tables.RFID(piece_id =trameInterpretee.piece_id, date = now, traite = False, resident_id = trameInterpretee.perso)
                     capteur_rfid.save()
+                    
+                elif trameInterpretee.typeCapteur == 'INTR':
+                    capteur_interrupteur = tables.Interrupteur(piece_id = trameInterpretee.piece_id, date = now, traite = False)
+                    capteur_interrupteur.save()
 
                 # Met le checkStatus du thread de commande à 1
                 threadCommand.checkStatus = 1
