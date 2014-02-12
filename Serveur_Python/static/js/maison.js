@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	//design constants
 	var WIDTH = $(window).width() / 3; 
-	var HEIGHT = $(window).height();
+	var HEIGHT = $(window).height() * 0.8;
 	var dec = 5
 
 	//principal corners' definition
@@ -19,7 +19,7 @@ $(document).ready(function() {
 	var MARGE = 3
 
 	//Draw maison 
-	maison = new Raphael(document.getElementById("maison"), WIDTH + MARGE * 2, HEIGHT + MARGE * 2);
+	maison = new Raphael(document.getElementById("maison"), WIDTH, HEIGHT);
 
 	//rooms	
 	var salon = createRoom(0, 0, w1, HEIGHT)
