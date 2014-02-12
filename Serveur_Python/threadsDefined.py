@@ -75,9 +75,9 @@ class ThreadCommand(threading.Thread):
         hote = '134.214.106.23'
         port = 5000
         try :
-            #self.socket.connect((hote, port))
+            self.socket.connect((hote, port))
             print("Connexion établie avec la passerelle sur le port {}".format(port))
-            #self.connected = True
+            self.connected = True
         except socket.error :
             print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
 
