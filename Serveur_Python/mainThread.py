@@ -2,13 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import threadsDefined
 import socket
-import trame
-import datetime
-import interpreteur
-import pymongo
 import mongoengine
+import datetime
+import trame
+import interpreteur
 sys.path.append('../BDD')
 import tables
 import initBase
@@ -60,10 +58,6 @@ initBase.initialize()
 #récupération identifiants dans la base
 identifiants = tables.Capteur.objects
 identifiants = map(lambda i : i.capteur_id, identifiants)
-print identifiants
-
-threadCommand = threadsDefined.ThreadCommand()
-threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
 try: 
@@ -94,11 +88,6 @@ try:
                 if infosTrame.eepSent == False :
                     # Interprète les informations contenues dans la Trame
                     interpreteur.interpretation(infosTrame,now)
-
-                # Met le checkStatus du thread de commande à 1
-                threadCommand.checkStatus = 1
-                # Note : il est possible que l'on se retrouve avec deux
-                # timers au lieu d'un avec cet appel... => double check de la BI
 
 
 except KeyboardInterrupt:

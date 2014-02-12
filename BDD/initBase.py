@@ -5,8 +5,6 @@ from mongoengine import *
 import sys
 import tables
 
-db = connect('GHome_BDD')
-
 def addCapteur() :
 	print 'ajouté à la base'
 
@@ -14,6 +12,7 @@ def addActionneur() :
 	print 'ajouté à la base'
 
 def initialize() :
+	db = connect('GHome_BDD')
 	db.drop_database('GHome_BDD')
 
 	#Initialisation pièces
@@ -82,8 +81,8 @@ def initialize() :
 
         #Initialisation de l'état des pièces
         for p in pieces :
-                etat = tables.Etat(piece_id = p.piece_id, rideauxOuverts = True,antiIncendieDeclenche = False,climActivee = False,portesFermees = False,voletsOuverts = True,priseDeclenchee = False,persosPresents = [])
-                etat.save()
+            etat = tables.Etat(piece_id = p.piece_id, rideauxOuverts = True,antiIncendieDeclenche = False,climActivee = False,portesFermees = False,voletsOuverts = True,priseDeclenchee = False,persosPresents = [])
+            etat.save()
 
 	print 'base reinitialisee'
 
