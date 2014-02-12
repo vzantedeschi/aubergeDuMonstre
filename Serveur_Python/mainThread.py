@@ -42,7 +42,7 @@ while connected == False:
         hote = raw_input(">> ")
         #print "\nSur quel port?"
         #port = int(input())
-        port = 14000
+        port = 13600
         try :
             connexion_avec_passerelle.connect((hote, port))
             print("Connexion établie avec la passerelle sur le port {}".format(port))

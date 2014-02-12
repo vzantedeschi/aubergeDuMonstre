@@ -74,13 +74,13 @@ class Commande():
             self.antiIncendieActive = elem[u'antiIncendieDeclenche']
             print self.antiIncendieActive
             
-        elif (typeInfo =="Donnee.RFID"):
+        elif (typeInfo == "Donnee.RFID"):
             print "RFID"
             self.type = 'RFID'
             self.resident = item[u'resident_id']
             print self.resident
 
-        elif (typeInfo =="Donnee.Interrupteur"):
+        elif (typeInfo == "Donnee.Interrupteur"):
             print "Interrupteur"
             self.type = 'INTR'
 
@@ -90,4 +90,4 @@ class Commande():
             
         if (item != None):
             # Modifier l'information de la BDD pour mettre "traite" à True            
-            db.devices.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+            db.donnee.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)

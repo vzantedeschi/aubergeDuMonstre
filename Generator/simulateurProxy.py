@@ -15,7 +15,7 @@ def envoiTramesAbsence():
     socketClient.send(trame)
 
 hote = 'localhost'
-port = 14000
+port = 13600
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -75,14 +75,15 @@ while True :
 
                     print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
 
-                    event = 7
-                    while event > 6 :
+                    event = 8
+                    while event > 7 :
                         print "1. Quelqu'un entre dans une piece"
-                        print "2. On allume la lumiere dans un piece"
+                        print "2. On allume la lumiere dans une piece"
                         print "3. On eteind la lumiere dans une piece"
                         print "4. La temperature passe a 24.5 degres"
                         print "5. Une fenetre est ouverte dans une piece"
                         print "6. L'humidite passe a 52.8 %"
+                        print "7. On clique sur l'interrupteur pour rouvrir les volets"
                         event = int(input())
 
                     piece = 4
@@ -93,7 +94,7 @@ while True :
                         print "3. Salon"
                         piece = int(input())
 
-                    if event not in [2,3,4,5,6] :
+                    if event not in [2,3,4,5,6,7] :
                         
                         perso = 4
                         while perso > 3 :
@@ -103,7 +104,7 @@ while True :
                             print "3. Un inconnu"
                             perso = int(input())
 
-                    if event not in [1,2,3,4,6] :
+                    if event not in [1,2,3,4,6,7] :
 
                         mouv = 3
                         while mouv > 2:
@@ -191,6 +192,15 @@ while True :
                     elif event == 6 :
                         if piece == 1:
                             trame = gen.currentHumidite()
+                        elif piece == 2:
+                            print "Pas de capteurs dans cette piece"
+                        elif piece == 3:
+                            print "Pas de capteurs dans cette piece"
+
+                    ## Réouverture des volets par interrupteur        
+                    elif event == 7 :
+                        if piece == 1:
+                            trame = gen.pressON()
                         elif piece == 2:
                             print "Pas de capteurs dans cette piece"
                         elif piece == 3:
