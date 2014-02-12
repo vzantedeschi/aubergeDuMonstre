@@ -96,6 +96,7 @@ try:
             infosTrame = trame.Trame(msg_recu)          
 
             if infosTrame.valide == True :
+                print "\n"
                 print ("ID {}".format(hex(infosTrame.idBytes)))
                 print ("DB ", infosTrame.dataBytes)
                 print ("Heure {}".format(now.time()))
