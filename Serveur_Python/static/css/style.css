@@ -145,8 +145,9 @@ body {
 #surv {
   display: block;
   bottom: 0%;
-  position: relative;
-  margin-top: -150px; /* negative value of footer height */
-  height: 150px;
-  clear:both;
+}
+
+#maison {
+  display: block;
+  margin-top: 10%;
 }

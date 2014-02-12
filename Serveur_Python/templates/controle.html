@@ -12,8 +12,10 @@
 		<div class="row">
 			<div class="col-12 col-sm-12 col-lg-12">
 				<h2>Tableau de controle</h2>
+				<div id="la">
+				</div>
 				<!-- presence d'un onsubmit="valider()" affichera un message d'erreur ou de confirmation d'envoi-->
-				<form method="POST" action="./controle">
+				<form method="POST" action="/controle">
 					<!-- presence d'un onclick="choixActionneur(piece)" affichera les actionneurs de la piece selectionnee-->
 					<!--affichage des pieces grace a requete, et non en dur-->
 					<select name="piece">
@@ -60,7 +62,7 @@
 		
 		if(document.getElementById('on').checked==true){
 			alert("L'" + document.forms[0].actionneur.value + " de la " + document.forms[0].piece.value + " est en position ON");
-			document.getElementById(id).innerHTML = message;
+			
 		}
 		else {
 			if(document.getElementById('off').checked==true){

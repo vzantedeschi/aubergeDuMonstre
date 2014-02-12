@@ -19,7 +19,7 @@ $(document).ready(function() {
 	var MARGE = 3
 
 	//Draw maison 
-	paper = new Raphael(p1x, p1y, WIDTH + MARGE * 2, HEIGHT + MARGE * 2);
+	maison = new Raphael(document.getElementById("maison"), WIDTH + MARGE * 2, HEIGHT + MARGE * 2);
 
 	//rooms	
 	var salon = createRoom(0, 0, w1, HEIGHT)
@@ -30,7 +30,7 @@ $(document).ready(function() {
 
 	function createRoom(x,y,width,height)
 	{
-	    var rect = paper.rect(x,y,width,height).attr({"fill":"white","stroke":"red"});
+	    var rect = maison.rect(x,y,width,height).attr({"fill":"white","stroke":"red"});
 	    return rect;
 	}
 
