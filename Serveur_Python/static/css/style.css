@@ -145,6 +145,10 @@ body {
 #surv {
   display: block;
   bottom: 0%;
+  position: relative;
+  margin-top: -150px;
+  height: 150px;
+  clear: both;
 }
 
 #maison {
