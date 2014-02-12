@@ -131,7 +131,7 @@ class ThreadCommand(threading.Thread):
                         if commande.val > 19 and commande.climActive == False :
                             print "Activation de la climatisation"
                             # Modifier l'information de la BDD pour mettre "climActive" à True
-                            db.etat.update({"_cls" : "Etat.Clim", u'piece_id' : commande.piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
+                            db.etat.update({u'piece_id' : commande.piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
                             if self.connected == True :
                                 self.socket.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
                         elif commande.val <= 19 and commande.climActive == True :
@@ -146,6 +146,8 @@ class ThreadCommand(threading.Thread):
                         ## La trame crée est fausse, c'est un exemple
                         if commande.val < 70 and commande.antiIncendieActive == False:
                             print "Activation du systeme anti-incendie"
+                            # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
+                            db.etat.update({u'piece_id' : commande.piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
                             if self.connected == True :
                                 self.socket.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
                         elif commande.val > 70 and commande.antiIncendieActive == True:

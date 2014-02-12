@@ -47,12 +47,13 @@ class Commande():
             pieces = tables.Piece.objects
             for p in pieces :
                 if self.piece_id == p.piece_id :
-                    etats = db.etat.find({u'_cls':"Etat.Clim", u'piece_id': item[u'piece_id']})
-                    for elem in etats:
-                        print elem
+                    etat = tables.Etat.objects(piece_id = self.piece_id).first()
+                    print etat
 
-            self.climActive = elem[u'climActivee']
+            self.climActive = etat[u'climActivee']
             print self.climActive
+
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'temperature' : tempDonnees} },upsert=False,multi=True)
 
         elif (typeInfo == "Donnee.Humidite"):
             print "Humidite"
@@ -67,12 +68,13 @@ class Commande():
             pieces = tables.Piece.objects
             for p in pieces :
                 if self.piece_id == p.piece_id :
-                    etats = db.etat.find({u'_cls':"Etat.AntiIncendie", u'piece_id': item[u'piece_id']})
-                    for elem in etats:
-                        print elem
+                    etat = tables.Etat.objects(piece_id = self.piece_id).first()
+                    print etat
 
-            self.antiIncendieActive = elem[u'antiIncendieDeclenche']
+            self.antiIncendieActive = etat[u'antiIncendieDeclenche']
             print self.antiIncendieActive
+        
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'humidite' : humDonnees} },upsert=False,multi=True)
             
         elif (typeInfo == "Donnee.RFID"):
             print "RFID"

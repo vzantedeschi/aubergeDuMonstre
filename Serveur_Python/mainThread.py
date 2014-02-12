@@ -42,7 +42,7 @@ while connected == False:
         hote = raw_input(">> ")
         #print "\nSur quel port?"
         #port = int(input())
-        port = 13600
+        port = 13800
         try :
             connexion_avec_passerelle.connect((hote, port))
             print("Connexion établie avec la passerelle sur le port {}".format(port))
@@ -61,16 +61,6 @@ initBase.initialize()
 identifiants = tables.Capteur.objects
 identifiants = map(lambda i : i.capteur_id, identifiants)
 print identifiants
-
-#
-#
-#
-# TESTS POUR ENVOI TRAME (APPAREILLAGE) #
-#connexion_avec_passerelle.send( 'A55A6B0570000000FF9F1E0530D1' )
-#
-#
-#
-#
 
 threadCommand = threadsDefined.ThreadCommand()
 threadCommand.start()
@@ -103,27 +93,7 @@ try:
 
                 if infosTrame.eepSent == False :
                     # Interprète les informations contenues dans la Trame
-                    trameInterpretee = interpreteur.Interpretation(infosTrame)                        
-
-                ### INSERTION DANS LA BDD ###
-                if trameInterpretee.typeCapteur == 'PRES':
-                    if trameInterpretee.donnees == 1:
-                        capteur_presence = tables.Presence(piece_id = trameInterpretee.piece_id, date = now, traite = False)
-                        capteur_presence.save()
-
-                elif trameInterpretee.typeCapteur == 'TEMP':
-                    capteur_temperature = tables.Temperature(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.tempDonnees)
-                    capteur_temperature.save()
-                    capteur_humidite = tables.Humidite(piece_id = trameInterpretee.piece_id, date = now, traite = False, valeur = trameInterpretee.humDonnees)
-                    capteur_humidite.save()
-
-                elif trameInterpretee.typeCapteur == 'RFID':
-                    capteur_rfid = tables.RFID(piece_id =trameInterpretee.piece_id, date = now, traite = False, resident_id = trameInterpretee.perso)
-                    capteur_rfid.save()
-                    
-                elif trameInterpretee.typeCapteur == 'INTR':
-                    capteur_interrupteur = tables.Interrupteur(piece_id = trameInterpretee.piece_id, date = now, traite = False)
-                    capteur_interrupteur.save()
+                    interpreteur.interpretation(infosTrame,now)
 
                 # Met le checkStatus du thread de commande à 1
                 threadCommand.checkStatus = 1

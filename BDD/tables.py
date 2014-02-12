@@ -19,12 +19,21 @@ class Piece(Document):
 	capteurs = SortedListField(ReferenceField('Capteur'))
 	
 class Personne(Document):
-	personne_id = IntField(primary_key=True)
+	personne_id = IntField(primary_key=True)	
 	nom = StringField(required = False)
 
 class Etat(Document):
     piece_id = IntField(required = True)
-    meta = {'allow_inheritance': True}
+    rideauxOuverts = BooleanField(required = True)
+    antiIncendieDeclenche = BooleanField(required = True)
+    climActivee = BooleanField(required = True)
+    portesFermees = BooleanField(required = True)
+    voletsOuverts = BooleanField(required = True)
+    priseDeclenchee = BooleanField(required = True)
+    temperature = IntField()
+    humidite = IntField()
+    persosPresents = SortedListField(ReferenceField('Personne'))
+#    meta = {'allow_inheritance': True}
 
 class Donnee(Document) :
 	piece_id = IntField(required = True)
@@ -49,23 +58,23 @@ class RFID (Donnee):
 	resident_id = IntField(required = True)
 
 ## Les classes héritant de Etat sont les booléens représentant l'état de la maison
-class FermetureRideau(Etat):
-	rideauOuvert = BooleanField(required = True)
+#class FermetureRideau(Etat):
+#	rideauOuvert = BooleanField(required = True)
 
-class AntiIncendie (Etat):
-	antiIncendieDeclenche = BooleanField(required = True)
+#class AntiIncendie (Etat):
+#	antiIncendieDeclenche = BooleanField(required = True)
 
-class Clim(Etat):
-	climActivee = BooleanField(required = True)
+#class Clim(Etat):
+#	climActivee = BooleanField(required = True)
 
-class FermeturePorte (Etat):
-	porteFermee = BooleanField(required = True)
+#class FermeturePorte (Etat):
+#	porteFermee = BooleanField(required = True)
 
-class FermetureVolet(Etat):
-	voletOuvert = BooleanField(required = True)
+#class FermetureVolet(Etat):
+#	voletOuvert = BooleanField(required = True)
 
-class Prise (Etat):
-	priseDeclenchee = BooleanField(required = True)
+#class Prise (Etat):
+#	priseDeclenchee = BooleanField(required = True)
 
 
 if __name__ == '__main__' :
