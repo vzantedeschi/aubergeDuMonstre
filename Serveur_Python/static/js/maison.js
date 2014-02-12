@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	//design constants
 	var WIDTH = $(window).width() / 3; 
-	var HEIGHT = $(window).height();
+	var HEIGHT = $(window).height() * 0.8;
 	var dec = 5
 
 	//principal corners' definition

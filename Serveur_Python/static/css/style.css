@@ -153,5 +153,7 @@ body {
 
 #maison {
   display: block;
-  margin-top: 10%;
+  position: absolute;
+  top: 10%;
 }
+
