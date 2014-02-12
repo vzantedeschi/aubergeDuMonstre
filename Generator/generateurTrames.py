@@ -22,6 +22,9 @@ class generateurTrames():
             elif (type == 'INTR') :
                 self.interrupteur = id
 
+            elif (type == 'INTR2') :
+                self.intrVolet = id
+
             elif (type == 'PRES') :
                 self.presence = id
 
@@ -67,6 +70,16 @@ class generateurTrames():
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "33"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def fermetureVolet(self) :
+        org = "05"
+        dataBytes = "70000000"
+        idBytes = self.intrVolet
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "04"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 

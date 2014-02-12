@@ -131,7 +131,6 @@ class ThreadCommand(threading.Thread):
                         if commande.val > 19 and commande.climActive == False :
                             print "Activation de la climatisation"
                             # Modifier l'information de la BDD pour mettre "climActive" à True
-                            print "J'Y SUIS"
                             db.etat.update({"_cls" : "Etat.Clim", u'piece_id' : commande.piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
                             if self.connected == True :
                                 self.socket.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
@@ -141,7 +140,7 @@ class ThreadCommand(threading.Thread):
                                 self.socket.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
                                 
                     elif commande.type == 'HUMID' :
-                        print 'Commande suivant un changement de humidite en cours'
+                        print 'Commande suivant un changement d''humidite en cours'
 
                         ## Valeur 70 à modifier dans une interface graphique par exemple
                         ## La trame crée est fausse, c'est un exemple
@@ -153,6 +152,12 @@ class ThreadCommand(threading.Thread):
                             print "Desactivation du systeme anti-incendie"
                             if self.connected == True :
                                 self.socket.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
+
+                    elif commande.type == 'INTR' :
+                        print 'Commande suivant un interrupteur en cours'
+                        if self.connected == True :
+                            print "Ouverture des volets"
+                            self.socket.send('A55A6B0570000000FF9F1E0530D1' )
 
                     elif commande.type == 'OTHER':
                         print 'Pas de commande implementee'
