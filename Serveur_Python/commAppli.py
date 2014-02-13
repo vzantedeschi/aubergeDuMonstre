@@ -34,7 +34,7 @@ def get_pieces():
 
 @app.route('/surveillance/etats')
 def get_etats():
-	etats = [e.to_dict() for e in tables.Etat.objects]
+	etats = [e.to_dict() for e in tables.Etat.objects.order_by('+piece_id')]
 	reponse = dict(ok=True, result=etats)
 	return json.dumps(reponse)
 
