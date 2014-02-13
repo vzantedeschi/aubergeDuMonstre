@@ -151,7 +151,7 @@ except socket.error :
 while True :
     try :
         # Permet d'examiner les informations nouvelles dans la BDD
-        liste = db.donnee.find({u'traite':False})
+        liste = db.donnee.find({u'traite':False}).sort("_id", 1)
         for item in liste:
             print type(item)
             print "\n"
