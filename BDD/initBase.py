@@ -5,8 +5,6 @@ from mongoengine import *
 import sys
 import tables
 
-db = connect('GHome_BDD')
-
 def addCapteur() :
 	print 'ajouté à la base'
 
@@ -14,6 +12,7 @@ def addActionneur() :
 	print 'ajouté à la base'
 
 def initialize() :
+	db = connect('GHome_BDD')
 	db.drop_database('GHome_BDD')
 
 	#Initialisation pièces
@@ -67,15 +66,25 @@ def initialize() :
 	    piece.actionneurs.append(actionneur)
 	    piece.save()
 
-	print 'base reinitialisee'
+	#Initialisation des personnages
+	fic_id = open('../personnages.txt',"r")
+	liste = fic_id.readlines()
+	fic_id.close()
 
-	#Initialisation de l'état de la pièce 1
-	volet = tables.FermetureVolet(piece_id = 1, voletOuvert = True)
-	volet.save()
-	clim = tables.Clim(piece_id = 1, climActivee = False)
-	clim.save()
-	anti_incendie = tables.AntiIncendie(piece_id = 1, antiIncendieDeclenche = False)
-	anti_incendie.save()
+	for l in liste:
+	    ident, name = l.split()
+	    ident = int(ident,16)
+	    personnage = tables.Personne(personne_id = ident, nom = name)
+	    personnage.save()
+
+        pieces = tables.Piece.objects
+
+        #Initialisation de l'état des pièces
+        for p in pieces :
+            etat = tables.Etat(piece_id = p.piece_id, rideauxOuverts = True,antiIncendieDeclenche = False,climActivee = False,portesFermees = False,voletsOuverts = True,priseDeclenchee = False,persosPresents = [])
+            etat.save()
+
+	print 'base reinitialisee'
 
 if __name__ == '__main__' :
 	initialize()
