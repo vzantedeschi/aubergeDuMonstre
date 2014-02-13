@@ -160,7 +160,7 @@ while True :
         else :
             #s'il n'y a pas de données à traiter
             print 'Aucune nouvelle donnée'
-            time.sleep(1)
+            time.sleep(2)
     except KeyboardInterrupt:
         t.cancel()
         break

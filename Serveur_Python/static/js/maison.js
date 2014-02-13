@@ -1,8 +1,8 @@
 $(document).ready(function() { 
 
 	//design constants
-	var WIDTH = $(window).width() / 3; 
-	var HEIGHT = $(window).height() * 0.8;
+	var WIDTH = $(document).width() * 0.4; 
+	var HEIGHT = $(document).height() * 0.8;
 	var dec = 5
 
 	//principal corners' definition
@@ -19,33 +19,61 @@ $(document).ready(function() {
 	var MARGE = 3
 
 	//Draw maison 
-	maison = new Raphael(document.getElementById("maison"), WIDTH, HEIGHT);
+	maison = new Raphael(document.getElementById("maison"), WIDTH + MARGE * 2, HEIGHT);
 
-	//rooms	
-	var salon = createRoom(0, 0, w1, HEIGHT)
-	var chambre = createRoom(w1 + MARGE, 0, w2, h2)
-	var couloir = createRoom(w1 + MARGE, h2 + MARGE, w3, h3 - MARGE)
-	var bain = createRoom(w1 + w3 + 2 * MARGE, h2 + MARGE, w4 - MARGE, h4 - MARGE)
-	var cuisine = createRoom(w1 + w3 + 2 * MARGE, h2 + h4 + MARGE, w4 - MARGE, h5 - MARGE)
+	var rooms=new Array();
+
+	$.getJSON('/surveillance/pieces', {}, function(data) {
+		//rien pour le moment. Gérer les pièces dinamiquement?
+	});
+
+	//rooms	statiques
+	rooms[0] = createRoom(0, 0, w1, HEIGHT)
+	rooms[1] = createRoom(w1 + MARGE, 0, w2, h2)
+	rooms[2] = createRoom(w1 + MARGE, h2 + MARGE, w3, h3 - MARGE)
+	rooms[3] = createRoom(w1 + w3 + 2 * MARGE, h2 + MARGE, w4 - MARGE, h4 - MARGE)
+	rooms[4] = createRoom(w1 + w3 + 2 * MARGE, h2 + h4 + MARGE, w4 - MARGE, h5 - MARGE)
 
 	function createRoom(x,y,width,height)
 	{
 	    var rect = maison.rect(x,y,width,height).attr({"fill":"white","stroke":"red"});
+	    addHoverListener(rect);
 	    return rect;
 	}
 
-	//Timer for variables update
-	setInterval(updatePresence, 1000);
+   
+	function addHoverListener(obj) {
+	    obj.mouseout(function(event){
 
-	function updatePresence() {
-		$.getJSON('/presence', {}, function(data) {
-		if(new String(data).valueOf() == new String("true").valueOf()) {
-			couloir.attr({"fill":"red"});
-			//$("body").html("<div class='alert-danger'>Quelqu'un est dans le couloir</div>");
-		}
-		else {
-			couloir.attr({"fill":"white"});
-		}
+			obj.attr({"fill":"white","stroke-width": 1});
+		});
+
+		obj.mouseover(function(event){
+
+			obj.attr({"stroke-width": 5});
+
+		});
+
+		obj.click(function(event){
+
+			obj.attr({"fill":"red"});
+
+		});
+	}
+
+	function showEtat(obj) {
+		//var piece_id = 
+	}
+
+	function showPerso() {
+
+	}
+
+	//setInterval(updateEtats, 1000);
+
+	function updateEtats() {
+		$.getJSON('/surveillance/etats', {}, function(data) {
+			console.log(data.result[0]);
 		});
 	}
 })

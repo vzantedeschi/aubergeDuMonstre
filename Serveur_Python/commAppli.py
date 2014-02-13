@@ -3,9 +3,16 @@
 from flask import Flask, render_template, request
 import requests
 import json
+from mongoengine import *
+import sys
+sys.path.append('../BDD')
+import tables
 
-presence = False
 app = Flask(__name__)
+db_connec = connect('GHome_BDD')
+
+# \ ! / Monkey patching mongoengine to make json dumping easier
+Document.to_dict = lambda s : json.loads(s.to_json())
 
 @app.route('/')
 def hello():
@@ -19,11 +26,17 @@ def surveillance():
 def controle():
     return render_template('controle.html')
 
-@app.route('/presence')
-def get_presence():
-    global presence
-    presence = not presence
-    return json.dumps(presence)
+@app.route('/surveillance/pieces')
+def get_pieces():
+	pieces = [p.to_dict() for p in tables.Piece.objects.order_by('+piece_id')]
+	reponse = dict(ok=True, result=pieces)
+	return json.dumps(reponse)
+
+@app.route('/surveillance/etats')
+def get_etats():
+	etats = [e.to_dict() for e in tables.Etat.objects]
+	reponse = dict(ok=True, result=etats)
+	return json.dumps(reponse)
 
 if __name__ == '__main__':
     app.run(debug=True)
