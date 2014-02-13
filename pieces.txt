@@ -1,3 +1,5 @@
 1 Couloir
-2 Cuisine
-3 Salon
+2 Salon
+3 Cuisine
+4 Bain
+5 Chambre

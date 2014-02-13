@@ -142,18 +142,3 @@ body {
   color: #FCEDF0;
 }
 
-#surv {
-  display: block;
-  bottom: 0%;
-  position: relative;
-  margin-top: -150px;
-  height: 150px;
-  clear: both;
-}
-
-#maison {
-  display: block;
-  position: absolute;
-  top: 10%;
-}
-
