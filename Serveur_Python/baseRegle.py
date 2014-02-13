@@ -26,7 +26,7 @@ port = 5000
 db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
-def RFIDFunc(thread):
+def RFIDFunc():
     rfidDetected = False
 
 def commande(item):
@@ -141,6 +141,7 @@ def commande(item):
         db.donnee.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
       
 try :
+    print 'Attente connexion au proxy'
     connectProxy.connect((hote, port))
     print("Connexion établie avec la passerelle sur le port {}".format(port))
     connected = True
@@ -158,6 +159,7 @@ while True :
             commande(item)
         else :
             #s'il n'y a pas de données à traiter
+            print 'Aucune nouvelle donnée'
             time.sleep(1)
     except KeyboardInterrupt:
         t.cancel()

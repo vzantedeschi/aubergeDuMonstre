@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd ./Generator/;
+gnome-terminal -t "Simulateur" -x python simulateurProxy.py;
+cd ../Serveur_Python;
+gnome-terminal -t "MainThread" -x python mainThread.py;
+gnome-terminal -t "BaseDeRegles" -x python baseRegle.py;
+python commAppli.py
