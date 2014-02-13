@@ -107,6 +107,8 @@ def commande(item):
                 connectProxy.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
         elif humDonnees > 70 and antiIncendieActive == True:
             print "Desactivation du systeme anti-incendie"
+            # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
             if connected == True :
                 connectProxy.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
     
