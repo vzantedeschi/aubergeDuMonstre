@@ -63,7 +63,7 @@ except socket.error :
 
 try :
     hote = 'localhost'
-    port = 13800
+    port = 13500
     connexion_avec_passerelle.connect((hote, port))
     print("Connexion etablie avec la passerelle sur le port {}".format(port))
     print ("\n")
@@ -89,6 +89,7 @@ try:
     while True:
         msg_recu = connexion_avec_passerelle.recv(28)       
         msg_recu = msg_recu.decode()
+        print "\n"
         print msg_recu
         
         # Recupere l'identifiant du capteur

@@ -52,7 +52,10 @@ class Temperature(Donnee):
 	valeur = FloatField(required = True)
 
 class Humidite(Donnee):
-	valeur = FloatField(required = True)	
+	valeur = FloatField(required = True)
+
+class ContactFen(Donnee):
+	ouverte = BooleanField(required = True)
 
 class RFID (Donnee):
 	resident_id = IntField(required = True)

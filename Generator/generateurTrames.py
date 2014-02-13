@@ -32,11 +32,8 @@ class generateurTrames():
                 self.temperature = id
                 self.humidite = id
 
-            elif (type == 'RFID1') :
-                self.rfid1 = id
-
-            elif (type == 'RFID2') :
-                self.rfid2 = id
+            elif (type == 'RFID') :
+                self.rfid = id
 
     #Generation des trames parasites
     def genericFrame(self) :
@@ -148,20 +145,10 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames de puces rfid
-    def rfid1Detected(self) :
+    def rfidDetected(self,perso) :
         org = "07"
-        dataBytes = "00000001"
-        idBytes = self.rfid1
-        message = org+dataBytes+idBytes
-        status = "30"
-        checksum = "00"
-        queueTrame = status+checksum
-        return self.enteteTrames + message + queueTrame
-
-    def rfid2Detected(self) :
-        org = "07"
-        dataBytes = "00000002"
-        idBytes = self.rfid2
+        dataBytes = "0000000"+str(perso)
+        idBytes = self.rfid
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "00"
@@ -174,7 +161,7 @@ class generateurTrames():
         print "capteur de detection de presence ", self.presence
         print "interrupteur sans fils ", self.interrupteur 
         print "capteur de temperature ", self.temperature
-        print "capteur de puce rfid ", self.rfid1, self.rfid2
+        print "capteur de puce rfid ", self.rfid
     
 
 if __name__ == "__main__" :

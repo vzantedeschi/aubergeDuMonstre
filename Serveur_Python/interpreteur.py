@@ -31,6 +31,7 @@ def interpretation(trame, now):
     for p in pieces :
       if capteur in p.capteurs :
         print "piece ", p.piece_id, "  : ", p.name
+        print "\n"
 
     piece_id = p.piece_id
       
@@ -38,7 +39,7 @@ def interpretation(trame, now):
     if typeCapteur == 'PRES':
       #recuperation de DB0.1 donnant la presence
       trame.dataBytes = int (trame.dataBytes, 16)
-      #si l avant dernier bit est a 0 alors c est une presence, si il est a 1 c est une absence
+      #si l'avant dernier bit est a 0 alors c est une presence, si il est a 1 c est une absence
       donnees = not((trame.dataBytes & 0x00000002) >> 1)
       #print (trame.dataBytes)
 
@@ -74,6 +75,16 @@ def interpretation(trame, now):
     elif typeCapteur == 'INTR':
         capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = now, traite = False)
         capteur_interrupteur.save()
+
+    elif typeCapteur == 'FEN':
+        fenBytes = int(trame.dataBytes[7:8], 16)
+        print ("fenBytes : ",fenBytes)
+        if fenBytes == 8:
+          capteur_fenetre = tables.ContactFen(piece_id = piece_id, date = now, traite = False, ouverte = True)
+        elif fenBytes == 9:
+          capteur_fenetre = tables.ContactFen(piece_id = piece_id, date = now, traite = False, ouverte = False)
+          
+        capteur_fenetre.save()
 
 if __name__ == "__main__" :
     print '################# TESTS UNITAIRES ##################'

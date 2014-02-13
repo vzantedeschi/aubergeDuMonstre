@@ -15,7 +15,7 @@ def envoiTramesAbsence():
     socketClient.send(trame)
 
 hote = 'localhost'
-port = 13800
+port = 13500
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -81,7 +81,7 @@ while True :
                         print "2. On allume la lumiere dans une piece"
                         print "3. On eteind la lumiere dans une piece"
                         print "4. La temperature passe a 24.5 degres"
-                        print "5. Une fenetre est ouverte dans une piece"
+                        print "5. Une fenêtre est ouverte/fermee dans une piece"
                         print "6. L'humidite passe a 52.8 %"
                         print "7. On clique sur l'interrupteur pour rouvrir les volets"
                         event = int(input())
@@ -119,27 +119,17 @@ while True :
                         if perso == 3:
                             if piece == 1:
                                 trame = gen.presenceDetected()
+                                socketClient.send(trame)
+                                ## Laisse le temps aux volets de se fermer avant
+                                ## que le capteur ne le signale
+                                time.sleep(10)
+                                trame = gen.contactFenetreFermee()
                             elif piece == 2:
                                 print "Pas de capteurs dans cette piece"
                             elif piece == 3:
                                 print "Pas de capteurs dans cette piece"
-                        elif perso == 1 :
-                            ## IL Y AURA AUSSI PLUSIEURS CAPTEURS DE TYPE FENETRE AVEC UN ID CHACUN,
-                            ## ON POURRAIT ASSOCIER CHAQUE ID A UNE PIECE
-                            trame = gen.rfid1Detected()
-                            trame = trame.encode()
-                            socketClient.send(trame)
-                            time.sleep(3)
-                            if piece == 1:
-                                trame = gen.presenceDetected()
-                            elif piece == 2:
-                                print "Pas de capteurs dans cette piece"
-                            elif piece == 3:
-                                print "Pas de capteurs dans cette piece"
-                                
-                        elif perso == 2 :
-                            trame = gen.rfid2Detected()
-                            time.sleep(3)
+                        else :
+                            trame = gen.rfidDetected(perso)
                             trame = trame.encode()
                             socketClient.send(trame)
                             time.sleep(3)
@@ -197,10 +187,15 @@ while True :
                         elif piece == 3:
                             print "Pas de capteurs dans cette piece"
 
-                    ## Réouverture des volets par interrupteur        
+                    ## Réouverture des volets par interrupteur
+                    ## Actuellement tous les interrupteurs ouvrent les volets, il faudra changer ça
                     elif event == 7 :
                         if piece == 1:
                             trame = gen.pressON()
+                            socketClient.send(trame)
+                            ## Laisse le temps d'ouverture des volets
+                            time.sleep(10)
+                            trame = gen.contactFenetreOuverte()
                         elif piece == 2:
                             print "Pas de capteurs dans cette piece"
                         elif piece == 3:
