@@ -32,6 +32,15 @@ def get_pieces():
 	reponse = dict(ok=True, result=pieces)
 	return json.dumps(reponse)
 
+@app.route('/surveillance/personnages')
+def get_persos():
+	piece_id = request.args.get('piece')
+	piece_id = int(piece_id)
+	etat = tables.Etat.objects(piece_id=piece_id).first()
+	persos = [p.to_dict() for p in etat.persosPresents]
+	reponse = dict(ok=True, result=persos)
+	return json.dumps(reponse)
+
 @app.route('/surveillance/etats')
 def get_etats():
 	etats = [e.to_dict() for e in tables.Etat.objects.order_by('+piece_id')]

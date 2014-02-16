@@ -141,3 +141,11 @@ body {
   border: 1px solid #881C30;
   color: #FCEDF0;
 }
+
+.dropdown-menu .divider {
+    height: 1px;
+    margin: 9px 1px;
+    overflow: hidden;
+    background-color: #E5E5E5;
+    border-bottom: 1px solid #FFF;
+}

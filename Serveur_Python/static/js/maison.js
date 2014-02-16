@@ -21,22 +21,24 @@ $(document).ready(function() {
 	//Draw maison 
 	maison = new Raphael(document.getElementById("maison"), WIDTH + MARGE * 2, HEIGHT);
 
-	var rooms = new Array();
+	var rects = new Array();
 	var status = new Array();
+	var pieces = new Array();
+	var persos = new Array();
 	updateEtats();
-	var objects;
 
 	$.getJSON('/surveillance/pieces', {}, function(data) {
-		objects = data.result;
+		pieces = data.result;
+		console.log(pieces);
 	});
-	//rooms	statiques
-	rooms[0] = createRoom(w1 + MARGE, h2 + MARGE, w3, h3 - MARGE);
-	rooms[1] = createRoom(0, 0, w1, HEIGHT);
-	rooms[2] = createRoom(w1 + w3 + 2 * MARGE, h2 + MARGE, w4 - MARGE, h4 - MARGE);
-	rooms[3] = createRoom(w1 + w3 + 2 * MARGE, h2 + h4 + MARGE, w4 - MARGE, h5 - MARGE);
-	rooms[4] = createRoom(w1 + MARGE, 0, w2, h2);
+	//rects	statiques
+	rects[0] = createRoom(w1 + MARGE, h2 + MARGE, w3, h3 - MARGE);
+	rects[1] = createRoom(0, 0, w1, HEIGHT);
+	rects[2] = createRoom(w1 + w3 + 2 * MARGE, h2 + MARGE, w4 - MARGE, h4 - MARGE);
+	rects[3] = createRoom(w1 + w3 + 2 * MARGE, h2 + h4 + MARGE, w4 - MARGE, h5 - MARGE);
+	rects[4] = createRoom(w1 + MARGE, 0, w2, h2);
 
-	setInterval(updateEtats, 2000);
+	//setInterval(updateEtats, 2000);
 
 
 	/********* Définition des fonctions **********/
@@ -64,41 +66,89 @@ $(document).ready(function() {
 
 			obj.attr({"fill":"red"});
 			showEtat(obj);
-
 		});
 	}
 
 	function showEtat(obj) {
-		var piece_id = rooms.indexOf(obj);
+		var piece_id = rects.indexOf(obj);
 		var etat = status[piece_id];
-		var piece = objects[piece_id];
+		console.log(etat)
+		var piece = pieces[piece_id];
+
+		var str0 = "<div class=\"media\">";
+		var str1 = "<a class=\"pull-left\" href=\"#\"><img class=\"media-object\" src=\"";
+		var str2 = "</a><div class=\"media-body\"><h4 class=\"media-heading\">";
+		var str3 = "</h4></div></div>";
 		var canvas = document.getElementById("description");
-		var description = "<div class=\"well\" style=\"padding: 8px 0;\"><ul class=\"nav nav-list\"><li class=\"nav-header\"><h2><img style=\"margin-left: 5%; margin-right: 20%;\" src=\"../static/img/hotel.png\"/ width=\"15%\">";
-		description += piece.name;
-		description += "</h2><li class=\"divider\"></li>";
-		description += "<li class=\"text-center\">Température : " + (etat.temperature).toString() + "</li>";
-		description += "<li class=\"text-center\">Rideaux : " + (etat.rideauxOuverts).toString() + "</li>";
-		description += "<li class=\"text-center\">AntiIncendie : " + (etat.antiIncendieDeclenche).toString() + "</li>";
-		description += "<li class=\"text-center\">Climatisation : " + (etat.climActivee).toString() + "</li>";
-		description += "<li class=\"text-center\">Volets : " + (etat.voletsOuverts).toString() + "</li>";
-		description += "<li class=\"text-center\">Prise : " + (etat.priseDeclenchee).toString() + "</li>";
-		description += "<li class=\"text-center\">Portes : " + (etat.portesFermees).toString() + "</li>";
-		description += "</ul></div>";
+
+		//nom pièce
+		var description = "<div class=\"well\" style=\"padding: 8px 0;\">" + str0 ;
+		description += str1 + "/static/img/hotel.png\" width=\"40px\">" + str2 + "Piece : " + piece.name + str3;
+
+		//température et humidité
+		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Température : " + etat.temperature + str3;
+		description += str0 + str1 + "/static/img/hum.png\" width=\"20px\">" + str2 + "Humidité : " + etat.humidite + str3;
+		//Rideaux
+		var str;
+		if (new String(etat.rideauxOuverts).valueOf() == new String("true")) {
+			str = "Ouverts"
+		} else {
+			str = "Fermés"
+		}
+		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Rideaux : " + str + str3;
+		//Incendie
+		if (new String(etat.antiIncendieDeclenche).valueOf() == new String("true")) {
+			str = "Déclenchée"
+		} else {
+			str = "Non déclenchée"
+		}
+		description += str0 + str1 + "/static/img/fire.png\" width=\"40px\">" + str2 + "Antincendie : " + str + str3;
+		//Climatisation
+		if (new String(etat.climActivee).valueOf() == new String("true")) {
+			str = "Active"
+		} else {
+			str = "Eteinte"
+		}
+		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Climatisation : " + str + str3;
+		if (new String(etat.voletsOuverts).valueOf() == new String("true")) {
+			str = "Ouverts"
+		} else {
+			str = "Fermés"
+		}
+		description += str0 + str1 + "/static/img/rideaux.png\" width=\"40px\">" + str2 + "Rideaux : " + str + str3;
+		if (new String(etat.priseDeclenchee).valueOf() == new String("true")) {
+			str = "Allumée"
+		} else {
+			str = "Eteinte"
+		}
+		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Prise Intelligente : " + str + str3;
+		if (new String(etat.portesFermees).valueOf() == new String("true")) {
+			str = "Fermées"
+		} else {
+			str = "Ouvertes"
+		}
+		description += str0 + str1 + "/static/img/door.png\" width=\"40px\">" + str2 + "Portes : " + str + str3 + "</div>";
+		
 		canvas.innerHTML = description;
 	}
 
-	function showPerso(etat) {
-		var piece_id = etat.piece_id;
-		// à terminer
-	}
-
 	function updateEtats() {
-		$.getJSON('/surveillance/etats', {}, function(data) {
-			status = data.result;
-			for (var i = 0; i < status.length ; i++)
-			{
-				showPerso(status[i]);
-			}
+		$.getJSON('/surveillance/etats', {}, function(data1) {
+			status = data1.result;			
 		});
+		var piece;
+		for (var i = 0; i < status.length ; i++) {
+			piece = status[i]._id;
+			$.getJSON('/surveillance/personnages', {piece : piece}, function(data2) {
+				persos[i] = data2.result;		
+			})
+			for (var j = 0; j < persos[i].length; j ++) {
+				if (new String(persos[i][j].nom).valueOf() == new String("Intrus")){
+					console.log("intrus");
+					$('#piece').text(pieces[piece - 1].name);
+					$('#notification').show();
+				}
+			}
+		}
 	}
 })

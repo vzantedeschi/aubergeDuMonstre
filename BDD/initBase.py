@@ -25,6 +25,8 @@ def initialize() :
 	    pi = int(pi)
 	    piece = tables.Piece(piece_id = pi, name = nom)
 	    piece.save()
+	    etat = tables.Etat(piece_id = piece.piece_id, persosPresents = [])
+	    etat.save()
 
 	#Initialisation capteurs
 	fic_id = open('../capteurs.txt',"r")
@@ -42,6 +44,8 @@ def initialize() :
 	    if piece == None :
 			piece = tables.Piece(piece_id = pi, name = "")
 			piece.save()
+			etat = tables.Etat(piece_id = pi, persosPresents = [])
+			etat.save()
 
 	    piece.capteurs.append(capteur)
 	    piece.save()
@@ -62,6 +66,8 @@ def initialize() :
 	    if piece == None :
 			piece = tables.Piece(piece_id = pi, name = "")
 			piece.save()
+			etat = tables.Etat(piece_id = pi, persosPresents = [])
+			etat.save()
 
 	    piece.actionneurs.append(actionneur)
 	    piece.save()
@@ -79,13 +85,16 @@ def initialize() :
 
         pieces = tables.Piece.objects
 
-        #Initialisation de l'état des pièces
-        for p in pieces :
-            etat = tables.Etat(piece_id = p.piece_id, rideauxOuverts = True,antiIncendieDeclenche = False,climActivee = False,portesFermees = False,voletsOuverts = True,priseDeclenchee = False,persosPresents = [])
-            etat.save()
-
 	print 'base reinitialisee'
 
 if __name__ == '__main__' :
 	initialize()
 
+	##### Ajout intrus dans le couloir ######
+	piece = tables.Piece.objects(name="Couloir").first()
+	print piece.piece_id
+	etat = tables.Etat.objects(piece_id=piece.piece_id).first()
+	intrus = tables.Personne.objects(nom="Intrus").first()
+	etat.persosPresents.append(intrus)
+	etat.save()
+	print "ça y est : un intrus est dans le couloir"
