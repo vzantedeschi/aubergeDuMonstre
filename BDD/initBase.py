@@ -89,12 +89,13 @@ def initialize() :
 
 if __name__ == '__main__' :
 	initialize()
-
+	import random
 	##### Ajout intrus dans le couloir ######
 	piece = tables.Piece.objects(name="Couloir").first()
-	print piece.piece_id
 	etat = tables.Etat.objects(piece_id=piece.piece_id).first()
-	intrus = tables.Personne.objects(nom="Intrus").first()
+	id = random.randint(10, 100)
+	intrus = tables.Personne(personne_id=id,ignore=False)
+	intrus.save()
 	etat.persosPresents.append(intrus)
 	etat.save()
 	print "ça y est : un intrus est dans le couloir"

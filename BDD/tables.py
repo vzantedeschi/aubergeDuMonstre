@@ -14,31 +14,32 @@ class Actionneur(Document):
 
 class Piece(Document):
 	piece_id = IntField(primary_key=True)
-	name = StringField(required = True)
+	name = StringField(required=True)
 	actionneurs = SortedListField(ReferenceField('Actionneur'))
 	capteurs = SortedListField(ReferenceField('Capteur'))
 	
 class Personne(Document):
 	personne_id = IntField(unique=True)	
-	nom = StringField(required = True)
+	nom = StringField(default="Intrus")
+	ignore = BooleanField(default=True)
 
 class Etat(Document):
-    piece_id = IntField(primary_key = True)
-    rideauxOuverts = BooleanField(default = True)
-    antiIncendieDeclenche = BooleanField(default = False)
-    climActivee = BooleanField(default = False)
-    portesFermees = BooleanField(default = False)
-    voletsOuverts = BooleanField(default = True)
-    priseDeclenchee = BooleanField(default = False)
+    piece_id = IntField(primary_key=True)
+    rideauxOuverts = BooleanField(default=True)
+    antiIncendieDeclenche = BooleanField(default=False)
+    climActivee = BooleanField(default=False)
+    portesFermees = BooleanField(default=False)
+    voletsOuverts = BooleanField(default=True)
+    priseDeclenchee = BooleanField(default=False)
     temperature = IntField()
     humidite = IntField()
     persosPresents = SortedListField(ReferenceField('Personne'))
 #    meta = {'allow_inheritance': True}
 
 class Donnee(Document) :
-	piece_id = IntField(required = True)
-	date = DateTimeField(required = True)
-	traite = BooleanField(required = True)
+	piece_id = IntField(required=True)
+	date = DateTimeField(required=True)
+	traite = BooleanField(required=True)
 	meta = {'allow_inheritance': True}
 
 ## Les classes héritant de Donnee sont les données récupérées des trames reçues
@@ -49,16 +50,16 @@ class Interrupteur(Donnee):
     pass
 	
 class Temperature(Donnee):
-	valeur = FloatField(required = True)
+	valeur = FloatField(required=True)
 
 class Humidite(Donnee):
-	valeur = FloatField(required = True)
+	valeur = FloatField(required=True)
 
 class ContactFen(Donnee):
-	ouverte = BooleanField(required = True)
+	ouverte = BooleanField(required=True)
 
 class RFID (Donnee):
-	resident_id = IntField(required = True)
+	resident_id = IntField(required=True)
 
 
 if __name__ == '__main__' :

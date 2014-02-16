@@ -47,5 +47,14 @@ def get_etats():
 	reponse = dict(ok=True, result=etats)
 	return json.dumps(reponse)
 
+@app.route('/surveillance/<perso_id>')
+def ignore(perso_id):
+	print perso_id
+	perso_id = int(perso_id)
+	perso = tables.Personne.objects(personne_id=perso_id).first()
+	perso.ignore = False
+	perso.save()
+	return "ok"
+
 if __name__ == '__main__':
     app.run(debug=True)

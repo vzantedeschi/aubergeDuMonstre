@@ -25,6 +25,7 @@ $(document).ready(function() {
 	var status = new Array();
 	var pieces = new Array();
 	var persos = new Array();
+
 	updateEtats();
 
 	$.getJSON('/surveillance/pieces', {}, function(data) {
@@ -38,7 +39,7 @@ $(document).ready(function() {
 	rects[3] = createRoom(w1 + w3 + 2 * MARGE, h2 + h4 + MARGE, w4 - MARGE, h5 - MARGE);
 	rects[4] = createRoom(w1 + MARGE, 0, w2, h2);
 
-	//setInterval(updateEtats, 2000);
+	setInterval(updateEtats, 2000);
 
 
 	/********* Définition des fonctions **********/
@@ -53,7 +54,7 @@ $(document).ready(function() {
 	function addHoverListener(obj) {
 	    obj.mouseout(function(event){
 
-			obj.attr({"fill":"white","stroke-width": 1});
+			obj.attr({"stroke-width": 1});
 		});
 
 		obj.mouseover(function(event){
@@ -64,7 +65,6 @@ $(document).ready(function() {
 
 		obj.click(function(event){
 
-			obj.attr({"fill":"red"});
 			showEtat(obj);
 		});
 	}
@@ -138,16 +138,24 @@ $(document).ready(function() {
 		});
 		var piece;
 		for (var i = 0; i < status.length ; i++) {
+			var intrus = false;
 			piece = status[i]._id;
 			$.getJSON('/surveillance/personnages', {piece : piece}, function(data2) {
 				persos[i] = data2.result;		
 			})
 			for (var j = 0; j < persos[i].length; j ++) {
-				if (new String(persos[i][j].nom).valueOf() == new String("Intrus")){
-					console.log("intrus");
+				if (new String(persos[i][j].nom).valueOf() == new String("Intrus") && new String(persos[i][j].ignore).valueOf() == new String("true")){
+					intrus = true;
 					$('#piece').text(pieces[piece - 1].name);
 					$('#notification').show();
+					//la prochaine fois, on ignore cet intrus
+					$.getJSON('/surveillance/' + persos[i][j].personne_id);
 				}
+			}
+			if (intrus) {
+				rects[piece-1].attr({"fill":"red"});
+			} else {
+				rects[piece-1].attr({"fill":"white"});
 			}
 		}
 	}
