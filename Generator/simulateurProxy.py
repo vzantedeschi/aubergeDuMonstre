@@ -79,19 +79,21 @@ while True :
                     while event > 7 :
                         print "1. Quelqu'un entre dans une piece"
                         print "2. On allume la lumiere dans une piece"
-                        print "3. On eteind la lumiere dans une piece"
+                        print "3. On eteint la lumiere dans une piece"
                         print "4. La temperature passe a 24.5 degres"
-                        print "5. Une fenêtre est ouverte/fermee dans une piece"
+                        print "5. Une fenetre est ouverte/fermee dans une piece"
                         print "6. L'humidite passe a 52.8 %"
                         print "7. On clique sur l'interrupteur pour rouvrir les volets"
                         event = int(input())
 
-                    piece = 4
-                    while piece > 3 :
+                    piece = 6
+                    while piece > 5 :
                         print "\nDans quelle piece?"
                         print "1. Couloir"
-                        print "2. Cuisine"
-                        print "3. Salon"
+                        print "2. Salon"
+                        print "3. Cuisine"
+                        print "4. Bain"
+                        print "5. Chambre"
                         piece = int(input())
 
                     if event not in [2,3,4,5,6,7] :
@@ -118,27 +120,56 @@ while True :
                     if event == 1 :
                         if perso == 3:
                             if piece == 1:
-                                trame = gen.presenceDetected()
+                                trame = gen.presenceDetected(1)
                                 socketClient.send(trame)
                                 ## Laisse le temps aux volets de se fermer avant
                                 ## que le capteur ne le signale
                                 time.sleep(10)
-                                trame = gen.contactFenetreFermee()
+                                trame = gen.contactFenetreFermee(1)
                             elif piece == 2:
-                                print "Pas de capteurs dans cette piece"
+                                trame = gen.presenceDetected(2)
+                                socketClient.send(trame)
+                                time.sleep(10)
+                                trame = gen.contactFenetreFermee(2)
                             elif piece == 3:
-                                print "Pas de capteurs dans cette piece"
+                                trame = gen.presenceDetected(2)
+                                socketClient.send(trame)
+                                time.sleep(10)
+                                trame = gen.contactFenetreFermee(2)
+                            elif piece == 4:
+                                trame = gen.presenceDetected(4)
+                                socketClient.send(trame)
+                                time.sleep(10)
+                                trame = gen.contactFenetreFermee(4)
+                            elif piece == 5:
+                                trame = gen.presenceDetected(5)
+                                socketClient.send(trame)
+                                time.sleep(10)
+                                trame = gen.contactFenetreFermee(5)
                         else :
-                            trame = gen.rfidDetected(perso)
+                            if piece == 1:
+                                trame = gen.rfidDetected(perso,1)
+                            elif piece == 2:
+                                trame = gen.rfidDetected(perso,2)
+                            elif piece == 3:
+                                trame = gen.rfidDetected(perso,3)
+                            elif piece == 4:
+                                trame = gen.rfidDetected(perso,4)
+                            elif piece == 5:
+                                trame = gen.rfidDetected(perso,5)
                             trame = trame.encode()
                             socketClient.send(trame)
                             time.sleep(3)
                             if piece == 1:
-                                trame = gen.presenceDetected()
+                                trame = gen.presenceDetected(1)
                             elif piece == 2:
-                                print "Pas de capteurs dans cette piece"
+                                trame = gen.presenceDetected(2)
                             elif piece == 3:
-                                print "Pas de capteurs dans cette piece"
+                                trame = gen.presenceDetected(3)
+                            elif piece == 4:
+                                trame = gen.presenceDetected(4)
+                            elif piece == 5:
+                                trame = gen.presenceDetected(5)
                                 
                     elif event == 2 :
                         if piece == 1:
@@ -157,35 +188,51 @@ while True :
                     
                     elif event == 4 :
                         if piece == 1:
-                            trame = gen.currentTemperature()
+                            trame = gen.currentTemperature(1)
                         elif piece == 2:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.currentTemperature(2)
                         elif piece == 3:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.currentTemperature(3)
+                        elif piece == 4:
+                            trame = gen.currentTemperature(4)
+                        elif piece == 5:
+                            trame = gen.currentTemperature(5)
 
                     elif event == 5 and mouv == 1 :
                         if piece == 1:
-                            trame = gen.contactFenetreOuverte()
+                            trame = gen.contactFenetreOuverte(1)
                         elif piece == 2:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.contactFenetreOuverte(2)
                         elif piece == 3:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.contactFenetreOuverte(3)
+                        elif piece == 4:
+                            trame = gen.contactFenetreOuverte(4)
+                        elif piece == 5:
+                            trame = gen.contactFenetreOuverte(5)
 
                     elif event == 5 and mouv == 2 :
                         if piece == 1:
-                            trame = gen.contactFenetreFermee()
+                            trame = gen.contactFenetreFermee(1)
                         elif piece == 2:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.contactFenetreFermee(2)
                         elif piece == 3:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.contactFenetreFermee(3)
+                        elif piece == 4:
+                            trame = gen.contactFenetreFermee(4)
+                        elif piece == 5:
+                            trame = gen.contactFenetreFermee(5)
 
                     elif event == 6 :
                         if piece == 1:
-                            trame = gen.currentHumidite()
+                            trame = gen.currentHumidite(1)
                         elif piece == 2:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.currentHumidite(2)
                         elif piece == 3:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.currentHumidite(3)
+                        elif piece == 4:
+                            trame = gen.currentHumidite(4)
+                        elif piece == 5:
+                            trame = gen.currentHumidite(5)
 
                     ## Réouverture des volets par interrupteur
                     ## Actuellement tous les interrupteurs ouvrent les volets, il faudra changer ça

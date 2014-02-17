@@ -24,7 +24,7 @@ def interpretation(trame, now):
 
     # a quelle piece correspond ce capteur v2
     # !!!solution temporaire : il doit y avoir une façon plus propre et directe
-    print 'Pièce concernée'
+    print 'Piece concernee'
     capteur = tables.Capteur.objects(capteur_id = id).first()
     typeCapteur = capteur.capteur_type
     pieces = tables.Piece.objects
@@ -32,6 +32,7 @@ def interpretation(trame, now):
       if capteur in p.capteurs :
         print "piece ", p.piece_id, "  : ", p.name
         print "\n"
+        break
 
     piece_id = p.piece_id
       

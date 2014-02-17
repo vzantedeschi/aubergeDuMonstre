@@ -38,12 +38,20 @@ def commande(item):
     #récupération état de la pièce concernée
     etat = tables.Etat.objects(piece_id = piece_id).first()
     print("\nEtat de la piece concernée")
-    print etat
+    print("Numero :",etat.piece_id)
+    print("Rideaux ouverts :",etat.rideauxOuverts)
+    print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
+    print("Climatisation activee :",etat.climActivee)
+    print("Portes fermees :",etat.portesFermees)
+    print("Volets ouverts :",etat.voletsOuverts)
+    print("Prise allumee :",etat.priseDeclenchee)
+    print("Temperature :",etat.temperature)
+    print("Humidite :",etat.humidite)
+    print("Personnages presents :",etat.persosPresents)
+    print '\n'
 
-    ### Il me faut le format des informations de sortie pour savoir
-    ### sur quoi faire une condition
     if (typeInfo == "Donnee.Presence"):
-        print '\nCommande suivant une présence en cours'
+        print '\nCommande suivant une presence en cours'
 
         if rfidDetected == 0 :
             # TODO : mise à jour état pièce
@@ -51,25 +59,49 @@ def commande(item):
             ## REPONSE APPLI WEB ##
             if (True) :
                 # Allume l'interrupteur simulant les volets
-                print "\nVerrouillage active : volets en cours de fermeture"
+                print "Verrouillage active : volets en cours de fermeture"
                 # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
                 if connected == True :
                     print "Envoi au proxy"
                     connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
+                    
         elif rfidDetected == 1 :
-            print ("\n Meduse est dans la piece :",piece_id)
+            print ("Meduse est dans la piece :",piece_id)
             pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
-            listePersos = pieceConcernee.persosPresents
-            print listePersos
-            listePersos.append(rfidDetected)
-            print listePersos
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'persosPresents' : listePersos} },upsert=False,multi=True)
+
+            persoAjoute = tables.Personne.objects(personne_id = rfidDetected).first()
+
+            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+            etatPiece.persosPresents.append(persoAjoute)
+            etatPiece.save()        
+
+            ## Enlever le perso des autres pieces
+            listePieces = tables.Etat.objects
+            for p in listePieces :
+                if p.piece_id != piece_id:
+                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                    if persoAjoute in etatAChanger.persosPresents:
+                        etatAChanger.persosPresents.remove(persoAjoute)
+                        etatAChanger.save()
+
         elif rfidDetected == 2 :
-            print ("\n Vampire est dans la piece :",piece_id)
-            listePersos = item[u'persosPresents']
-            listePersos.append(rfidDetected)
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'persosPresents' : listePersos} },upsert=False,multi=True)
+            print ("Vampire est dans la piece :",piece_id)
+            pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
             
+            persoAjoute = tables.Personne.objects(personne_id = rfidDetected).first()
+
+            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+            etatPiece.persosPresents.append(persoAjoute)
+            etatPiece.save()        
+
+            ## Enlever le perso des autres pieces
+            listePieces = tables.Etat.objects
+            for p in listePieces :
+                if p.piece_id != piece_id:
+                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                    if persoAjoute in etatAChanger.persosPresents:
+                        etatAChanger.persosPresents.remove(persoAjoute)
+                        etatAChanger.save()
 
     elif (typeInfo == "Donnee.Temperature"):
         #Détermine la commande et mettre "traite" à True        
@@ -79,7 +111,7 @@ def commande(item):
         climActive = etat[u'climActivee']
         print climActive
 
-        db.etat.update({u'piece_id' : piece_id},{ "$set": {u'temperature' : tempDonnees} },upsert=False,multi=True)
+        db.etat.update({u'_id' : piece_id},{ "$set": {u'temperature' : tempDonnees} },upsert=False,multi=True)
         print '\nCommande suivant un changement de temperature en cours'
 
         ## Valeur 19 à modifier dans une interface graphique par exemple
@@ -89,13 +121,13 @@ def commande(item):
             # Modifier l'information de la BDD pour mettre "climActive" à True
             db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
             if connected == True :
-                connectProxy.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
+                connectProxy.send( 'A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
         elif tempDonnees <= 19 and climActive == True :
             print "Desactivation de la climatisation"
             # Modifier l'information de la BDD pour mettre "climActive" à False
             db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
             if connected == True :
-                connectProxy.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
+                connectProxy.send( 'A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
 
     elif (typeInfo == "Donnee.Humidite"):
         type = 'HUMID'
@@ -172,13 +204,12 @@ while True :
         # Permet d'examiner les informations nouvelles dans la BDD
         liste = db.donnee.find({u'traite':False}).sort("_id", 1)
         for item in liste:
-            print type(item)
             print "\n"
             print item
             commande(item)
         else :
             #s'il n'y a pas de données à traiter
-            print 'Aucune nouvelle donnée'
+            print 'Aucune nouvelle donnee'
             time.sleep(2)
     except KeyboardInterrupt:
         break
