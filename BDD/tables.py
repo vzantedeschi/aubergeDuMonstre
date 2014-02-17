@@ -62,6 +62,16 @@ class RFID (Donnee):
 	resident_id = IntField(required=True)
 
 
+## Donnees recues par l'appli web (actionneurs)
+class DonneeAppli(Document) :
+	traite = BooleanField(required=True)
+	actionneur_id = IntField(required=True) #actionneur concerne
+	meta = {'allow_inheritance': True}
+
+## Reponse envoyee suite a la detection d'un intrus
+class ReponseAppli(DonneeAppli)
+	reponse = BooleanField(required=True)
+
 if __name__ == '__main__' :
 
 	import time
