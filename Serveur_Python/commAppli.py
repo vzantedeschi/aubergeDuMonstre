@@ -52,9 +52,26 @@ def ignore(perso_id):
 	print perso_id
 	perso_id = int(perso_id)
 	perso = tables.Personne.objects(personne_id=perso_id).first()
-	perso.ignore = False
+	print "avant " + str(perso.ignore)
+	perso.ignore = True
+	print "après " + str(perso.ignore)
 	perso.save()
 	return "ok"
+
+@app.route('/login', methods=['GET'])
+def login():
+	return render_template('login.html', error=False)
+
+@app.route('/login', methods=['POST'])
+def process_login():
+    """email, password = request.form['email'].lower(), request.form['password']
+    user = User.objects(email=email).first()
+    if user is None or not user.valid_password(password):
+        app.logger.warning("Couldn't login : {}".format(user))
+        return render_template('login.html', error=True, email=email)
+    else:
+        session['logged_in'] = user.email"""
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
