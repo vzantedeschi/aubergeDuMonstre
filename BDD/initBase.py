@@ -98,4 +98,4 @@ if __name__ == '__main__' :
 	intrus.save()
 	etat.persosPresents.append(intrus)
 	etat.save()
-	print "ça y est : un intrus est dans le couloir"
+	print "ça y est : " + intrus.nom + " est dans le couloir"

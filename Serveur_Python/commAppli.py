@@ -52,7 +52,9 @@ def ignore(perso_id):
 	print perso_id
 	perso_id = int(perso_id)
 	perso = tables.Personne.objects(personne_id=perso_id).first()
-	perso.ignore = False
+	print "avant " + str(perso.ignore)
+	perso.ignore = True
+	print "après " + str(perso.ignore)
 	perso.save()
 	return "ok"
 

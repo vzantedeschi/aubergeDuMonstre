@@ -24,14 +24,12 @@ $(document).ready(function() {
 	var rects = new Array();
 	var status = new Array();
 	var pieces = new Array();
-	var persos = new Array();
-
-	updateEtats();
 
 	$.getJSON('/surveillance/pieces', {}, function(data) {
 		pieces = data.result;
-		console.log(pieces);
 	});
+
+	updateEtats();
 	//rects	statiques
 	rects[0] = createRoom(w1 + MARGE, h2 + MARGE, w3, h3 - MARGE);
 	rects[1] = createRoom(0, 0, w1, HEIGHT);
@@ -39,7 +37,7 @@ $(document).ready(function() {
 	rects[3] = createRoom(w1 + w3 + 2 * MARGE, h2 + h4 + MARGE, w4 - MARGE, h5 - MARGE);
 	rects[4] = createRoom(w1 + MARGE, 0, w2, h2);
 
-	setInterval(updateEtats, 2000);
+	setInterval(updateEtats, 1000);
 
 
 	/********* Définition des fonctions **********/
@@ -136,27 +134,33 @@ $(document).ready(function() {
 		$.getJSON('/surveillance/etats', {}, function(data1) {
 			status = data1.result;			
 		});
-		var piece;
 		for (var i = 0; i < status.length ; i++) {
-			var intrus = false;
-			piece = status[i]._id;
+			var piece = status[i]._id;
 			$.getJSON('/surveillance/personnages', {piece : piece}, function(data2) {
-				persos[i] = data2.result;		
-			})
-			for (var j = 0; j < persos[i].length; j ++) {
-				if (new String(persos[i][j].nom).valueOf() == new String("Intrus") && new String(persos[i][j].ignore).valueOf() == new String("true")){
-					intrus = true;
-					$('#piece').text(pieces[piece - 1].name);
-					$('#notification').show();
-					//la prochaine fois, on ignore cet intrus
-					$.getJSON('/surveillance/' + persos[i][j].personne_id);
+				var intrus = false;
+				var nom = pieces[piece - 1].name;
+				var persos = new Array();
+				persos = data2.result;
+				for (var j = 0; j < persos.length; j ++) {
+					if (new String(persos[j].nom).valueOf() == new String("Intrus")){
+						console.log(persos[j].ignore);
+						if (new String(persos[j].ignore).valueOf() == new String("false")) {
+							intrus = true;
+							console.log("intrus dans " + (piece - 1));
+							$('#piece').text(nom);
+							$('#notification').show();
+							//la prochaine fois, on ignore cet intrus
+							$.getJSON('/surveillance/' + persos[j].personne_id);
+						}
+					}
 				}
-			}
-			if (intrus) {
-				rects[piece-1].attr({"fill":"red"});
-			} else {
-				rects[piece-1].attr({"fill":"white"});
-			}
+				console.log('intrus = ' + intrus);
+				if (intrus) {
+					rects[piece-1].attr({"fill":"red"});
+				} else {
+					rects[piece-1].attr({"fill":"white"});
+				}		
+			})
 		}
 	}
 })
