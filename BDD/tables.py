@@ -64,7 +64,8 @@ class RFID (Donnee):
 ## Donnees recues par l'appli web (actionneurs)
 class DonneeAppli(Document) :
 	traite = BooleanField(required=True)
-	actionneur_id = IntField(required=True) #actionneur concerne
+	piece_id = IntField(required=True) #piece concernee
+	capteur_type = StringField(required=True) #type de capteur concerne
 	meta = {'allow_inheritance': True}
 
 ## Reponse envoyee suite a la detection d'un intrus
