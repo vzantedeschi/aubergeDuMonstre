@@ -21,8 +21,24 @@
           <a href="/controle">Controle</a>
         </li>
       </ul>
+    
+  
+
+<!--{% if user %}
+        <span class="logout right-link">
+            <a href="/logout"><span class="glyphicon glyphicon-remove"></span> Logout</a>
+        </span>
+        <span class="username right-link">
+            {{user.username}}
+        </span>
+    {% else %}-->
+        <span class="login right-link, pull-right">
+            <a href="/login"><span class="glyphicon glyphicon-user"></span> Login</a>
+        </span>
+    <!--{% endif %}-->
     </div>
-  </div>
+</div>
+
 </div>
 
 <div class="page-header" id="banner">
