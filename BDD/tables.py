@@ -34,7 +34,6 @@ class Etat(Document):
     temperature = IntField()
     humidite = IntField()
     persosPresents = SortedListField(ReferenceField('Personne'))
-#    meta = {'allow_inheritance': True}
 
 class Donnee(Document) :
 	piece_id = IntField(required=True)
@@ -61,6 +60,17 @@ class ContactFen(Donnee):
 class RFID (Donnee):
 	resident_id = IntField(required=True)
 
+
+## Donnees recues par l'appli web (actionneurs)
+class DonneeAppli(Document) :
+	traite = BooleanField(required=True)
+	piece_id = IntField(required=True) #piece concernee
+	capteur_type = StringField(required=True) #type de capteur concerne
+	meta = {'allow_inheritance': True}
+
+## Reponse envoyee suite a la detection d'un intrus
+class ReponseAppli(DonneeAppli):
+	reponse = BooleanField(required=True)
 
 if __name__ == '__main__' :
 

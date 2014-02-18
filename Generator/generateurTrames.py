@@ -46,6 +46,21 @@ class generateurTrames():
             elif (type == 'PRES5') :
                 self.presence5 = id
 
+            elif (type == 'VOL') :
+                self.volet = id
+
+            elif (type == 'VOL2') :
+                self.volet2 = id
+
+            elif (type == 'VOL3') :
+                self.volet3 = id
+
+            elif (type == 'VOL4') :
+                self.volet4 = id
+
+            elif (type == 'VOL5') :
+                self.volet5 = id
+
             elif (type == 'TEMP') :
                 self.temperature = id
                 self.humidite = id
@@ -85,7 +100,31 @@ class generateurTrames():
                 self.interrupteur = id
 
             elif (type == 'INTR2') :
+                self.interrupteur2 = id
+
+            elif (type == 'INTR3') :
+                self.interrupteur3 = id
+
+            elif (type == 'INTR4') :
+                self.interrupteur4 = id
+
+            elif (type == 'INTR5') :
+                self.interrupteur5 = id
+
+            elif (type == 'INFE') :
                 self.intrVolet = id
+
+            elif (type == 'INFE2') :
+                self.intrVolet2 = id
+                
+            elif (type == 'INFE3') :
+                self.intrVolet3 = id
+                
+            elif (type == 'INFE4') :
+                self.intrVolet4 = id
+                
+            elif (type == 'INFE5') :
+                self.intrVolet5 = id
 
     #Generation des trames parasites
     def genericFrame(self) :
@@ -99,33 +138,85 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames de l'interrupteur
-    def pressON(self) :
+    def pressON(self,piece) :
         org = "05"
         dataBytes = "10000000"
-        idBytes = self.interrupteur
+
+        if piece == 1:
+            idBytes = self.interrupteur
+        elif piece ==2:
+            idBytes = self.interrupteur2
+        elif piece ==3:
+            idBytes = self.interrupteur3
+        elif piece ==4:
+            idBytes = self.interrupteur4
+        elif piece ==5:
+            idBytes = self.interrupteur5
+            
         message = org+dataBytes+idBytes
         status = "30"
-        # checksum est censé être l'addition des octets en hexadécimal sur un octet de HSEQ à status
-        #checksum = hex(int(org,16)+int(status,16)+int("10",16)+int(idBytes[0:2],16)+int(idBytes[2:4],16)+int(idBytes[4:6],16)+int(idBytes[6:8],16))
-        #print checksum
         checksum = "13"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def pressOFF(self) :
+    def pressOFF(self,piece) :
         org = "05"
         dataBytes = "30000000"
-        idBytes = self.interrupteur
+
+        if piece == 1:
+            idBytes = self.interrupteur
+        elif piece ==2:
+            idBytes = self.interrupteur2
+        elif piece ==3:
+            idBytes = self.interrupteur3
+        elif piece ==4:
+            idBytes = self.interrupteur4
+        elif piece ==5:
+            idBytes = self.interrupteur5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "33"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def fermetureVolet(self) :
+    #Generation des trames de l'interrupteur pour volet
+    def fermeVolet(self,piece) :
         org = "05"
-        dataBytes = "70000000"
-        idBytes = self.intrVolet
+        dataBytes = "30000000"
+
+        if piece == 1:
+            idBytes = self.intrVolet
+        elif piece ==2:
+            idBytes = self.intrVolet2
+        elif piece ==3:
+            idBytes = self.intrVolet3
+        elif piece ==4:
+            idBytes = self.intrVolet4
+        elif piece ==5:
+            idBytes = self.intrVolet5
+            
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "04"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def ouvreVolet(self,piece) :
+        org = "05"
+        dataBytes = "10000000"
+
+        if piece == 1:
+            idBytes = self.intrVolet
+        elif piece ==2:
+            idBytes = self.intrVolet2
+        elif piece ==3:
+            idBytes = self.intrVolet3
+        elif piece ==4:
+            idBytes = self.intrVolet4
+        elif piece ==5:
+            idBytes = self.intrVolet5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "04"
@@ -244,6 +335,49 @@ class generateurTrames():
             idBytes = self.fenetre4
         elif piece ==5:
             idBytes = self.fenetre5
+        
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "81"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    #Generation des trames du capteur de volet
+    def contactVoletOuvert(self,piece) :
+        org = "07"
+        dataBytes = "00000008"
+        
+        if piece == 1:
+            idBytes = self.volet
+        elif piece ==2:
+            idBytes = self.volet2
+        elif piece ==3:
+            idBytes = self.volet3
+        elif piece ==4:
+            idBytes = self.volet4
+        elif piece ==5:
+            idBytes = self.volet5
+            
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "82"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def contactVoletFerme(self,piece) :
+        org = "07"
+        dataBytes = "00000009"
+        
+        if piece == 1:
+            idBytes = self.volet
+        elif piece ==2:
+            idBytes = self.volet2
+        elif piece ==3:
+            idBytes = self.volet3
+        elif piece ==4:
+            idBytes = self.volet4
+        elif piece ==5:
+            idBytes = self.volet5
         
         message = org+dataBytes+idBytes
         status = "30"

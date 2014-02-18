@@ -80,10 +80,10 @@ while True :
                         print "1. Quelqu'un entre dans une piece"
                         print "2. On allume la lumiere dans une piece"
                         print "3. On eteint la lumiere dans une piece"
-                        print "4. La temperature passe a 24.5 degres"
+                        print "4. La temperature passe a 24.5 degres dans une piece"
                         print "5. Une fenetre est ouverte/fermee dans une piece"
-                        print "6. L'humidite passe a 52.8 %"
-                        print "7. On clique sur l'interrupteur pour rouvrir les volets"
+                        print "6. L'humidite passe a 52.8 % dans une piece"
+                        print "7. On ouvre/ferme les volets dans une piece"
                         event = int(input())
 
                     piece = 6
@@ -106,13 +106,13 @@ while True :
                             print "3. Un inconnu"
                             perso = int(input())
 
-                    if event not in [1,2,3,4,6,7] :
+                    if event not in [1,2,3,4,6] :
 
                         mouv = 3
                         while mouv > 2:
-                            print "\nOuverte ou fermee?"
-                            print "1. Ouverte"
-                            print "2. Fermee"
+                            print "\nOuvert ou ferme?"
+                            print "1. Ouvert"
+                            print "2. Ferme"
                             mouv = int(input())
                     
                     trame = ""
@@ -125,27 +125,27 @@ while True :
                                 ## Laisse le temps aux volets de se fermer avant
                                 ## que le capteur ne le signale
                                 time.sleep(10)
-                                trame = gen.contactFenetreFermee(1)
+                                trame = gen.contactVoletFerme(1)
                             elif piece == 2:
                                 trame = gen.presenceDetected(2)
                                 socketClient.send(trame)
                                 time.sleep(10)
-                                trame = gen.contactFenetreFermee(2)
+                                trame = gen.contactVoletFerme(2)
                             elif piece == 3:
                                 trame = gen.presenceDetected(2)
                                 socketClient.send(trame)
                                 time.sleep(10)
-                                trame = gen.contactFenetreFermee(2)
+                                trame = gen.contactVoletFerme(2)
                             elif piece == 4:
                                 trame = gen.presenceDetected(4)
                                 socketClient.send(trame)
                                 time.sleep(10)
-                                trame = gen.contactFenetreFermee(4)
+                                trame = gen.contactVoletFerme(4)
                             elif piece == 5:
                                 trame = gen.presenceDetected(5)
                                 socketClient.send(trame)
                                 time.sleep(10)
-                                trame = gen.contactFenetreFermee(5)
+                                trame = gen.contactVoletFerme(5)
                         else :
                             if piece == 1:
                                 trame = gen.rfidDetected(perso,1)
@@ -173,18 +173,27 @@ while True :
                                 
                     elif event == 2 :
                         if piece == 1:
-                            trame = gen.pressON()
+                            trame = gen.pressON(1)
                         elif piece == 2:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.pressON(2)
                         elif piece == 3:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.pressON(3)
+                        elif piece == 4:
+                            trame = gen.pressON(4)
+                        elif piece == 5:
+                            trame = gen.pressON(5)
+                            
                     elif event == 3 :
                         if piece == 1:
-                            trame = gen.pressOFF()
+                            trame = gen.pressOFF(1)
                         elif piece == 2:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.pressOFF(2)
                         elif piece == 3:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.pressOFF(3)
+                        elif piece == 4:
+                            trame = gen.pressOFF(4)
+                        elif piece == 5:
+                            trame = gen.pressOFF(5)
                     
                     elif event == 4 :
                         if piece == 1:
@@ -234,19 +243,63 @@ while True :
                         elif piece == 5:
                             trame = gen.currentHumidite(5)
 
-                    ## Réouverture des volets par interrupteur
-                    ## Actuellement tous les interrupteurs ouvrent les volets, il faudra changer ça
-                    elif event == 7 :
+                    ## ouverture des volets par interrupteur
+                    elif event == 7 and mouv == 1:
                         if piece == 1:
-                            trame = gen.pressON()
+                            trame = gen.ouvreVolets(1)
                             socketClient.send(trame)
                             ## Laisse le temps d'ouverture des volets
                             time.sleep(10)
-                            trame = gen.contactFenetreOuverte()
+                            trame = gen.contactVoletOuvert(1)
                         elif piece == 2:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.ouvreVolets(2)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletOuvert(2)
                         elif piece == 3:
-                            print "Pas de capteurs dans cette piece"
+                            trame = gen.ouvreVolets(3)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletOuvert(3)
+                        elif piece == 4:
+                            trame = gen.ouvreVolets(4)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletOuvert(4)
+                        elif piece == 5:
+                            trame = gen.ouvreVolets(5)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletOuvert(5)
+
+                    ## fermeture des volets par interrupteur
+                    elif event == 7 and mouv == 2:
+                        if piece == 1:
+                            trame = gen.fermeVolets(1)
+                            socketClient.send(trame)
+                            ## Laisse le temps d'ouverture des volets
+                            time.sleep(10)
+                            trame = gen.contactVoletFerme(1)
+                        elif piece == 2:
+                            trame = gen.fermeVolets(2)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletFerme(2)
+                        elif piece == 3:
+                            trame = gen.fermeVolets(3)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletFerme(3)
+                        elif piece == 4:
+                            trame = gen.fermeVolets(4)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletFerme(4)
+                        elif piece == 5:
+                            trame = gen.fermeVolets(5)
+                            socketClient.send(trame)
+                            time.sleep(10)
+                            trame = gen.contactVoletFerme(5)
 
                     trame = trame.encode()
                     print 'Scenario cree, trame envoyee'
