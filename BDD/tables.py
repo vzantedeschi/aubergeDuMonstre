@@ -34,7 +34,6 @@ class Etat(Document):
     temperature = IntField()
     humidite = IntField()
     persosPresents = SortedListField(ReferenceField('Personne'))
-#    meta = {'allow_inheritance': True}
 
 class Donnee(Document) :
 	piece_id = IntField(required=True)
@@ -69,7 +68,7 @@ class DonneeAppli(Document) :
 	meta = {'allow_inheritance': True}
 
 ## Reponse envoyee suite a la detection d'un intrus
-class ReponseAppli(DonneeAppli)
+class ReponseAppli(DonneeAppli):
 	reponse = BooleanField(required=True)
 
 if __name__ == '__main__' :
