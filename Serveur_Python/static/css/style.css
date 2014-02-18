@@ -142,18 +142,10 @@ body {
   color: #FCEDF0;
 }
 
-#surv {
-  display: block;
-  bottom: 0%;
-  position: relative;
-  margin-top: -150px;
-  height: 150px;
-  clear: both;
+.dropdown-menu .divider {
+    height: 1px;
+    margin: 9px 1px;
+    overflow: hidden;
+    background-color: #E5E5E5;
+    border-bottom: 1px solid #FFF;
 }
-
-#maison {
-  display: block;
-  position: absolute;
-  top: 10%;
-}
-

@@ -19,24 +19,112 @@ class generateurTrames():
             if (type == 'FEN') :
                 self.fenetre = id
 
-            elif (type == 'INTR') :
-                self.interrupteur = id
-
-            elif (type == 'INTR2') :
-                self.intrVolet = id
+            elif (type == 'FEN2') :
+                self.fenetre2 = id
+                
+            elif (type == 'FEN3') :
+                self.fenetre3 = id
+                
+            elif (type == 'FEN4') :
+                self.fenetre4 = id
+                
+            elif (type == 'FEN5') :
+                self.fenetre5 = id
 
             elif (type == 'PRES') :
                 self.presence = id
+
+            elif (type == 'PRES2') :
+                self.presence2 = id
+
+            elif (type == 'PRES3') :
+                self.presence3 = id
+
+            elif (type == 'PRES4') :
+                self.presence4 = id
+
+            elif (type == 'PRES5') :
+                self.presence5 = id
+
+            elif (type == 'VOL') :
+                self.volet = id
+
+            elif (type == 'VOL2') :
+                self.volet2 = id
+
+            elif (type == 'VOL3') :
+                self.volet3 = id
+
+            elif (type == 'VOL4') :
+                self.volet4 = id
+
+            elif (type == 'VOL5') :
+                self.volet5 = id
 
             elif (type == 'TEMP') :
                 self.temperature = id
                 self.humidite = id
 
-            elif (type == 'RFID1') :
-                self.rfid1 = id
+            elif (type == 'TEMP2') :
+                self.temperature2 = id
+                self.humidite2 = id
+
+            elif (type == 'TEMP3') :
+                self.temperature3 = id
+                self.humidite3 = id
+
+            elif (type == 'TEMP4') :
+                self.temperature4 = id
+                self.humidite4 = id
+
+            elif (type == 'TEMP5') :
+                self.temperature5 = id
+                self.humidite5 = id
+
+            elif (type == 'RFID') :
+                self.rfid = id
 
             elif (type == 'RFID2') :
                 self.rfid2 = id
+
+            elif (type == 'RFID3') :
+                self.rfid3 = id
+
+            elif (type == 'RFID4') :
+                self.rfid4 = id
+
+            elif (type == 'RFID5') :
+                self.rfid5 = id
+                
+            elif (type == 'INTR') :
+                self.interrupteur = id
+
+            elif (type == 'INTR2') :
+                self.interrupteur2 = id
+
+            elif (type == 'INTR3') :
+                self.interrupteur3 = id
+
+            elif (type == 'INTR4') :
+                self.interrupteur4 = id
+
+            elif (type == 'INTR5') :
+                self.interrupteur5 = id
+
+            elif (type == 'INFE') :
+                self.intrVolet = id
+
+            elif (type == 'INFE2') :
+                self.intrVolet2 = id
+                
+            elif (type == 'INFE3') :
+                self.intrVolet3 = id
+                
+            elif (type == 'INFE4') :
+                self.intrVolet4 = id
+                
+            elif (type == 'INFE5') :
+                self.intrVolet5 = id
 
     #Generation des trames parasites
     def genericFrame(self) :
@@ -50,33 +138,85 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames de l'interrupteur
-    def pressON(self) :
+    def pressON(self,piece) :
         org = "05"
         dataBytes = "10000000"
-        idBytes = self.interrupteur
+
+        if piece == 1:
+            idBytes = self.interrupteur
+        elif piece ==2:
+            idBytes = self.interrupteur2
+        elif piece ==3:
+            idBytes = self.interrupteur3
+        elif piece ==4:
+            idBytes = self.interrupteur4
+        elif piece ==5:
+            idBytes = self.interrupteur5
+            
         message = org+dataBytes+idBytes
         status = "30"
-        # checksum est censé être l'addition des octets en hexadécimal sur un octet de HSEQ à status
-        #checksum = hex(int(org,16)+int(status,16)+int("10",16)+int(idBytes[0:2],16)+int(idBytes[2:4],16)+int(idBytes[4:6],16)+int(idBytes[6:8],16))
-        #print checksum
         checksum = "13"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def pressOFF(self) :
+    def pressOFF(self,piece) :
         org = "05"
         dataBytes = "30000000"
-        idBytes = self.interrupteur
+
+        if piece == 1:
+            idBytes = self.interrupteur
+        elif piece ==2:
+            idBytes = self.interrupteur2
+        elif piece ==3:
+            idBytes = self.interrupteur3
+        elif piece ==4:
+            idBytes = self.interrupteur4
+        elif piece ==5:
+            idBytes = self.interrupteur5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "33"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def fermetureVolet(self) :
+    #Generation des trames de l'interrupteur pour volet
+    def fermeVolet(self,piece) :
         org = "05"
-        dataBytes = "70000000"
-        idBytes = self.intrVolet
+        dataBytes = "30000000"
+
+        if piece == 1:
+            idBytes = self.intrVolet
+        elif piece ==2:
+            idBytes = self.intrVolet2
+        elif piece ==3:
+            idBytes = self.intrVolet3
+        elif piece ==4:
+            idBytes = self.intrVolet4
+        elif piece ==5:
+            idBytes = self.intrVolet5
+            
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "04"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def ouvreVolet(self,piece) :
+        org = "05"
+        dataBytes = "10000000"
+
+        if piece == 1:
+            idBytes = self.intrVolet
+        elif piece ==2:
+            idBytes = self.intrVolet2
+        elif piece ==3:
+            idBytes = self.intrVolet3
+        elif piece ==4:
+            idBytes = self.intrVolet4
+        elif piece ==5:
+            idBytes = self.intrVolet5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "04"
@@ -84,10 +224,21 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames du capteur de presence
-    def presenceDetected(self) :
+    def presenceDetected(self,piece) :
         org = "07"
         dataBytes = "B7D6000D"
-        idBytes = self.presence
+        
+        if piece == 1:
+            idBytes = self.presence
+        elif piece ==2:
+            idBytes = self.presence2
+        elif piece ==3:
+            idBytes = self.presence3
+        elif piece ==4:
+            idBytes = self.presence4
+        elif piece ==5:
+            idBytes = self.presence5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "6C"
@@ -105,10 +256,21 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
  
     #Generation des trames du capteur de température
-    def currentTemperature(self) : 
+    def currentTemperature(self,piece) : 
         org = "07"
         dataBytes = "0084990F"
-        idBytes = self.temperature
+        
+        if piece == 1:
+            idBytes = self.temperature
+        elif piece ==2:
+            idBytes = self.temperature2
+        elif piece ==3:
+            idBytes = self.temperature3
+        elif piece ==4:
+            idBytes = self.temperature4
+        elif piece ==5:
+            idBytes = self.temperature5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "A7"
@@ -116,10 +278,21 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames du capteur d'humidité
-    def currentHumidite(self) : 
+    def currentHumidite(self,piece) : 
         org = "07"
         dataBytes = "0084990F"
-        idBytes = self.humidite
+        
+        if piece == 1:
+            idBytes = self.humidite
+        elif piece ==2:
+            idBytes = self.humidite2
+        elif piece ==3:
+            idBytes = self.humidite3
+        elif piece ==4:
+            idBytes = self.humidite4
+        elif piece ==5:
+            idBytes = self.humidite5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "A7"
@@ -127,20 +300,85 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames du capteur de fenetre
-    def contactFenetreOuverte(self) :
+    def contactFenetreOuverte(self,piece) :
         org = "07"
         dataBytes = "00000008"
-        idBytes = self.fenetre
+        
+        if piece == 1:
+            idBytes = self.fenetre
+        elif piece ==2:
+            idBytes = self.fenetre2
+        elif piece ==3:
+            idBytes = self.fenetre3
+        elif piece ==4:
+            idBytes = self.fenetre4
+        elif piece ==5:
+            idBytes = self.fenetre5
+            
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "82"
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def contactFenetreFermee(self) :
+    def contactFenetreFermee(self,piece) :
         org = "07"
         dataBytes = "00000009"
-        idBytes = self.fenetre
+        
+        if piece == 1:
+            idBytes = self.fenetre
+        elif piece ==2:
+            idBytes = self.fenetre2
+        elif piece ==3:
+            idBytes = self.fenetre3
+        elif piece ==4:
+            idBytes = self.fenetre4
+        elif piece ==5:
+            idBytes = self.fenetre5
+        
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "81"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    #Generation des trames du capteur de volet
+    def contactVoletOuvert(self,piece) :
+        org = "07"
+        dataBytes = "00000008"
+        
+        if piece == 1:
+            idBytes = self.volet
+        elif piece ==2:
+            idBytes = self.volet2
+        elif piece ==3:
+            idBytes = self.volet3
+        elif piece ==4:
+            idBytes = self.volet4
+        elif piece ==5:
+            idBytes = self.volet5
+            
+        message = org+dataBytes+idBytes
+        status = "30"
+        checksum = "82"
+        queueTrame = status+checksum
+        return self.enteteTrames + message + queueTrame
+
+    def contactVoletFerme(self,piece) :
+        org = "07"
+        dataBytes = "00000009"
+        
+        if piece == 1:
+            idBytes = self.volet
+        elif piece ==2:
+            idBytes = self.volet2
+        elif piece ==3:
+            idBytes = self.volet3
+        elif piece ==4:
+            idBytes = self.volet4
+        elif piece ==5:
+            idBytes = self.volet5
+        
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "81"
@@ -148,20 +386,21 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames de puces rfid
-    def rfid1Detected(self) :
+    def rfidDetected(self,perso,porte) :
         org = "07"
-        dataBytes = "00000001"
-        idBytes = self.rfid1
-        message = org+dataBytes+idBytes
-        status = "30"
-        checksum = "00"
-        queueTrame = status+checksum
-        return self.enteteTrames + message + queueTrame
-
-    def rfid2Detected(self) :
-        org = "07"
-        dataBytes = "00000002"
-        idBytes = self.rfid2
+        dataBytes = "0000000"+str(perso)
+        
+        if porte == 1:
+            idBytes = self.rfid
+        elif porte ==2:
+            idBytes = self.rfid2
+        elif porte ==3:
+            idBytes = self.rfid3
+        elif porte ==4:
+            idBytes = self.rfid4
+        elif porte ==5:
+            idBytes = self.rfid5
+           
         message = org+dataBytes+idBytes
         status = "30"
         checksum = "00"
@@ -174,7 +413,7 @@ class generateurTrames():
         print "capteur de detection de presence ", self.presence
         print "interrupteur sans fils ", self.interrupteur 
         print "capteur de temperature ", self.temperature
-        print "capteur de puce rfid ", self.rfid1, self.rfid2
+        print "capteur de puce rfid ", self.rfid
     
 
 if __name__ == "__main__" :

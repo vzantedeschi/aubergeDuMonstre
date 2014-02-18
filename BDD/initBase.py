@@ -5,8 +5,6 @@ from mongoengine import *
 import sys
 import tables
 
-db = connect('GHome_BDD')
-
 def addCapteur() :
 	print 'ajouté à la base'
 
@@ -14,6 +12,7 @@ def addActionneur() :
 	print 'ajouté à la base'
 
 def initialize() :
+	db = connect('GHome_BDD')
 	db.drop_database('GHome_BDD')
 
 	#Initialisation pièces
@@ -26,6 +25,8 @@ def initialize() :
 	    pi = int(pi)
 	    piece = tables.Piece(piece_id = pi, name = nom)
 	    piece.save()
+	    etat = tables.Etat(piece_id = piece.piece_id, persosPresents = [])
+	    etat.save()
 
 	#Initialisation capteurs
 	fic_id = open('../capteurs.txt',"r")
@@ -43,6 +44,8 @@ def initialize() :
 	    if piece == None :
 			piece = tables.Piece(piece_id = pi, name = "")
 			piece.save()
+			etat = tables.Etat(piece_id = pi, persosPresents = [])
+			etat.save()
 
 	    piece.capteurs.append(capteur)
 	    piece.save()
@@ -63,20 +66,36 @@ def initialize() :
 	    if piece == None :
 			piece = tables.Piece(piece_id = pi, name = "")
 			piece.save()
+			etat = tables.Etat(piece_id = pi, persosPresents = [])
+			etat.save()
 
 	    piece.actionneurs.append(actionneur)
 	    piece.save()
 
-	print 'base reinitialisee'
+	#Initialisation des personnages
+	fic_id = open('../personnages.txt',"r")
+	liste = fic_id.readlines()
+	fic_id.close()
 
-	#Initialisation de l'état de la pièce 1
-	volet = tables.FermetureVolet(piece_id = 1, voletOuvert = True)
-	volet.save()
-	clim = tables.Clim(piece_id = 1, climActivee = False)
-	clim.save()
-	anti_incendie = tables.AntiIncendie(piece_id = 1, antiIncendieDeclenche = False)
-	anti_incendie.save()
+	for l in liste:
+	    ident, name = l.split()
+	    ident = int(ident,16)
+	    personnage = tables.Personne(personne_id = ident, nom = name)
+	    personnage.save()
+
+        pieces = tables.Piece.objects
+
+	print 'base reinitialisee'
 
 if __name__ == '__main__' :
 	initialize()
-
+	import random
+	##### Ajout intrus dans le couloir ######
+	piece = tables.Piece.objects(name="Couloir").first()
+	etat = tables.Etat.objects(piece_id=piece.piece_id).first()
+	id = random.randint(10, 100)
+	intrus = tables.Personne(personne_id=id,ignore=False)
+	intrus.save()
+	etat.persosPresents.append(intrus)
+	etat.save()
+	print "ça y est : un intrus est dans le couloir"

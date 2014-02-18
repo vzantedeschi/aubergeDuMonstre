@@ -9,9 +9,19 @@
 {% include "header.html" %}
 
 <div class="container">
+	<div class="page-header" id="banner">
+		<div class="row">
+			<h2></h2>
+			<div class="col-md-6" id="maison">
+			</div>
+			<div class="col-md-6" id="description">
+				<h3>Cliquez sur une pièce pour visualiser ses informations</h3>
+			</div>
+		</div>
+	</div>
 
 	<div class="col-md-6">
-		<div id="maison">
+		<div id="formulaire">
 
 		</div>
 	</div>
@@ -19,7 +29,7 @@
 </div>
 
 <div class="text-center">
-		<p id="surv">Copyright By H4213</p>
+	<p id="surv">Copyright By H4213</p>
 </div>
 
 {% endblock body %}
@@ -27,4 +37,11 @@
 
 {% block javascript %}
 <script src="/static/js/maison.js"></script>
+
+<script type="text/javascript">
+	function manger() {
+		
+
+	}
+</script>
 {% endblock %}
