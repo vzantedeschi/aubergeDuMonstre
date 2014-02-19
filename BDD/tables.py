@@ -38,7 +38,7 @@ class Etat(Document):
 class Donnee(Document) :
 	piece_id = IntField(required=True)
 	date = DateTimeField(required=True)
-	traite = BooleanField(required=True)
+	traite = BooleanField(default=False)
 	meta = {'allow_inheritance': True}
 
 ## Les classes héritant de Donnee sont les données récupérées des trames reçues

@@ -1,13 +1,14 @@
 function alertOui() {	
 	alert("A table!");
 	$('#notification').hide();
-    $.getJSON('/surveillance/reponse', {rep : "oui"});
+    piece = $("#piece").text();
+    $.getJSON('/surveillance/reponse', {piece : piece, rep : "oui"});
 }
 
 function alertNon() {	
 	alert("Rien à faire");
-	$('#notification').hide();
-    $.getJSON('/surveillance/reponse', {rep : "non"});
+	piece = $("#piece").text();
+    $.getJSON('/surveillance/reponse', {piece : piece, rep : "non"});
 }
 
 /* Handlebars */

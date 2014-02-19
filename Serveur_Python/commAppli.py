@@ -5,6 +5,7 @@ import requests
 import json
 from mongoengine import *
 import sys
+import datetime
 sys.path.append('../BDD')
 import tables
 
@@ -95,11 +96,13 @@ def ignore(perso_id):
 @app.route('/surveillance/reponse')
 def reponse():
 	rep = request.args.get('rep')
-	"""if rep == 'oui' :
-		reponse = tables.ReponseAppli(reponse=True)
-	else :
-		reponse = tables.ReponseAppli(reponse=False)
-	reponse.save()"""
+	nom = request.args.get('piece')
+	piece = tables.Piece.objects(name=nom).first()
+	now = datetime.datetime.now()
+	reponse = tables.ReponseAppli(date=now,piece_id=piece.piece_id,reponse=False)
+	if rep == 'oui' :
+		reponse.ReponseAppli = True	
+	reponse.save()
 	return "ok"
 
 @app.route('/login', methods=['GET'])
