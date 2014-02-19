@@ -80,7 +80,7 @@ def get_etat_piece(piece_id):
 	return json.dumps(etat)
 
 @app.route('/controle/<piece_id>')
-def get_etat_piece(piece_id):
+def get_actionneurs(piece_id):
 	piece = tables.Piece.objects(piece_id=piece_id).first()
 	actionneurs = [a.to_dict() for a in piece.actionneurs]
 	return json.dumps(actionneurs)
