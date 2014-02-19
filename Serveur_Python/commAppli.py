@@ -14,6 +14,39 @@ db_connec = connect('GHome_BDD')
 # \ ! / Monkey patching mongoengine to make json dumping easier
 Document.to_dict = lambda s : json.loads(s.to_json())
 
+
+def etat_to_tuples(piece_id):
+	etat = tables.Etat.objects(piece_id=piece_id).first()
+	print etat
+	piece = tables.Piece.objects(piece_id=piece_id).first()
+	print piece
+	rid = "Fermés"
+	if etat.rideauxOuverts : rid = "Ouverts"
+
+	inc = "Non déclenchée"
+	if etat.antiIncendieDeclenche : inc = "Déclenchée"
+
+	clim = "Eteinte"
+	if etat.climActivee : rid = "Active"
+
+	vol = "Fermés"
+	if etat.voletsOuverts : vol = "Ouverts"
+
+	prise = "Fermés"
+	if etat.priseDeclenchee : prise = "Ouverts"
+
+	result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name },
+							{ "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
+							{ "image" : "hum.png", "width" : "20px","nom":"Humidité" , "valeur": etat.humidite },
+							{ "image" : "rideaux.png", "width" : "30px","nom":"Rideaux" , "valeur": rid },
+							{ "image" : "hotel.png", "width" : "40px","nom":"Climatisation" , "valeur": piece.name },
+							{ "image" : "hotel.png", "width" : "40px","nom":"Prise intelligente" , "valeur": prise },
+							{ "image" : "fire.png", "width" : "30px","nom":"Antincendie" , "valeur": inc },
+							{ "image" : "hotel.png", "width" : "40px","nom":"Volets" , "valeur": vol }
+							]
+			}
+	return result
+
 @app.route('/')
 def hello():
     return render_template('index.html')
@@ -46,6 +79,11 @@ def get_etats():
 	etats = [e.to_dict() for e in tables.Etat.objects.order_by('+piece_id')]
 	reponse = dict(ok=True, result=etats)
 	return json.dumps(reponse)
+
+@app.route('/surveillance/etat/<piece_id>')
+def get_etat_piece(piece_id):
+	etat = etat_to_tuples(piece_id)
+	return json.dumps(etat)
 
 @app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
