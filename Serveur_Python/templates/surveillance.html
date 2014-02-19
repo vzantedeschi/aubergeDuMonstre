@@ -16,6 +16,7 @@
 			</div>
 			<div class="col-md-6" id="description">
 				<h3>Cliquez sur une pièce pour visualiser ses informations</h3>
+
 			</div>
 		</div>
 	</div>
@@ -33,15 +34,25 @@
 </div>
 
 {% endblock body %}
-
-
 {% block javascript %}
+{% raw %}
 <script src="/static/js/maison.js"></script>
-
-<script type="text/javascript">
-	function manger() {
-		
-
-	}
 </script>
+{% endraw %}
+{% raw %}
+<script id="description-template" type="text/x-handlebars-template">
+
+	<div class="form-group">
+        <ul>
+            {{#each couples}}
+            <li class="list-group-item">
+            <img class="pull-left" src="/static/img/{{image}}" width="20px"/>
+            {{nom}} : {{valeur}}
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+</script>
+{% endraw %}
 {% endblock %}
