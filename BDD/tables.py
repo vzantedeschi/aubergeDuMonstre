@@ -68,6 +68,22 @@ class DonneeAppli(Donnee) :
 ## Reponse envoyee suite a la detection d'un intrus
 class ReponseAppli(Donnee):
 	reponse = BooleanField(required=True)
+    
+class Regle(Document):
+    regle_id = IntField(required=True)
+    nom = StringField(required = True)
+    conditions = SortedListField(ReferenceField('Condition'))
+    actions = SortedListField(ReferenceField('Action'))
+    
+class Action(Document):
+    nom = StringField(required = True)
+    description = StringField(required = True)
+    
+class Condition(Document):    
+    nom = StringField(required = True)
+    description = StringField(required = True)
+
+    
 
 if __name__ == '__main__' :
 
