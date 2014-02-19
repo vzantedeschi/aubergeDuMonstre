@@ -74,16 +74,16 @@ def get_persos():
 	reponse = dict(ok=True, result=persos)
 	return json.dumps(reponse)
 
-@app.route('/surveillance/etats')
-def get_etats():
-	etats = [e.to_dict() for e in tables.Etat.objects.order_by('+piece_id')]
-	reponse = dict(ok=True, result=etats)
-	return json.dumps(reponse)
-
 @app.route('/surveillance/etat/<piece_id>')
 def get_etat_piece(piece_id):
 	etat = etat_to_tuples(piece_id)
 	return json.dumps(etat)
+
+@app.route('/controle/<piece_id>')
+def get_etat_piece(piece_id):
+	piece = tables.Piece.objects(piece_id=piece_id).first()
+	actionneurs = [a.to_dict() for a in piece.actionneurs]
+	return json.dumps(actionneurs)
 
 @app.route('/surveillance/<perso_id>')
 def ignore(perso_id):

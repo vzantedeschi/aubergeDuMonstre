@@ -79,14 +79,10 @@ $(document).ready(function() {
 	}
 
 	function updateEtats() {
-		$.getJSON('/surveillance/etats', {}, function(data1) {
-			status = data1.result;			
-		});
-		for (var i = 0; i < status.length ; i++) {
-			var piece = status[i]._id;
+		for (var i = 0; i < pieces.length ; i++) {
+			var piece = i + 1;
 			$.getJSON('/surveillance/personnages', {piece : piece}, function(data2) {
 				var intrus = false;
-				var nom = pieces[piece - 1].name;
 				var persos = new Array();
 				persos = data2.result;
 				for (var j = 0; j < persos.length; j ++) {
