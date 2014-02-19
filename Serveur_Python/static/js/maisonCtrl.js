@@ -61,6 +61,14 @@ $(document).ready(function() {
 	}
 
 	function showForm(obj) {
+		var $description = $("#description");
+		var piece_id = rects.indexOf(obj);
+		piece_id ++;
+		$description.html("");
+		$.getJSON('/controle/' + piece_id, {}, function(data) {
+			console.log(data);		
+			$description.append(descriptionTemplate(data));
+		});
 		var piece_id = rects.indexOf(obj);
 		var etat = status[piece_id];
 		console.log(etat)

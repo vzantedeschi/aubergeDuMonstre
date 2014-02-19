@@ -17,9 +17,7 @@ Document.to_dict = lambda s : json.loads(s.to_json())
 
 def etat_to_tuples(piece_id):
 	etat = tables.Etat.objects(piece_id=piece_id).first()
-	print etat
 	piece = tables.Piece.objects(piece_id=piece_id).first()
-	print piece
 	rid = "Fermés"
 	if etat.rideauxOuverts : rid = "Ouverts"
 
@@ -74,12 +72,6 @@ def get_persos():
 	reponse = dict(ok=True, result=persos)
 	return json.dumps(reponse)
 
-@app.route('/surveillance/etats')
-def get_etats():
-	etats = [e.to_dict() for e in tables.Etat.objects.order_by('+piece_id')]
-	reponse = dict(ok=True, result=etats)
-	return json.dumps(reponse)
-
 @app.route('/surveillance/etat/<piece_id>')
 def get_etat_piece(piece_id):
 	etat = etat_to_tuples(piece_id)
@@ -87,8 +79,6 @@ def get_etat_piece(piece_id):
 
 @app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
-	print perso_id
-	perso_id = int(perso_id)
 	perso = tables.Personne.objects(personne_id=perso_id).first()
 	print "avant " + str(perso.ignore)
 	perso.ignore = True
