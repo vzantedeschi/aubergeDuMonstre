@@ -74,7 +74,15 @@ def interpretation(trame, now):
         capteur_rfid.save()
 
     elif typeCapteur == 'INTR':
-        capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = now, traite = False)
+
+        intrDonnees = int(trame.dataBytes[0:1],16)
+        print ("donnees :",intrDonnees)
+
+        if intrDonnees == 5 or intrDonnees == 1:
+          capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = now, traite = False, ouverte = True)
+        elif intrDonnees == 7 or intrDonnees == 3:
+          capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = now, traite = False, ouverte = False)
+        
         capteur_interrupteur.save()
 
     elif typeCapteur == 'FEN':
