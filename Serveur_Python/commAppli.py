@@ -85,14 +85,14 @@ def get_actionneurs(piece_id):
 	return json.dumps(actionneurs)
 
 
-@app.route('/surveillance/<perso_id>')
+"""@app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
 	perso = tables.Personne.objects(personne_id=perso_id).first()
 	print "avant " + str(perso.ignore)
 	perso.ignore = True
 	print "après " + str(perso.ignore)
 	perso.save()
-	return "ok"
+	return "ok"""
 
 @app.route('/login', methods=['GET'])
 def login():

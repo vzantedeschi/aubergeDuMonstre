@@ -46,9 +46,9 @@
 
 	<form method="POST" action="/controle">
         <select name="actionneur">
-            {{#each actionneurs}}
-            <option value={{actionneur_id}}>{{actionneur_id}}</option>
-            {{\each}}
+            
+            <option value="{{_id}}">{{_id}}</option>
+
         <\select>
         <br><br>
         <input type="radio" value="On" id="on" name="onOff"> On 

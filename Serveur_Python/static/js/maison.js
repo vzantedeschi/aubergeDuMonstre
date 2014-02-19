@@ -104,7 +104,7 @@ $(document).ready(function() {
 						$('#piece').text(pieces[piece - 1].name);
 						$('#notification').show();
 						//la prochaine fois, on ignore cet intrus
-						$.getJSON('/surveillance/' + persos[j].personne_id);
+						//$.getJSON('/surveillance/' + persos[j].personne_id);
 					}
 				}
 			}		
