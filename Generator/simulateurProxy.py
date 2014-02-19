@@ -15,7 +15,7 @@ def envoiTramesAbsence():
     socketClient.send(trame)
 
 hote = 'localhost'
-port = 13500
+port = 13700
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -75,15 +75,12 @@ while True :
 
                     print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
 
-                    event = 8
-                    while event > 7 :
+                    event = 5
+                    while event > 4 :
                         print "1. Quelqu'un entre dans une piece"
-                        print "2. On allume la lumiere dans une piece"
-                        print "3. On eteint la lumiere dans une piece"
-                        print "4. La temperature passe a 24.5 degres dans une piece"
-                        print "5. Une fenetre est ouverte/fermee dans une piece"
-                        print "6. L'humidite passe a 52.8 % dans une piece"
-                        print "7. On ouvre/ferme les volets dans une piece"
+                        print "2. On ouvre/ferme les volets dans une piece"
+                        print "3. La temperature passe a 24.5 degres dans une piece"
+                        print "4. L'humidite passe a 52.8 % dans une piece"
                         event = int(input())
 
                     piece = 6
@@ -96,7 +93,7 @@ while True :
                         print "5. Chambre"
                         piece = int(input())
 
-                    if event not in [2,3,4,5,6,7] :
+                    if event == 1 :
                         
                         perso = 4
                         while perso > 3 :
@@ -106,7 +103,7 @@ while True :
                             print "3. Un inconnu"
                             perso = int(input())
 
-                    if event not in [1,2,3,4,6] :
+                    if event == 2 :
 
                         mouv = 3
                         while mouv > 2:
@@ -117,6 +114,7 @@ while True :
                     
                     trame = ""
 
+                    ## capteurs de présence et rfid
                     if event == 1 :
                         if perso == 3:
                             if piece == 1:
@@ -170,8 +168,9 @@ while True :
                                 trame = gen.presenceDetected(4)
                             elif piece == 5:
                                 trame = gen.presenceDetected(5)
-                                
-                    elif event == 2 :
+
+                    ## Interrupteur Généraux (NOT GENERATED)            
+                    elif event == 6 :
                         if piece == 1:
                             trame = gen.pressON(1)
                         elif piece == 2:
@@ -183,7 +182,7 @@ while True :
                         elif piece == 5:
                             trame = gen.pressON(5)
                             
-                    elif event == 3 :
+                    elif event == 7 :
                         if piece == 1:
                             trame = gen.pressOFF(1)
                         elif piece == 2:
@@ -194,8 +193,9 @@ while True :
                             trame = gen.pressOFF(4)
                         elif piece == 5:
                             trame = gen.pressOFF(5)
-                    
-                    elif event == 4 :
+
+                    ## capteur température
+                    elif event == 3 :
                         if piece == 1:
                             trame = gen.currentTemperature(1)
                         elif piece == 2:
@@ -207,6 +207,7 @@ while True :
                         elif piece == 5:
                             trame = gen.currentTemperature(5)
 
+                    ## Contacteur pour fenêtre (NOT GENERATED)
                     elif event == 5 and mouv == 1 :
                         if piece == 1:
                             trame = gen.contactFenetreOuverte(1)
@@ -231,7 +232,8 @@ while True :
                         elif piece == 5:
                             trame = gen.contactFenetreFermee(5)
 
-                    elif event == 6 :
+                    ## capteur humidité
+                    elif event == 4 :
                         if piece == 1:
                             trame = gen.currentHumidite(1)
                         elif piece == 2:
@@ -244,7 +246,7 @@ while True :
                             trame = gen.currentHumidite(5)
 
                     ## ouverture des volets par interrupteur
-                    elif event == 7 and mouv == 1:
+                    elif event == 2 and mouv == 1:
                         if piece == 1:
                             trame = gen.ouvreVolets(1)
                             socketClient.send(trame)
@@ -273,7 +275,7 @@ while True :
                             trame = gen.contactVoletOuvert(5)
 
                     ## fermeture des volets par interrupteur
-                    elif event == 7 and mouv == 2:
+                    elif event == 2 and mouv == 2:
                         if piece == 1:
                             trame = gen.fermeVolets(1)
                             socketClient.send(trame)

@@ -27,7 +27,9 @@ db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
 def RFIDFunc():
+    global rfidDetected
     rfidDetected = 0
+    print '\nRFID DETECTED REMIS A 0'
 
 def commande(item):
     global rfidDetected
@@ -84,6 +86,9 @@ def commande(item):
                         etatAChanger.persosPresents.remove(persoAjoute)
                         etatAChanger.save()
 
+            # Remettre rfidDetected a 0
+            rfidDetected = 0
+
         elif rfidDetected == 2 :
             print ("Vampire est dans la piece :",piece_id)
             pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
@@ -102,6 +107,9 @@ def commande(item):
                     if persoAjoute in etatAChanger.persosPresents:
                         etatAChanger.persosPresents.remove(persoAjoute)
                         etatAChanger.save()
+
+            # Remettre rfidDetected a 0
+            rfidDetected = 0
 
     elif (typeInfo == "Donnee.Temperature"):
         #Détermine la commande et mettre "traite" à True        
@@ -171,8 +179,13 @@ def commande(item):
     elif (typeInfo == "Donnee.Interrupteur"):
         print '\nCommande suivant un interrupteur en cours'
         if connected == True :
-            print "Ouverture des volets"
-            connectProxy.send('A55A6B0570000000FF9F1E0530D1' )
+            intrDonnees = item[u'ouverte']
+            if intrDonnees == True:
+                print "Ouverture des volets"
+                connectProxy.send('A55A6B0550000000FF9F1E0530D1' )
+            elif intrDonnees == False:
+                print "Fermeture des volets"
+                connectProxy.send('A55A6B0570000000FF9F1E0530D1' )
 
     elif (typeInfo == "Donnee.ContactFen"):
         fenDonnees = item[u'ouverte']
