@@ -64,10 +64,27 @@ class RFID (Donnee):
 ## Donnees recues par l'appli web (actionneurs)
 class DonneeAppli(Donnee) :
 	capteur_type = StringField(required=True) #type d'actionneur concerne
+	action_type = BooleanField(required=True) #allumer = True, eteindre = False
 
 ## Reponse envoyee suite a la detection d'un intrus
 class ReponseAppli(Donnee):
 	reponse = BooleanField(required=True)
+    
+class Regle(Document):
+    regle_id = IntField(required=True)
+    nom = StringField(required = True)
+    conditions = SortedListField(ReferenceField('Condition'))
+    actions = SortedListField(ReferenceField('Action'))
+    
+class Action(Document):
+    nom = StringField(required = True)
+    description = StringField(required = True)
+    
+class Condition(Document):    
+    nom = StringField(required = True)
+    description = StringField(required = True)
+
+    
 
 if __name__ == '__main__' :
 
