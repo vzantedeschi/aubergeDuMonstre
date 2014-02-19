@@ -248,28 +248,28 @@ while True :
                     ## ouverture des volets par interrupteur
                     elif event == 2 and mouv == 1:
                         if piece == 1:
-                            trame = gen.ouvreVolets(1)
+                            trame = gen.ouvreVolet(1)
                             socketClient.send(trame)
                             ## Laisse le temps d'ouverture des volets
                             time.sleep(10)
                             trame = gen.contactVoletOuvert(1)
                         elif piece == 2:
-                            trame = gen.ouvreVolets(2)
+                            trame = gen.ouvreVolet(2)
                             socketClient.send(trame)
                             time.sleep(10)
                             trame = gen.contactVoletOuvert(2)
                         elif piece == 3:
-                            trame = gen.ouvreVolets(3)
+                            trame = gen.ouvreVolet(3)
                             socketClient.send(trame)
                             time.sleep(10)
                             trame = gen.contactVoletOuvert(3)
                         elif piece == 4:
-                            trame = gen.ouvreVolets(4)
+                            trame = gen.ouvreVolet(4)
                             socketClient.send(trame)
                             time.sleep(10)
                             trame = gen.contactVoletOuvert(4)
                         elif piece == 5:
-                            trame = gen.ouvreVolets(5)
+                            trame = gen.ouvreVolet(5)
                             socketClient.send(trame)
                             time.sleep(10)
                             trame = gen.contactVoletOuvert(5)
@@ -277,13 +277,13 @@ while True :
                     ## fermeture des volets par interrupteur
                     elif event == 2 and mouv == 2:
                         if piece == 1:
-                            trame = gen.fermeVolets(1)
+                            trame = gen.fermeVolet(1)
                             socketClient.send(trame)
                             ## Laisse le temps d'ouverture des volets
                             time.sleep(10)
                             trame = gen.contactVoletFerme(1)
                         elif piece == 2:
-                            trame = gen.fermeVolets(2)
+                            trame = gen.fermeVolet(2)
                             socketClient.send(trame)
                             time.sleep(10)
                             trame = gen.contactVoletFerme(2)
@@ -293,12 +293,12 @@ while True :
                             time.sleep(10)
                             trame = gen.contactVoletFerme(3)
                         elif piece == 4:
-                            trame = gen.fermeVolets(4)
+                            trame = gen.fermeVolet(4)
                             socketClient.send(trame)
                             time.sleep(10)
                             trame = gen.contactVoletFerme(4)
                         elif piece == 5:
-                            trame = gen.fermeVolets(5)
+                            trame = gen.fermeVolet(5)
                             socketClient.send(trame)
                             time.sleep(10)
                             trame = gen.contactVoletFerme(5)
