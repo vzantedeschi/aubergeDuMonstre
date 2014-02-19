@@ -20,6 +20,7 @@ connected = False
 
 # Aucune puce RFID détectée
 rfidDetected = 0
+idIntrus = 5
 
 hote = '134.214.106.23'
 port = 5000
@@ -34,6 +35,7 @@ def RFIDFunc():
 
 def commande(item):
     global rfidDetected
+    global idIntrus
     #récupération type de donnée
     typeInfo = item[u'_cls']
     #récupération de l'id de la pièce concernée
@@ -62,20 +64,27 @@ def commande(item):
             # Un seul intrus dans la maison en même temps sinon => comment savoir si un
             # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
             # vient de changer de pièce (enlever id de la pièce précédente)
-            persoAjoute = tables.Personne.objects(personne_id = rfidDetected, ignore = False).first()
-            
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.persosPresents.append(persoAjoute)
-            etatPiece.save()        
+            if piece_id == 1:
+                newPerso = tables.Personne(personne_id = idIntrus, name ="Intrus", ignore = False)
+                newPerso.save()
+                idIntrus = idIntrus+1
+                
+            persoAjoute = tables.Personne.objects(ignore = False)
 
-            ## Enlever le perso des autres pieces
-            listePieces = tables.Etat.objects
-            for p in listePieces :
-                if p.piece_id != piece_id:
-                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
-                    if persoAjoute in etatAChanger.persosPresents:
-                        etatAChanger.persosPresents.remove(persoAjoute)
-                        etatAChanger.save()
+            if persoAjoute != None:
+                persoAjoute = persoAjoute.first()
+                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                etatPiece.persosPresents.append(persoAjoute)
+                etatPiece.save()        
+
+                ## Enlever le perso des autres pieces
+                listePieces = tables.Etat.objects
+                for p in listePieces :
+                    if p.piece_id != piece_id:
+                        etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                        if persoAjoute in etatAChanger.persosPresents:
+                            etatAChanger.persosPresents.remove(persoAjoute)
+                            etatAChanger.save()
 
         elif rfidDetected == 1 :
             print ("Meduse est dans la piece :",piece_id)
