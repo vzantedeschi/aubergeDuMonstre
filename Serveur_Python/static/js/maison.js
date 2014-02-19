@@ -73,19 +73,19 @@ $(document).ready(function() {
 		console.log(etat)
 		var piece = pieces[piece_id];
 
-		var str0 = "<div class=\"media\">";
-		var str1 = "<a class=\"pull-left\" href=\"#\"><img class=\"media-object\" src=\"";
-		var str2 = "</a><div class=\"media-body\"><h4 class=\"media-heading\">";
-		var str3 = "</h4></div></div>";
+		var str0 = "<div class=\"media, row\">";
+		var str1 = "<div class=\"col-lg-1\"><a class=\"pull-left\" href=\"#\"><img class=\"media-object\" src=\"";
+		var str2 = "</a></div><div class=\"col-lg-6\"><div class=\"media-body\"><h4 class=\"media-heading\">";
+		var str3 = "</h4></div></div></div>";
 		var canvas = document.getElementById("description");
 
 		//nom pièce
 		var description = "<div class=\"well\" style=\"padding: 8px 0;\">" + str0 ;
-		description += str1 + "/static/img/hotel.png\" width=\"40px\">" + str2 + "Piece : " + piece.name + str3;
+		description += str1 + "/static/img/hotel.png\" width=\"60px\">" + str2 + "Piece : " + piece.name + str3;
 
 		//température et humidité
 		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Température : " + etat.temperature + str3;
-		description += str0 + str1 + "/static/img/hum.png\" width=\"20px\">" + str2 + "Humidité : " + etat.humidite + str3;
+		description += str0 + str1 + "/static/img/hum.png\" width=\"30px\">" + str2 + "Humidité : " + etat.humidite + str3;
 		//Rideaux
 		var str;
 		if (new String(etat.rideauxOuverts).valueOf() == new String("true")) {
