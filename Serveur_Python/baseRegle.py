@@ -10,6 +10,7 @@ import threading
 sys.path.append('../BDD')
 import tables
 
+
 ## Variables globales ##
 connectProxy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # La variable "connected" servira à savoir au cour du programme si on peut
@@ -55,15 +56,6 @@ def commande(item):
 
         if rfidDetected == 0 :
             # TODO : mise à jour état pièce
-
-            ## REPONSE APPLI WEB ##
-            if (True) :
-                # Allume l'interrupteur simulant les volets
-                print "Verrouillage active : volets en cours de fermeture"
-                # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
-                if connected == True :
-                    print "Envoi au proxy"
-                    connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
                     
         elif rfidDetected == 1 :
             print ("Meduse est dans la piece :",piece_id)
@@ -183,6 +175,38 @@ def commande(item):
         elif fenDonnees == True:
             print '\nCommande suivant une ouverture de volets en cours'
             db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
+
+
+#### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
+    elif(typeInfo == "Donnee.DonneeAppli"):
+        #Recherche des actionneurs de la piece du type demande
+        actionneursPiece = tables.Piece.objects(piece_id = piece_id).first().actionneurs
+        actionneursConcernes = actionneursPiece.objects(capteur_type = item[u'capteur_type'])
+
+        if connected == True :
+                print "Envoi au proxy"
+                connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
+                for a in actionneursConcernes:
+                    #TODO : connectProxy.send(...)
+                    pass
+
+    elif(typeInfo == "Donnee.ReponseAppli"):
+        reponse = item[u'reponse']
+        if reponse:
+            actionneurs = tables.Piece.objects(piece_id = piece_id).first().actionneurs
+            actionneursConcernes = actionneursPiece.objects(capteur_type = 'ContactFen'])
+            # Allume l'interrupteur simulant les volets
+            print "Verrouillage actif : volets en cours de fermeture"
+            # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+            if connected == True :
+                print "Envoi au proxy"
+                connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
+               for a in actionneursConcernes:
+                    #TODO : connectProxy.send(...)
+                    pass
+
+#### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
+
 
     else:
         print '\nPas de commande implementee'
