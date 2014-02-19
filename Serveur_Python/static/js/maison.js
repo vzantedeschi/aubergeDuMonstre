@@ -37,7 +37,7 @@ $(document).ready(function() {
 	rects[3] = createRoom(w1 + w3 + 2 * MARGE, h2 + h4 + MARGE, w4 - MARGE, h5 - MARGE);
 	rects[4] = createRoom(w1 + MARGE, 0, w2, h2);
 
-	//setInterval(updateEtats, 1000);
+	setInterval(updateEtats, 1000);
 
 
 	/********* Définition des fonctions **********/
@@ -81,30 +81,34 @@ $(document).ready(function() {
 	function updateEtats() {
 		for (var i = 0; i < pieces.length ; i++) {
 			var piece = i + 1;
-			$.getJSON('/surveillance/personnages', {piece : piece}, function(data2) {
-				var intrus = false;
-				var persos = new Array();
-				persos = data2.result;
-				for (var j = 0; j < persos.length; j ++) {
-					if (new String(persos[j].nom).valueOf() == new String("Intrus")){
-						console.log(persos[j].ignore);
-						if (new String(persos[j].ignore).valueOf() == new String("false")) {
-							intrus = true;
-							console.log("intrus dans " + (piece - 1));
-							$('#piece').text(nom);
-							$('#notification').show();
-							//la prochaine fois, on ignore cet intrus
-							$.getJSON('/surveillance/' + persos[j].personne_id);
-						}
+			var intrus = updateEtatPiece(piece);
+			if (intrus) {
+				rects[i].attr({"fill":"red"});
+			} else {
+				rects[i].attr({"fill":"white"});
+			}	
+		}
+	}
+
+	function updateEtatPiece(piece) {
+		$.getJSON('/surveillance/personnages', {piece : piece}, function(data) {
+			var intrus = false;
+			var persos = new Array();
+			persos = data.result;
+			for (var j = 0; j < persos.length; j ++) {
+				if (new String(persos[j].nom).valueOf() == new String("Intrus")){
+					console.log(persos[j].ignore);
+					if (new String(persos[j].ignore).valueOf() == new String("false")) {
+						intrus = true;
+						console.log("intrus dans " + (piece - 1));
+						$('#piece').text(pieces[piece - 1].name);
+						$('#notification').show();
+						//la prochaine fois, on ignore cet intrus
+						$.getJSON('/surveillance/' + persos[j].personne_id);
 					}
 				}
-				console.log('intrus = ' + intrus);
-				if (intrus) {
-					rects[piece-1].attr({"fill":"red"});
-				} else {
-					rects[piece-1].attr({"fill":"white"});
-				}		
-			})
-		}
+			}		
+		})
+		return intrus;
 	}
 })
