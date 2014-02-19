@@ -33,6 +33,57 @@ def RFIDFunc():
     rfidDetected = 0
     print '\nRFID DETECTED REMIS A 0'
 
+def calcCheckSum(chaine):
+    checksum = 0
+    i = 0
+    while i < len(trame) :
+        c = trame[i:i+2]
+        i += 2
+        checksum += int(c, 16)
+
+    checksum &= 0xFF
+    return hex(checksum)[2:4]
+
+def trameActionneur(actionneur, activation):
+    sync = 'A55A'
+    message = 'B0550000000'
+    if activation:
+        message = 'B0570000000'
+    message += actionneurConcerne.actionneur_id
+    status = "30"
+    checksum = calcCheckSum(message)
+    queueTrame = status + checksum
+    return sync + message + queueTrame
+
+def activerActionneur(idPiece, typeActionneur):
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurConcerne = actionneursPiece.objects(capteur_type = typeActionneur]).first()
+    print "Activation de l'actionneur"
+    # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+    if connected == True :
+        print "Envoi au proxy"
+        connectProxy.send(trameActionneur(actionneurConcerne, True))
+
+def desactiverActionneur(idPiece, typeActionneur):
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurConcerne = actionneursPiece.objects(capteur_type = typeActionneur]).first()
+    print "Desactivation de l'actionneur"
+    # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+    if connected == True :
+        print "Envoi au proxy"
+        connectProxy.send(trameActionneur(actionneurConcerne, False))
+
+def ouvrirVolets(idPiece):    
+    # Allume l'interrupteur simulant les volets
+    print "Verrouillage actif : volets en cours d'ouverture"
+    activerActionneur(idPiece, 'ContactFen')        
+
+
+def fermerVolets(idPiece):
+    # Allume l'interrupteur simulant les volets
+    print "Verrouillage actif : volets en cours d'ouverture"
+    desactiverActionneur(idPiece, 'ContactFen')  
+
 def commande(item):
     global rfidDetected
     global idIntrus
@@ -59,6 +110,10 @@ def commande(item):
         print '\nCommande suivant une presence en cours'
 
         if rfidDetected == 0 :
+<<<<<<< HEAD
+            # TODO : mise à jour état pièce
+            pass
+=======
             print ("Intrus est dans la piece :",piece_id)
 
             # Un seul intrus dans la maison en même temps sinon => comment savoir si un
@@ -86,6 +141,7 @@ def commande(item):
                             etatAChanger.persosPresents.remove(persoAjoute)
                             etatAChanger.save()
 
+>>>>>>> bc30dfc4c53457bdf537ee8b3fe2cee62b4fa828
         elif rfidDetected == 1 :
             print ("Meduse est dans la piece :",piece_id)
             pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
@@ -246,19 +302,23 @@ def commande(item):
 #### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
     elif(typeInfo == "Donnee.DonneeAppli"):
         #Recherche des actionneurs de la piece du type demande
+        capteurType = item[u'capteur_type']
         actionneursPiece = tables.Piece.objects(piece_id = piece_id).first().actionneurs
-        actionneursConcernes = actionneursPiece.objects(capteur_type = item[u'capteur_type'])
+        actionneursConcernes = actionneursPiece.objects(capteur_type = capteurType)
 
         if connected == True :
-                print "Envoi au proxy"
-                connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
-                for a in actionneursConcernes:
-                    #TODO : connectProxy.send(...)
-                    pass
+            print "Envoi au proxy"
+            connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
+            for a in actionneursConcernes:
+                #TODO : connectProxy.send(...)
+                pass
 
     elif(typeInfo == "Donnee.ReponseAppli"):
         reponse = item[u'reponse']
         if reponse:
+<<<<<<< HEAD
+            fermerVolets()
+=======
             actionneurs = tables.Piece.objects(piece_id = piece_id).first().actionneurs
             actionneursConcernes = actionneursPiece.objects(capteur_type = 'ContactFen')
             # Allume l'interrupteur simulant les volets
@@ -270,6 +330,7 @@ def commande(item):
                 for a in actionneursConcernes:
                     #TODO : connectProxy.send(...)
                     pass
+>>>>>>> bc30dfc4c53457bdf537ee8b3fe2cee62b4fa828
 
 #### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
 
