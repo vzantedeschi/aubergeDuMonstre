@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import requests
 import json
 from mongoengine import *
@@ -35,14 +35,14 @@ def etat_to_tuples(piece_id):
 	prise = "Fermés"
 	if etat.priseDeclenchee : prise = "Ouverts"
 
-	result = { "couples": [ { "image" : "hotel.png", "nom":"Piece" , "valeur": piece.name },
-							{ "image" : "hotel.png", "nom":"Température" , "valeur": etat.temperature },
-							{ "image" : "hotel.png", "nom":"Humidité" , "valeur": etat.humidite },
-							{ "image" : "rideaux.png", "nom":"Rideaux" , "valeur": rid },
-							{ "image" : "hotel.png", "nom":"Climatisation" , "valeur": piece.name },
-							{ "image" : "hotel.png", "nom":"Prise intelligente" , "valeur": prise },
-							{ "image" : "hotel.png", "nom":"Antincendie" , "valeur": inc },
-							{ "image" : "hotel.png", "nom":"Volets" , "valeur": vol }
+	result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name },
+							{ "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
+							{ "image" : "hum.png", "width" : "20px","nom":"Humidité" , "valeur": etat.humidite },
+							{ "image" : "rideaux.png", "width" : "30px","nom":"Rideaux" , "valeur": rid },
+							{ "image" : "hotel.png", "width" : "40px","nom":"Climatisation" , "valeur": piece.name },
+							{ "image" : "hotel.png", "width" : "40px","nom":"Prise intelligente" , "valeur": prise },
+							{ "image" : "fire.png", "width" : "30px","nom":"Antincendie" , "valeur": inc },
+							{ "image" : "hotel.png", "width" : "40px","nom":"Volets" , "valeur": vol }
 							]
 			}
 	return result

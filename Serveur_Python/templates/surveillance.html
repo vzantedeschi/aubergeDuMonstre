@@ -46,8 +46,10 @@
         <ul>
             {{#each couples}}
             <li class="list-group-item">
-            <img class="pull-left" src="/static/img/{{image}}" width="20px"/>
-            {{nom}} : {{valeur}}
+            <div class="row">
+            <div class="col-lg-3 text-center"><img src="/static/img/{{image}}" width={{width}}/></div>
+            <div class="col-lg-9"><h4>{{nom}} : {{valeur}}</h4></div>
+            </div>
             </li>
             {{/each}}
         </ul>
