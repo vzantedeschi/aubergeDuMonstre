@@ -2,12 +2,15 @@ function alertOui() {
 	alert("A table!");
 	$('#notification').hide();
     piece = $("#piece").text();
+    $("#piece").text("");
     $.getJSON('/surveillance/reponse', {piece : piece, rep : "oui"});
 }
 
 function alertNon() {	
 	alert("Rien à faire");
+    $('#notification').hide();
 	piece = $("#piece").text();
+    $("#piece").text("");
     $.getJSON('/surveillance/reponse', {piece : piece, rep : "non"});
 }
 
