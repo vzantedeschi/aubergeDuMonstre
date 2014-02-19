@@ -46,7 +46,7 @@ class Presence(Donnee):
 	pass
 
 class Interrupteur(Donnee):
-    pass
+        ouverte = BooleanField(required = True)
 	
 class Temperature(Donnee):
 	valeur = FloatField(required=True)
@@ -64,6 +64,7 @@ class RFID (Donnee):
 ## Donnees recues par l'appli web (actionneurs)
 class DonneeAppli(Donnee) :
 	capteur_type = StringField(required=True) #type d'actionneur concerne
+	action_type = BooleanField(required=True) #allumer = True, eteindre = False
 
 ## Reponse envoyee suite a la detection d'un intrus
 class ReponseAppli(Donnee):
