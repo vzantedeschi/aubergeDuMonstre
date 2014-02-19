@@ -1,5 +1,5 @@
 $(document).ready(function() { 
-
+	descriptionTemplate = loadTemplate('#description-template'); 
 	//design constants
 	var WIDTH = $(document).width() * 0.4; 
 	var HEIGHT = $(document).height() * 0.7;
@@ -68,99 +68,47 @@ $(document).ready(function() {
 	}
 
 	function showEtat(obj) {
+		var $description = $("#description");
 		var piece_id = rects.indexOf(obj);
-		var etat = status[piece_id];
-		console.log(etat)
-		var piece = pieces[piece_id];
-
-		var str0 = "<div class=\"media\">";
-		var str1 = "<a class=\"pull-left\" href=\"#\"><img class=\"media-object\" src=\"";
-		var str2 = "</a><div class=\"media-body\"><h4 class=\"media-heading\">";
-		var str3 = "</h4></div></div>";
-		var canvas = document.getElementById("description");
-
-		//nom pièce
-		var description = "<div class=\"well\" style=\"padding: 8px 0;\">" + str0 ;
-		description += str1 + "/static/img/hotel.png\" width=\"40px\">" + str2 + "Piece : " + piece.name + str3;
-
-		//température et humidité
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Température : " + etat.temperature + str3;
-		description += str0 + str1 + "/static/img/hum.png\" width=\"20px\">" + str2 + "Humidité : " + etat.humidite + str3;
-		//Rideaux
-		var str;
-		if (new String(etat.rideauxOuverts).valueOf() == new String("true")) {
-			str = "Ouverts"
-		} else {
-			str = "Fermés"
-		}
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Rideaux : " + str + str3;
-		//Incendie
-		if (new String(etat.antiIncendieDeclenche).valueOf() == new String("true")) {
-			str = "Déclenchée"
-		} else {
-			str = "Non déclenchée"
-		}
-		description += str0 + str1 + "/static/img/fire.png\" width=\"40px\">" + str2 + "Antincendie : " + str + str3;
-		//Climatisation
-		if (new String(etat.climActivee).valueOf() == new String("true")) {
-			str = "Active"
-		} else {
-			str = "Eteinte"
-		}
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Climatisation : " + str + str3;
-		if (new String(etat.voletsOuverts).valueOf() == new String("true")) {
-			str = "Ouverts"
-		} else {
-			str = "Fermés"
-		}
-		description += str0 + str1 + "/static/img/rideaux.png\" width=\"40px\">" + str2 + "Rideaux : " + str + str3;
-		if (new String(etat.priseDeclenchee).valueOf() == new String("true")) {
-			str = "Allumée"
-		} else {
-			str = "Eteinte"
-		}
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Prise Intelligente : " + str + str3;
-		if (new String(etat.portesFermees).valueOf() == new String("true")) {
-			str = "Fermées"
-		} else {
-			str = "Ouvertes"
-		}
-		description += str0 + str1 + "/static/img/door.png\" width=\"40px\">" + str2 + "Portes : " + str + str3 + "</div>";
-		
-		canvas.innerHTML = description;
+		piece_id ++;
+		$description.html("");
+		$.getJSON('/surveillance/etat/' + piece_id, {}, function(data) {
+			console.log(data);		
+			$description.append(descriptionTemplate(data));
+		});
 	}
 
 	function updateEtats() {
-		$.getJSON('/surveillance/etats', {}, function(data1) {
-			status = data1.result;			
-		});
-		for (var i = 0; i < status.length ; i++) {
-			var piece = status[i]._id;
-			$.getJSON('/surveillance/personnages', {piece : piece}, function(data2) {
-				var intrus = false;
-				var nom = pieces[piece - 1].name;
-				var persos = new Array();
-				persos = data2.result;
-				for (var j = 0; j < persos.length; j ++) {
-					if (new String(persos[j].nom).valueOf() == new String("Intrus")){
-						console.log(persos[j].ignore);
-						if (new String(persos[j].ignore).valueOf() == new String("false")) {
-							intrus = true;
-							console.log("intrus dans " + (piece - 1));
-							$('#piece').text(nom);
-							$('#notification').show();
-							//la prochaine fois, on ignore cet intrus
-							$.getJSON('/surveillance/' + persos[j].personne_id);
-						}
+		for (var i = 0; i < pieces.length ; i++) {
+			var piece = i + 1;
+			var intrus = updateEtatPiece(piece);
+			if (intrus) {
+				rects[i].attr({"fill":"red"});
+			} else {
+				rects[i].attr({"fill":"white"});
+			}	
+		}
+	}
+
+	function updateEtatPiece(piece) {
+		$.getJSON('/surveillance/personnages', {piece : piece}, function(data) {
+			var intrus = false;
+			var persos = new Array();
+			persos = data.result;
+			for (var j = 0; j < persos.length; j ++) {
+				if (new String(persos[j].nom).valueOf() == new String("Intrus")){
+					console.log(persos[j].ignore);
+					if (new String(persos[j].ignore).valueOf() == new String("false")) {
+						intrus = true;
+						console.log("intrus dans " + (piece - 1));
+						$('#piece').text(pieces[piece - 1].name);
+						$('#notification').show();
+						//la prochaine fois, on ignore cet intrus
+						$.getJSON('/surveillance/' + persos[j].personne_id);
 					}
 				}
-				console.log('intrus = ' + intrus);
-				if (intrus) {
-					rects[piece-1].attr({"fill":"red"});
-				} else {
-					rects[piece-1].attr({"fill":"white"});
-				}		
-			})
-		}
+			}		
+		})
+		return intrus;
 	}
 })
