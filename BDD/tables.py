@@ -46,7 +46,7 @@ class Presence(Donnee):
 	pass
 
 class Interrupteur(Donnee):
-        ouverte = BooleanField(required = True)
+    ouverte = BooleanField(required = True)
 	
 class Temperature(Donnee):
 	valeur = FloatField(required=True)

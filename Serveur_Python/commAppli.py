@@ -80,10 +80,18 @@ def get_etat_piece(piece_id):
 @app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
 	perso = tables.Personne.objects(personne_id=perso_id).first()
-	print "avant " + str(perso.ignore)
 	perso.ignore = True
-	print "après " + str(perso.ignore)
 	perso.save()
+	return "ok"
+
+@app.route('/surveillance/reponse')
+def reponse():
+	rep = request.args.get('rep')
+	"""if rep == 'oui' :
+		reponse = tables.ReponseAppli(reponse=True)
+	else :
+		reponse = tables.ReponseAppli(reponse=False)
+	reponse.save()"""
 	return "ok"
 
 @app.route('/login', methods=['GET'])
