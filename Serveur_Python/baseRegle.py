@@ -55,34 +55,54 @@ def trameActionneur(actionneur, activation):
     queueTrame = status + checksum
     return sync + message + queueTrame
 
-def activerActionneur(idPiece, typeActionneur):
+
+def activerActionneur(idPiece, idAct):
     actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
-    actionneurConcerne = actionneursPiece.objects(capteur_type = typeActionneur]).first()
+    actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
     print "Activation de l'actionneur"
     # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
         print "Envoi au proxy"
         connectProxy.send(trameActionneur(actionneurConcerne, True))
-
-def desactiverActionneur(idPiece, typeActionneur):
+        
+def activerActionneur_type(idPiece, typeActionneur):
     actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
-    actionneurConcerne = actionneursPiece.objects(capteur_type = typeActionneur]).first()
+    l = actionneursPiece.objects(capteur_type = typeActionneur)
+    for actionneurConcerne in l :
+        print "Activation de l'actionneur"
+        # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+        if connected == True :
+            print "Envoi au proxy"
+            connectProxy.send(trameActionneur(actionneurConcerne, True))
+
+def desactiverActionneur(idPiece, idAct):
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
     print "Desactivation de l'actionneur"
     # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
         print "Envoi au proxy"
         connectProxy.send(trameActionneur(actionneurConcerne, False))
+            
+def desactiverActionneur_type(idPiece, typeActionneur):
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    l = actionneursPiece.objects(capteur_type = typeActionneur)
+    for actionneurConcerne in l :
+        print "Desactivation de l'actionneur"
+        # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+        if connected == True :
+            print "Envoi au proxy"
+            connectProxy.send(trameActionneur(actionneurConcerne, False))
 
 def ouvrirVolets(idPiece):    
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
-    activerActionneur(idPiece, 'ContactFen')        
-
+    activerActionneur_type(idPiece, 'ContactFen')        
 
 def fermerVolets(idPiece):
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
-    desactiverActionneur(idPiece, 'ContactFen')  
+    desactiverActionneur_type(idPiece, 'ContactFen')  
 
 def commande(item):
     global rfidDetected
