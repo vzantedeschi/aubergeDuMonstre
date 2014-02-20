@@ -46,6 +46,8 @@ def etat_to_tuples(piece_id):
 			}
 	return result
 
+
+
 @app.route('/')
 def hello():
     return render_template('index.html')
