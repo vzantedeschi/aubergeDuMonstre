@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import requests
 import json
 from mongoengine import *
@@ -85,7 +85,7 @@ def get_etat_piece(piece_id):
 def get_actionneurs(piece_id):
 	piece = tables.Piece.objects(piece_id=piece_id).first()
 	actionneurs = [a.to_dict() for a in piece.actionneurs]
-	return json.dumps(actionneurs)
+	return jsonify(ok=True, result=actionneurs)
 
 
 """@app.route('/surveillance/<perso_id>')

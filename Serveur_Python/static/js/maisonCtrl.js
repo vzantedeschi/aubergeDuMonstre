@@ -1,5 +1,5 @@
 $(document).ready(function() { 
-	formuTemplate = loadTemplate('#formu-template'); 
+	liTemplate = loadTemplate('#li-template'); 
 	//design constants
 	var WIDTH = $(document).width() * 0.4; 
 	var HEIGHT = $(document).height() * 0.7;
@@ -60,18 +60,21 @@ $(document).ready(function() {
 	}
 
 	function showForm(obj) {
-		var $formu = $("#formu");
+		var $actionneurs = $("#formu");
 		var piece_id = rects.indexOf(obj);
 		piece_id ++;
-		$formu.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
-
+		//$actionneurs.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
+		$actionneurs.html("");
 		$.getJSON('/controle/' + piece_id, {}, function(data) {
-			for(donnee in data){
-				console.log(donnee);		
-				$formu.append(formuTemplate(donnee));
-			}
+			console.log(data);
+			/*var objs = data.result;
+			for (var i = 0; i < objs.length; i++) {
+				console.log(objs[i]);
+				$actionneurs.append(liTemplate(objs[i]));
+			}*/
+			$actionneurs.append(liTemplate(data));
 
-			$formu.append("</select><br><br><input type=\"radio\" value=\"On\" id=\"on\" name=\"onOff\"> On <input type=\"radio\" value=\"Off\" id=\"off\" name=\"onOff\"> Off <br><br><br><input type=\"submit\" value=\"Envoyer\" name=\"boutonEnv\" onclick=\"valider()\"></form>")
+			//$formu.append("</select><br><br><input type=\"radio\" value=\"On\" id=\"on\" name=\"onOff\"> On <input type=\"radio\" value=\"Off\" id=\"off\" name=\"onOff\"> Off <br><br><br><input type=\"submit\" value=\"Envoyer\" name=\"boutonEnv\" onclick=\"valider()\"></form>")
 		});
 	}
 
