@@ -311,9 +311,8 @@ def commande(item):
     elif(typeInfo == "Donnee.ReponseAppli"):
         reponse = item[u'reponse']
         if reponse:
-<<<<<<< HEAD
+
             fermerVolets()
-=======
             actionneurs = tables.Piece.objects(piece_id = piece_id).first().actionneurs
             actionneursConcernes = actionneursPiece.objects(capteur_type = 'ContactFen')
             # Allume l'interrupteur simulant les volets
@@ -325,7 +324,6 @@ def commande(item):
                 for a in actionneursConcernes:
                     #TODO : connectProxy.send(...)
                     pass
->>>>>>> bc30dfc4c53457bdf537ee8b3fe2cee62b4fa828
 
 #### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
 

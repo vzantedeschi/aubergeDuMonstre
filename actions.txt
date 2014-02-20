@@ -1,17 +1,17 @@
 allumeClim	Allumer la climatisation 
-eteintClim	Éteindre la climatisation 
+eteintClim	Ã‰teindre la climatisation 
 ouvreVolet	Ouvrir les volets 
 fermeVolet	Fermer les volets
-allumeLum	Allumer la lumière 
-eteintLum	Éteindre la lumière 
-fermePiece	fermer une pièce
+allumeLum	Allumer la lumiÃ¨re 
+eteintLum	Ã‰teindre la lumiÃ¨re 
+fermePiece	fermer une piÃ¨ce
 ouvreVolet 	ouvrir une "porte"
 ouvrePiece	ouvrir une piece
-question	Poser question aux résidents (pour manger uniquement ?)
-allumeEau	Activer le système anti-incendie
-eteintEau	Éteindre le système anti-incendie
+question	Poser question aux rÃ©sidents (pour manger uniquement ?)
+allumeEau	Activer le systÃ¨me anti-incendie
+eteintEau	Ã‰teindre le systÃ¨me anti-incendie
 fermeRideau	Cacher les miroirs 
-ouvreRideau	Dévoiler les miroirs
-notifieRes	Envoyer notification aux résidents ?
+ouvreRideau	DÃ©voiler les miroirs
+notifieRes	Envoyer notification aux rÃ©sidents ?
 allumeInt	Allumer un interrupteur
 eteintInt	Eteindre un interrupteur

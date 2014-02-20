@@ -1,27 +1,27 @@
-tempInf x	Seuil inférieur à x de température atteint
-tempSup x	Seuil supérieur à x de température atteint
+tempInf x	Seuil infÃ©rieur Ã  x de tempÃ©rature atteint
+tempSup x	Seuil supÃ©rieur Ã  x de tempÃ©rature atteint
 porteOuv	Porte ouverte
-porteFer	Porte fermée
-vampire	Présence vampire
-meduse	Présence méduse
-intrus	Présence intrus
-sirene	Présence sirène
-invite	Présence invité
-fenOuv	Fenêtre ouverte
-fenFer	Fenêtre fermée
-humInf x 	Seuil inférieur d'humidité x atteint
-humSup x	Seuil supérieur à x d'humidité atteint
+porteFer	Porte fermÃ©e
+vampire	PrÃ©sence vampire
+meduse	PrÃ©sence mÃ©duse
+intrus	PrÃ©sence intrus
+sirene	PrÃ©sence sirÃ¨ne
+invite	PrÃ©sence invitÃ©
+fenOuv	FenÃªtre ouverte
+fenFer	FenÃªtre fermÃ©e
+humInf x 	Seuil infÃ©rieur d'humiditÃ© x atteint
+humSup x	Seuil supÃ©rieur Ã  x d'humiditÃ© atteint
 pasChange x	Pas de changement depuis x temps ?
-mouv	Détection mouvement
-lumEt	Lumière éteinte ?
-lumAll	Lumière allumée ?
+mouv	DÃ©tection mouvement
+lumEt	LumiÃ¨re Ã©teinte ?
+lumAll	LumiÃ¨re allumÃ©e ?
 pasBouge x	Pas de mouvement depuis x temps
 dansCuisine	Dans cuisine
 dansChambre	Dans chambre
 dansSalon	Dans salon
 dansCouloir	Dans couloir
-dansPiece x 	Dans pièce x
-climAll	Climatisation allumée
-climEt	Climatisation éteinte
-incAll	Système anti-incendie allumé
-incEt	Système anti-incendie éteint
+dansPiece x 	Dans piÃ¨ce x
+climAll	Climatisation allumÃ©e
+climEt	Climatisation Ã©teinte
+incAll	SystÃ¨me anti-incendie allumÃ©
+incEt	SystÃ¨me anti-incendie Ã©teint
