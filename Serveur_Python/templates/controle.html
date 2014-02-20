@@ -45,7 +45,11 @@
         <li class="list-group-item">
         <div class="row">
         <div class="col-lg-3 text-center">{{_id}}</div>
-        <div class="col-lg-9">{{capteur_type}}</div>
+        <div class="col-lg-3">{{capteur_type}}</div>
+    	<form action="vailder" method="get">
+			<div class="col-lg-3"><button type="submit" value="{{_id}}" class="btn btn-default">Activer</button></div>
+        	<div class="col-lg-3"><button type="submit" value="{{_id}}" class="btn btn-default">Désactiver</button></div>
+		</form> 
         </div>
         </li>
         {{/each}}

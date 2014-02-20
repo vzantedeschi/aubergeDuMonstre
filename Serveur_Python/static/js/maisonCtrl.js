@@ -59,24 +59,28 @@ $(document).ready(function() {
 		});
 	}
 
+	var piece_id;
+
 	function showForm(obj) {
 		var $actionneurs = $("#formu");
-		var piece_id = rects.indexOf(obj);
+		piece_id = rects.indexOf(obj);
 		piece_id ++;
 		//$actionneurs.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
 		$actionneurs.html("");
 		$.getJSON('/controle/' + piece_id, {}, function(data) {
 			console.log(data);
-			/*var objs = data.result;
-			for (var i = 0; i < objs.length; i++) {
-				console.log(objs[i]);
-				$actionneurs.append(liTemplate(objs[i]));
-			}*/
 			$actionneurs.append(liTemplate(data));
-
-			//$formu.append("</select><br><br><input type=\"radio\" value=\"On\" id=\"on\" name=\"onOff\"> On <input type=\"radio\" value=\"Off\" id=\"off\" name=\"onOff\"> Off <br><br><br><input type=\"submit\" value=\"Envoyer\" name=\"boutonEnv\" onclick=\"valider()\"></form>")
 		});
 	}
 
+	$('.submit').click(function()  {
+		var id = $(this).val();
+		var action = $(this).text();
+		var bool = false;
+		if (value == "Activer") {
+			bool = true;
+		}
+		
+	})
 
 })
