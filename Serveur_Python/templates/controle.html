@@ -11,15 +11,10 @@
 <div class="container">
 	<div class="page-header" id="banner">
 		<div class="row">
-			<div class="col-12 col-sm-12 col-lg-12">
-				<h2>Tableau de controle</h2>
-			</div>
 			<div class="col-md-6" id="maisonCtrl">
 			</div>
 			<div class="col-md-6" id="formu">
 				<h3>Cliquez sur une pièce pour manipuler ses actionneurs</h3>
-				<!-- presence d'un onsubmit="valider()" affichera un message d'erreur ou de confirmation d'envoi-->
-				
 			</div>
 		</div>
 	</div>
@@ -40,25 +35,23 @@
 {% raw %}
 <script src="static/js/maisonCtrl.js"></script>
 {% endraw %}
-
 {% raw %}
-<script id="formu-template" type="text/x-handlebars-template">
-
-	<form method="POST" action="/controle">
-        <select name="actionneur">
-            {{#each actionneurs}}
-            <option value={{actionneur_id}}>{{actionneur_id}}</option>
-            {{\each}}
-        <\select>
-        <br><br>
-        <input type="radio" value="On" id="on" name="onOff"> On 
-		<input type="radio" value="Off" id="off" name="onOff"> Off <br><br><br>
-		<input type="submit" value="Envoyer" name="boutonEnv" onclick="valider()">
-    <\form>
-
+<script id="li-template" type="text/x-handlebars-template">
+	<div class="panel panel-default text-center">
+		<div class="panel-heading">
+			<h3 class="panel-title">Actionneurs disponibles</h3>
+		</div>
+        {{#each result}}
+        <li class="list-group-item">
+        <div class="row">
+        <div class="col-lg-3 text-center">{{_id}}</div>
+        <div class="col-lg-9">{{capteur_type}}</div>
+        </div>
+        </li>
+        {{/each}}
+	</div>
 </script>
 {% endraw %}
-
 {% raw %}
 <script type="text/javascript">
 	function valider() {

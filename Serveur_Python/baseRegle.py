@@ -106,8 +106,33 @@ def commande(item):
         print '\nCommande suivant une presence en cours'
 
         if rfidDetected == 0 :
-            # TODO : mise à jour état pièce
-            pass
+            print ("Intrus est dans la piece :",piece_id)
+
+            # Un seul intrus dans la maison en même temps sinon => comment savoir si un
+            # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
+            # vient de changer de pièce (enlever id de la pièce précédente)
+            if piece_id == 1:
+                newPerso = tables.Personne(personne_id = idIntrus, name ="Intrus", ignore = False)
+                newPerso.save()
+                idIntrus = idIntrus+1
+                
+            persoAjoute = tables.Personne.objects(ignore = False)
+
+            if persoAjoute != None:
+                persoAjoute = persoAjoute.first()
+                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                etatPiece.persosPresents.append(persoAjoute)
+                etatPiece.save()        
+
+                ## Enlever le perso des autres pieces
+                listePieces = tables.Etat.objects
+                for p in listePieces :
+                    if p.piece_id != piece_id:
+                        etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                        if persoAjoute in etatAChanger.persosPresents:
+                            etatAChanger.persosPresents.remove(persoAjoute)
+                            etatAChanger.save()
+                            
         elif rfidDetected == 1 :
             print ("Meduse est dans la piece :",piece_id)
             pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
@@ -251,6 +276,7 @@ def commande(item):
         reponse = item[u'reponse']
         if reponse:
             fermerVolets(piece_id)
+
 
 #### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
 
