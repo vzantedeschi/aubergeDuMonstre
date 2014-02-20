@@ -98,8 +98,8 @@ $(document).ready(function() {
 					if (new String(persos[j].ignore).valueOf() == new String("false")) {
 						$('#piece').text(pieces[piece - 1].name);
 						$('#notification').show();
-						//la prochaine fois, on ignore cet intrus
-						//$.getJSON('/surveillance/' + persos[j].personne_id);
+						la prochaine fois, on ignore cet intrus
+						$.getJSON('/surveillance/' + persos[j].personne_id);
 					}
 				}
 			}	
