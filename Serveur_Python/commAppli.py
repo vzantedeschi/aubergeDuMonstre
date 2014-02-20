@@ -90,11 +90,10 @@ def get_actionneurs(piece_id):
 def send_action():
 	id_act = request.args.get('action')
 	piece = request.args.get('piece')
-
+	act_type = request.args.get('type')
+	print str(id_act)
 	now = datetime.datetime.now()
-	reponse = tables.DonneeAppli(date=now,piece_id=piece,reponse=False)
-	if rep == 'oui' :
-		reponse.ReponseAppli = True	
+	reponse = tables.DonneeAppli(date=now,piece_id=piece,actionneur_id=id_act,action_type=act_type)
 	reponse.save()
 	return "ok"
 

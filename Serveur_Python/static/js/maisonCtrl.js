@@ -68,19 +68,21 @@ $(document).ready(function() {
 		//$actionneurs.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
 		$actionneurs.html("");
 		$.getJSON('/controle/' + piece_id, {}, function(data) {
-			console.log(data);
 			$actionneurs.append(liTemplate(data));
 		});
 	}
-
-	$('.submit').click(function()  {
-		var id = $(this).val();
-		var action = $(this).text();
-		var bool = false;
-		if (value == "Activer") {
-			bool = true;
-		}
-		
-	})
-
 })
+
+function valider() {
+	console.log('tout va bien');
+	var id = $(this).val();
+	var action = $(this).text();
+	console.log('tout va bien');
+	var bool = false;
+	console.log(piece_id);
+	if (value == "Activer") {
+		console.log(value);
+		bool = true;
+	}
+	$.getJSON('/controle/action', {piece : piece_id, type : bool, action : action});
+}
