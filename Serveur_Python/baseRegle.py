@@ -30,7 +30,7 @@ db = db_connec.GHome_BDD
 def RFIDFunc():
     rfidDetected = 0
 
-def calcCheckSum(chaine):
+def calcCheckSum(trame):
     checksum = 0
     i = 0
     while i < len(trame) :
@@ -43,14 +43,13 @@ def calcCheckSum(chaine):
 
 def trameActionneur(actionneurId, activation):
     sync = 'A55A'
-    message = 'B0550000000'
+    message = '6B0550000000'
     if activation:
-        message = 'B0570000000'
+        message = '6B0570000000'
     message += format(actionneurId, '08x')
-    status = "30"
+    message += "30"
     checksum = calcCheckSum(message)
-    queueTrame = status + checksum
-    return sync + message + queueTrame
+    return sync + message + checksum
 
 def activerActionneur(actionneurId):
     print "Activation de l'actionneur"
