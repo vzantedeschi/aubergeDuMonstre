@@ -63,71 +63,16 @@ $(document).ready(function() {
 		var $formu = $("#formu");
 		var piece_id = rects.indexOf(obj);
 		piece_id ++;
-		$formu.html("");
+		$formu.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
+
 		$.getJSON('/controle/' + piece_id, {}, function(data) {
-			console.log(data);		
-			$formu.append(formuTemplate(data));
+			for(donnee in data){
+				console.log(donnee);		
+				$formu.append(formuTemplate(donnee));
+			}
+
+			$formu.append("</select><br><br><input type=\"radio\" value=\"On\" id=\"on\" name=\"onOff\"> On <input type=\"radio\" value=\"Off\" id=\"off\" name=\"onOff\"> Off <br><br><br><input type=\"submit\" value=\"Envoyer\" name=\"boutonEnv\" onclick=\"valider()\"></form>")
 		});
-		/*var piece_id = rects.indexOf(obj);
-		var etat = status[piece_id];
-		console.log(etat)
-		var piece = pieces[piece_id];
-
-		var str0 = "<div class=\"media\">";
-		var str1 = "<a class=\"pull-left\" href=\"#\"><img class=\"media-object\" src=\"";
-		var str2 = "</a><div class=\"media-body\"><h4 class=\"media-heading\">";
-		var str3 = "</h4></div></div>";
-		var canvas = document.getElementById("description");
-
-		//nom pièce
-		var description = "<div class=\"well\" style=\"padding: 8px 0;\">" + str0 ;
-		description += str1 + "/static/img/hotel.png\" width=\"40px\">" + str2 + "Piece : " + piece.name + str3;
-
-		//température et humidité
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Température : " + etat.temperature + str3;
-		description += str0 + str1 + "/static/img/hum.png\" width=\"20px\">" + str2 + "Humidité : " + etat.humidite + str3;
-		//Rideaux
-		var str;
-		if (new String(etat.rideauxOuverts).valueOf() == new String("true")) {
-			str = "Ouverts"
-		} else {
-			str = "Fermés"
-		}
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Rideaux : " + str + str3;
-		//Incendie
-		if (new String(etat.antiIncendieDeclenche).valueOf() == new String("true")) {
-			str = "Déclenchée"
-		} else {
-			str = "Non déclenchée"
-		}
-		description += str0 + str1 + "/static/img/fire.png\" width=\"40px\">" + str2 + "Antincendie : " + str + str3;
-		//Climatisation
-		if (new String(etat.climActivee).valueOf() == new String("true")) {
-			str = "Active"
-		} else {
-			str = "Eteinte"
-		}
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Climatisation : " + str + str3;
-		if (new String(etat.voletsOuverts).valueOf() == new String("true")) {
-			str = "Ouverts"
-		} else {
-			str = "Fermés"
-		}
-		description += str0 + str1 + "/static/img/rideaux.png\" width=\"40px\">" + str2 + "Rideaux : " + str + str3;
-		if (new String(etat.priseDeclenchee).valueOf() == new String("true")) {
-			str = "Allumée"
-		} else {
-			str = "Eteinte"
-		}
-		description += str0 + str1 + "/static/img/temp.png\" width=\"40px\">" + str2 + "Prise Intelligente : " + str + str3;
-		if (new String(etat.portesFermees).valueOf() == new String("true")) {
-			str = "Fermées"
-		} else {
-			str = "Ouvertes"
-		}
-		description += str0 + str1 + "/static/img/door.png\" width=\"40px\">" + str2 + "Portes : " + str + str3 + "</div>";
-		*/
-		canvas.innerHTML = description;
 	}
 
 

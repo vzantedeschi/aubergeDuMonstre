@@ -5,6 +5,7 @@ import requests
 import json
 from mongoengine import *
 import sys
+import datetime
 sys.path.append('../BDD')
 import tables
 
@@ -44,6 +45,8 @@ def etat_to_tuples(piece_id):
 							]
 			}
 	return result
+
+
 
 @app.route('/')
 def hello():
@@ -85,13 +88,23 @@ def get_actionneurs(piece_id):
 	return json.dumps(actionneurs)
 
 
-@app.route('/surveillance/<perso_id>')
+"""@app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
 	perso = tables.Personne.objects(personne_id=perso_id).first()
-	print "avant " + str(perso.ignore)
 	perso.ignore = True
-	print "après " + str(perso.ignore)
 	perso.save()
+	return "ok"""
+
+@app.route('/surveillance/reponse')
+def reponse():
+	rep = request.args.get('rep')
+	nom = request.args.get('piece')
+	piece = tables.Piece.objects(name=nom).first()
+	now = datetime.datetime.now()
+	reponse = tables.ReponseAppli(date=now,piece_id=piece.piece_id,reponse=False)
+	if rep == 'oui' :
+		reponse.ReponseAppli = True	
+	reponse.save()
 	return "ok"
 
 @app.route('/login', methods=['GET'])

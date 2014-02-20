@@ -110,10 +110,6 @@ def commande(item):
         print '\nCommande suivant une presence en cours'
 
         if rfidDetected == 0 :
-<<<<<<< HEAD
-            # TODO : mise à jour état pièce
-            pass
-=======
             print ("Intrus est dans la piece :",piece_id)
 
             # Un seul intrus dans la maison en même temps sinon => comment savoir si un
@@ -140,8 +136,7 @@ def commande(item):
                         if persoAjoute in etatAChanger.persosPresents:
                             etatAChanger.persosPresents.remove(persoAjoute)
                             etatAChanger.save()
-
->>>>>>> bc30dfc4c53457bdf537ee8b3fe2cee62b4fa828
+                            
         elif rfidDetected == 1 :
             print ("Meduse est dans la piece :",piece_id)
             pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()

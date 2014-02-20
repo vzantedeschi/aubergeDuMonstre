@@ -81,34 +81,28 @@ $(document).ready(function() {
 	function updateEtats() {
 		for (var i = 0; i < pieces.length ; i++) {
 			var piece = i + 1;
-			var intrus = updateEtatPiece(piece);
-			if (intrus) {
+			updateEtatPiece(piece);
+			rects[i].attr({"fill":"white"});
+			if (pieces[i].name == $("#piece").text()) {
 				rects[i].attr({"fill":"red"});
-			} else {
-				rects[i].attr({"fill":"white"});
-			}	
+			}
 		}
 	}
 
 	function updateEtatPiece(piece) {
+		var persos = new Array();
 		$.getJSON('/surveillance/personnages', {piece : piece}, function(data) {
-			var intrus = false;
-			var persos = new Array();
 			persos = data.result;
 			for (var j = 0; j < persos.length; j ++) {
 				if (new String(persos[j].nom).valueOf() == new String("Intrus")){
-					console.log(persos[j].ignore);
 					if (new String(persos[j].ignore).valueOf() == new String("false")) {
-						intrus = true;
-						console.log("intrus dans " + (piece - 1));
 						$('#piece').text(pieces[piece - 1].name);
 						$('#notification').show();
 						//la prochaine fois, on ignore cet intrus
-						$.getJSON('/surveillance/' + persos[j].personne_id);
+						//$.getJSON('/surveillance/' + persos[j].personne_id);
 					}
 				}
-			}		
-		})
-		return intrus;
+			}	
+		});
 	}
 })
