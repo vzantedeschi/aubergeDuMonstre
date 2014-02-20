@@ -43,18 +43,8 @@
 
 {% raw %}
 <script id="formu-template" type="text/x-handlebars-template">
-
-	<form method="POST" action="/controle">
-        <select name="actionneur">
             
-            <option value="{{_id}}">{{_id}}</option>
-
-        <\select>
-        <br><br>
-        <input type="radio" value="On" id="on" name="onOff"> On 
-		<input type="radio" value="Off" id="off" name="onOff"> Off <br><br><br>
-		<input type="submit" value="Envoyer" name="boutonEnv" onclick="valider()">
-    <\form>
+            <option value={{_id}}>{{_id}}</option>
 
 </script>
 {% endraw %}

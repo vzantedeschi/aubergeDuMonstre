@@ -63,13 +63,15 @@ $(document).ready(function() {
 		var $formu = $("#formu");
 		var piece_id = rects.indexOf(obj);
 		piece_id ++;
-		$formu.html("");
+		$formu.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
 
 		$.getJSON('/controle/' + piece_id, {}, function(data) {
 			for(donnee in data){
 				console.log(donnee);		
 				$formu.append(formuTemplate(donnee));
 			}
+
+			$formu.append("</select><br><br><input type=\"radio\" value=\"On\" id=\"on\" name=\"onOff\"> On <input type=\"radio\" value=\"Off\" id=\"off\" name=\"onOff\"> Off <br><br><br><input type=\"submit\" value=\"Envoyer\" name=\"boutonEnv\" onclick=\"valider()\"></form>")
 		});
 	}
 
