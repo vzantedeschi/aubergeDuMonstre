@@ -49,7 +49,66 @@ def initialize() :
 
 	    piece.capteurs.append(capteur)
 	    piece.save()
+        
+    #Initialisation conditions
+	fic_id = open('../conditions.txt',"r")
+	liste = fic_id.readlines()
+	fic_id.close()
 
+	for l in liste:
+	    c_nom, desc = l.split('\t')
+	    cond = tables.Condition(nom =c_nom, description = desc)
+	    cond.save()
+        
+    #Initialisation actions
+	fic_id = open('../actions.txt',"r")
+	liste = fic_id.readlines()
+	fic_id.close()
+
+	for l in liste:
+	    a_nom, desc = l.split('\t')
+	    act = tables.Action(nom =a_nom, description = desc)
+	    act.save()
+        
+    #Initialisation regles
+	fic_id = open('../regles.txt',"r")
+	liste = fic_id.readlines()
+	fic_id.close()
+
+	for l in liste:
+	    id, nom, conds, acts= l.split(';', 3)
+        
+        l_cond = conds.split('\t', conds.count('\t'))
+        pb = False
+        if pb == False :
+            r_conds = [] 
+            for elem in l_cond:
+                obj =tables.Condition.objects(nom = elem).first()
+                if obj == None :
+                    pb = True
+                    break
+                else :
+                    r_conds.append(obj)
+                    
+            l_act = acts.split('\t', acts.count('\t'))
+            
+        if pb == False :
+            #ajoute les conditions de la regle
+            r_acts = [] 
+            for elem in l_act:
+                obj =tables.Action.objects(nom = elem).first()
+                if obj == None :
+                    pb = True
+                    break
+                else :
+                    r_acts.append(obj)
+ 
+        if pb == False :
+            #ajoute les actions de la regle
+            regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
+            regle.save()
+
+        
 	#Initialisation actionneurs
 	fic_id = open('../actionneurs.txt',"r")
 	liste = fic_id.readlines()
