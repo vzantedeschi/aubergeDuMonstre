@@ -1,3 +1,43 @@
+#Je viens de m'en rendre compte, là, vers 11h55 que Cyprien et Éloise ont ajouté ça : 
+def trameActionneur(actionneur, activation):
+    sync = 'A55A'
+    message = 'B0550000000'
+    if activation:
+        message = 'B0570000000'
+    message += actionneurConcerne.actionneur_id
+    status = "30"
+    checksum = calcCheckSum(message)
+    queueTrame = status + checksum
+    return sync + message + queueTrame
+
+def activerActionneur(idPiece, typeActionneur):
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurConcerne = actionneursPiece.objects(capteur_type = typeActionneur]).first()
+    print "Activation de l'actionneur"
+    # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+    if connected == True :
+        print "Envoi au proxy"
+        connectProxy.send(trameActionneur(actionneurConcerne, True))
+
+def desactiverActionneur(idPiece, typeActionneur):
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurConcerne = actionneursPiece.objects(capteur_type = typeActionneur]).first()
+    print "Desactivation de l'actionneur"
+    # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+    if connected == True :
+        print "Envoi au proxy"
+        connectProxy.send(trameActionneur(actionneurConcerne, False))
+
+def ouvrirVolets(idPiece):    
+    # Allume l'interrupteur simulant les volets
+    print "Verrouillage actif : volets en cours d'ouverture"
+    activerActionneur(idPiece, 'ContactFen')        
+
+def fermerVolets(idPiece):
+    # Allume l'interrupteur simulant les volets
+    print "Verrouillage actif : volets en cours d'ouverture"
+    desactiverActionneur(idPiece, 'ContactFen')  
+
 #TODO
 #factoriser la ligne if connected == True : 
 #connected permet de verifier si on est bien connecté au proxy...
