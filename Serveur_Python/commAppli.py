@@ -116,7 +116,7 @@ def reponse():
 	now = datetime.datetime.now()
 	reponse = tables.ReponseAppli(date=now,piece_id=piece.piece_id,reponse=False)
 	if rep == 'oui' :
-		reponse.ReponseAppli = True	
+		reponse.reponse = True
 	reponse.save()
 	return "ok"
 
