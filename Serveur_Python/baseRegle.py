@@ -321,23 +321,39 @@ def commande(item):
             
             def mouv() : 
             
-            def lumEt() : 
-            def lumAll(): 
+            def lumEt() :
+                
+            def lumAll() :
+            
             def pasBouge() : 
-            def dansCuisine() : 
+            
+            #Les id des pieces sont-ils dans pieces.txt ou dans nom_piece.txt, les deux fichiers ne correspondent pas.
+            def dansCuisine() :
+                return etat.piece_id == 3 
             def dansChambre() : 
+                return etat.piece_id == 5
             def dansSalon() : 
+                return etat.piece_id == 2 
             def dansCouloir(): 
+                return etat.piece_id == 1
             def dansPiece() : 
-            def climAll() : 
-            def climEt() : 
+            
+            def climAll() :
+                return etat.climActivee == True
+            def climEt() :
+                return etat.climActivee == False
             def eauAll() : 
+                return etat.antiIncendieDeclenche == True
             def eauEt() : 
+                return etat.antiIncendieDeclenche == False
             def intAll() : 
-            def intEt() : 
+                return etat.priseDeclenchee == True
+            def intEt() :
+                return etat.priseDeclenchee == False
             def repNon() : 
             def repOui() :
     # fin on applique toutes les regles qui marchent ***********
+
     
         
     # ------fin partie recherche des regles ---------------------------------------------
