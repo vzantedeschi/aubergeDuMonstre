@@ -56,9 +56,13 @@ def hello():
 def surveillance():
     return render_template('surveillance.html')
 
-@app.route('/controle', methods=['GET', 'POST'])
+@app.route('/controle')
 def controle():
     return render_template('controle.html')
+
+@app.route('/parametrage')
+def parametrage():
+    return render_template('parametrage.html')
 
 @app.route('/surveillance/pieces')
 def get_pieces():

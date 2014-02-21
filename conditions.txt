@@ -23,5 +23,9 @@ dansCouloir	Dans couloir
 dansPiece x 	Dans pièce x
 climAll	Climatisation allumée
 climEt	Climatisation éteinte
-incAll	Système anti-incendie allumé
-incEt	Système anti-incendie éteint
+eauAll	Système anti-incendie allumé
+eauEt	Système anti-incendie éteint
+intAll	Interrupteur enclenché
+intEt	Interrupteur désenclenché
+repNon	l'utilisateur répond non
+repOui	l'utilisateur répond oui
