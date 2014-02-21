@@ -59,7 +59,7 @@ $(document).ready(function() {
 		});
 	}
 
-	var piece_id;
+	piece_id;
 
 	function showForm(obj) {
 		var $actionneurs = $("#formu");
@@ -73,16 +73,16 @@ $(document).ready(function() {
 	}
 })
 
-function valider() {
-	console.log('tout va bien');
-	var id = $(this).val();
-	var action = $(this).text();
-	console.log('tout va bien');
+function valider(elt) {
+	console.log(elt);
+	var actionneur_id = elt.value;
+	var action = $(elt).text();
+	console.log(action);
 	var bool = false;
 	console.log(piece_id);
-	if (value == "Activer") {
-		console.log(value);
+	if (action == "Activer") {
+		console.log(action);
 		bool = true;
 	}
-	$.getJSON('/controle/action', {piece : piece_id, type : bool, action : action});
+	$.getJSON('/controle/action', {piece : piece_id, type : bool, action : actionneur_id});
 }
