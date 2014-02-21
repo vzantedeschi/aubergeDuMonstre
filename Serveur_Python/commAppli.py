@@ -1,20 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, session
 import requests
 import json
 from mongoengine import *
 import sys
 import datetime
+from protege import rest_api
 sys.path.append('../BDD')
 import tables
 
 app = Flask(__name__)
 db_connec = connect('GHome_BDD')
+app.secret_key = '\xdf\x0e4\xaa\xdb:\xa8\xc6\r\x14\x96|\xc56\xfaq=\xb3\xb9\xc6\xaf\xab\x7fe'
+app.register_blueprint(rest_api)
 
 # \ ! / Monkey patching mongoengine to make json dumping easier
 Document.to_dict = lambda s : json.loads(s.to_json())
-
 
 def etat_to_tuples(piece_id):
 	etat = tables.Etat.objects(piece_id=piece_id).first()
@@ -45,8 +47,6 @@ def etat_to_tuples(piece_id):
 							]
 			}
 	return result
-
-
 
 @app.route('/')
 def hello():
@@ -126,14 +126,22 @@ def login():
 
 @app.route('/login', methods=['POST'])
 def process_login():
-    """email, password = request.form['email'].lower(), request.form['password']
-    user = User.objects(email=email).first()
-    if user is None or not user.valid_password(password):
+    name, password = request.form['username'], request.form['password']
+    user = tables.Personne.objects(nom=name).first()
+    if user is None :
         app.logger.warning("Couldn't login : {}".format(user))
-        return render_template('login.html', error=True, email=email)
+        return render_template('login.html', error=True, username=name)
     else:
-        session['logged_in'] = user.email"""
+        session['logged_in'] = user.nom
     return redirect('/')
+
+@app.context_processor
+def inject_user():
+    """ Injects a 'user' variable in templates' context when a user is logged in """
+    if session.get('logged_in', None):
+        return dict(user=tables.Personne.objects.get(nom=session['logged_in']))
+    else:
+        return dict(user=None)
 
 if __name__ == '__main__':
     app.run(debug=True)

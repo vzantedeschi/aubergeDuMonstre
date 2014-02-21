@@ -139,7 +139,7 @@ def initialize() :
 	for l in liste:
 	    ident, name = l.split()
 	    ident = int(ident,16)
-	    personnage = tables.Personne(personne_id = ident, nom = name)
+	    personnage = tables.Personne(personne_id = ident, nom = name, secret_hash='IFODJI2973', salt='2')
 	    personnage.save()
 
 	#Ajout d'un personnage "Intrus"
@@ -157,7 +157,7 @@ if __name__ == '__main__' :
 	piece = tables.Piece.objects(name="Couloir").first()
 	etat = tables.Etat.objects(piece_id=piece.piece_id).first()
 	id = random.randint(10, 100)
-	intrus = tables.Personne(personne_id=id,ignore=False)
+	intrus = tables.Personne(personne_id=id,ignore=False, secret_hash='IFODJI2973', salt='2')
 	intrus.save()
 	etat.persosPresents.append(intrus)
 	etat.save()

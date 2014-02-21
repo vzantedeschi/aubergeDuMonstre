@@ -70,9 +70,11 @@ function updateEtats() {
     for (var i = 0; i < pieces.length ; i++) {
         var piece = i + 1;
         updateEtatPiece(piece);
-        rects[i].attr({"fill":"white"});
-        if (pieces[i].name == $("#piece").text()) {
-            rects[i].attr({"fill":"red"});
+        if (rects)  {
+            rects[i].attr({"fill":"white"});
+            if (pieces[i].name == $("#piece").text()) {
+                rects[i].attr({"fill":"red"});
+            }
         }
     }
 }
