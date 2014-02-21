@@ -9,6 +9,7 @@ import socket
 import threading
 sys.path.append('../BDD')
 import tables
+import datetime
 
 
 ## Variables globales ##
@@ -102,6 +103,7 @@ def fermerVolets(idPiece):
 
 def commande(item):
     global rfidDetected
+    now = datetime.datetime.now()
     #récupération type de donnée
     typeInfo = item[u'_cls']
     #récupération de l'id de la pièce concernée
@@ -120,6 +122,7 @@ def commande(item):
     print("Humidite :",etat.humidite)
     print("Personnages presents :",etat.persosPresents)
     
+    # remarque :  now est calcule plus haut
     dateDerMouv = 0
     dateDerEve = 0
     piece = tables.Piece.objects(piece_id = piece_id).first()
@@ -133,7 +136,9 @@ def commande(item):
     for act in piece.actionneurs :
         if act.date > dateDerEve :
             dateDerEve = act.date
-    #a ajouter : dernier changement en date
+            
+    
+    #a ajouter : 
     #               interrupteur (changements jusqu a la base)
     #               reponse utilisateur eventuelle
     
