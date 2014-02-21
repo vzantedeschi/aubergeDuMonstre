@@ -270,7 +270,7 @@ def commande(item):
 #### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
     elif(typeInfo == "Donnee.DonneeAppli"):
         #Recherche des actionneurs de la piece du type demande
-        capteurType = item[u'actionneur_id']
+        actionneur_id = item[u'actionneur_id']
         actionType = item[u'action_type']      
         if actionType:
             activerActionneur(actionneur_id)
