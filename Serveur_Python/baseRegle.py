@@ -93,12 +93,12 @@ def desactiverActionneur_type(idPiece, typeActionneur):
 def ouvrirVolets(idPiece):    
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
-    activerActionneur_type(idPiece, 'ContactFen')        
+    activerActionneur_type(idPiece, 'VOL')        
 
 def fermerVolets(idPiece):
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
-    desactiverActionneur_type(idPiece, 'ContactFen')  
+    desactiverActionneur_type(idPiece, 'VOL')   
 
 def commande(item):
     global rfidDetected
@@ -281,15 +281,6 @@ def commande(item):
             activerActionneur(actionneur_id)
         else:
             desactiverActionneur(actionneur_id)
-        # actionneursPiece = tables.Piece.objects(piece_id = piece_id).first().actionneurs
-        # actionneursConcernes = actionneursPiece.objects(capteur_type = capteurType)
-
-        # if connected == True :
-        #     print "Envoi au proxy"
-        #     connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
-        #     for a in actionneursConcernes:
-        #         #TODO : connectProxy.send(...)
-        #         pass
 
     elif(typeInfo == "Donnee.ReponseAppli"):
         reponse = item[u'reponse']
