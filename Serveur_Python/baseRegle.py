@@ -51,36 +51,49 @@ def trameActionneur(actionneurId, activation):
     checksum = calcCheckSum(message)
     return sync + message + checksum
 
-def activerActionneur(actionneurId):
+
+
+def activerActionneur(idAct):
     print "Activation de l'actionneur"
     # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
         print "Envoi au proxy"
-        connectProxy.send(trameActionneur(actionneurId, True))
+        connectProxy.send(trameActionneur(idAct, True))
+        
+def activerActionneur_type(idPiece, typeActionneur):
+    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+    for a in actionneurs:
+        if a.capteur_type == typeActionneur:
+            print "Activation de l'actionneur"
+            # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+            if connected == True :
+                print "Envoi au proxy"
+            connectProxy.send(trameActionneur(a.actionneur_id, True))
 
-def desactiverActionneur(actionneurId):
-    print "Desactivation de l'actionneur"
-    # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+def desactiverActionneur(idAct):
     if connected == True :
         print "Envoi au proxy"
-        connectProxy.send(trameActionneur(actionneurId, False))
+        connectProxy.send(trameActionneur(idAct, False))
+            
+def desactiverActionneur_type(idPiece, typeActionneur):
+    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+    for a in actionneurs:
+        if a.capteur_type == typeActionneur:
+            print "Desactivation de l'actionneur"
+            # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+            if connected == True :
+                print "Envoi au proxy"
+            connectProxy.send(trameActionneur(a.actionneur_id, False))
 
 def ouvrirVolets(idPiece):    
     # Allume l'interrupteur simulant les volets
-    actionneursPiece = tables.Piece.objects(piece_id = idPiece).first().actionneurs
-    print "Verrouillage actif : volets en cours d'ouverture'"
-    for a in actionneursPiece:
-        if a.capteur_type == 'VOL':
-            activerActionneur(a.actionneur_id)      
-
+    print "Verrouillage actif : volets en cours d'ouverture"
+    activerActionneur_type(idPiece, 'VOL')        
 
 def fermerVolets(idPiece):
     # Allume l'interrupteur simulant les volets
-    actionneursPiece = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     print "Verrouillage actif : volets en cours de fermeture"
-    for a in actionneursPiece:
-        if a.capteur_type == 'VOL':
-            desactiverActionneur(a.actionneur_id))  
+    desactiverActionneur_type(idPiece, 'VOL')   
 
 def commande(item):
     global rfidDetected
