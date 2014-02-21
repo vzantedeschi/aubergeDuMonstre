@@ -31,6 +31,7 @@ class Etat(Document):
     portesFermees = BooleanField(default=False)
     voletsOuverts = BooleanField(default=True)
     priseDeclenchee = BooleanField(default=False)
+    lumiereAllumee = BooleanField(default=False)
     temperature = IntField()
     humidite = IntField()
     persosPresents = SortedListField(ReferenceField('Personne'))

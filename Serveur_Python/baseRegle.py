@@ -219,8 +219,10 @@ def commande(item):
                                "intEt" : intEt,
                                "repNon" : repNon,
                                "repOui" : repOui}
-            def tempInf() : 
+            def tempInf() :
+            
             def tempSup() : 
+            
             def porteOuv() :
                 return etat.portesFermees == False
             def porteFer() :
@@ -462,18 +464,76 @@ def commande(item):
                 # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
                 #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
                 etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.antiIncendieDeclenche = False
+                etatPiece.lumiereAllumee = True
                 etatPiece.save()
             elif connected ==False    
                 enFonctionnement == 1
+        
         def eteintLum():
+            if connected == True :    
+                print "Éteindre la lumière"
+                activerActionneur(idPiece, capteur_id)
+                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                etatPiece.lumiereAllumee = False
+                etatPiece.save()
+            elif connected ==False    
+                enFonctionnement == 1
+                
         def allumeInt():
+            if connected == True :    
+                print "Allumer la prise"
+                activerActionneur(idPiece, capteur_id)
+                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                etatPiece.priseDeclenchee = True
+                etatPiece.save()
+            elif connected ==False    
+                enFonctionnement == 1
+                
         def eteintInt():
+            if connected == True :    
+                print "Éteindre la prise"
+                activerActionneur(idPiece, capteur_id)
+                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                etatPiece.priseDeclenchee =False
+                etatPiece.save()
+            elif connected ==False    
+                enFonctionnement == 1
+                
         def fermePiece():
+            #fermeture porte ou fermeture portes fenetres? 
         def ouvrePiece():
         def question():
-        def fermeRideau(): 
+        
+        def fermeRideau():
+            if connected == True :    
+                print "Fermer le rideau"
+                activerActionneur(idPiece, capteur_id)
+                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                etatPiece.rideauxOuverts = False
+                etatPiece.save()
+            elif connected ==False    
+                enFonctionnement == 1
+                
         def ouvreRideau(): 
+            if connected == True :    
+                print "Ouvrir le rideau"
+                activerActionneur(idPiece, capteur_id)
+                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                etatPiece.rideauxOuverts = True
+                etatPiece.save()
+            elif connected ==False    
+                enFonctionnement == 1
+                
         def notifierRes():
                         
         baseregle[num]()
