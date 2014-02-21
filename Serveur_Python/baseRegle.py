@@ -188,6 +188,10 @@ def commande(item):
         i=0
         while conditionsRemplies == True
             nomCondition = r.conditions[i].nom
+            listeConditions = nomCondition.split()
+            if listeConditions.len > 1 :
+                condition = listeConditions[0]
+                valeur = listeConditions[1]
             switchCondition = {"tempInf" : tempInf,
                                "tempSup" : tempSup,
                                "porteOuv" : porteOuv,
@@ -219,10 +223,18 @@ def commande(item):
                                "intEt" : intEt,
                                "repNon" : repNon,
                                "repOui" : repOui}
+            
+            
             def tempInf() :
-            
+                currentTemp = etat.temperature
+                if currentTemp < valeur
+                    return "tempInf"
+                    
             def tempSup() : 
-            
+                currentTemp = etat.temperature
+                if currentTemp > valeur 
+                    return "tempSup"
+                    
             def porteOuv() :
                 return etat.portesFermees == False
             def porteFer() :
@@ -316,9 +328,13 @@ def commande(item):
             def fenFer() : 
                 return etat.voletsOuverts == False
             def humInf() : 
-            
+                 currentHum = etat.humidite
+                if currentTemp < valeur
+                    return "humInf"
             def humSup() : 
-            
+                currentHum = etat.humidite
+                if currentSup < valeur
+                    return "humSup"
             def pasChange() : 
             
             def mouv() : 
