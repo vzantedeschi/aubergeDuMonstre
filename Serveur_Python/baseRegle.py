@@ -54,7 +54,7 @@ def trameActionneur(actionneurId, activation):
 
 
 def activerActionneur(idPiece, idAct):
-    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
 
     print "Activation de l'actionneur"
@@ -64,7 +64,7 @@ def activerActionneur(idPiece, idAct):
         connectProxy.send(trameActionneur(actionneurConcerne, True))
         
 def activerActionneur_type(idPiece, typeActionneur):
-    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     l = actionneursPiece.objects(capteur_type = typeActionneur)
     for actionneurConcerne in l :
         print "Activation de l'actionneur"
@@ -74,14 +74,14 @@ def activerActionneur_type(idPiece, typeActionneur):
             connectProxy.send(trameActionneur(actionneurConcerne, True))
 
 def desactiverActionneur(idPiece, idAct):
-    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
     if connected == True :
         print "Envoi au proxy"
         connectProxy.send(trameActionneur(actionneurConcerne, False))
             
 def desactiverActionneur_type(idPiece, typeActionneur):
-    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     l = actionneursPiece.objects(capteur_type = typeActionneur)
     for actionneurConcerne in l :
         print "Desactivation de l'actionneur"
@@ -119,6 +119,20 @@ def commande(item):
     print("Temperature :",etat.temperature)
     print("Humidite :",etat.humidite)
     print("Personnages presents :",etat.persosPresents)
+    
+    dateDerMouv = 0
+    dateDerEve = 0
+    piece = tables.Piece.objects(piece_id = piece_id).first()
+    for cap in piece.capteurs :
+        if cap.capteur_type == "PRES" :
+            if cap.date > dateDerMouv :
+                dateDerMouv = cap.date
+        if cap.date > dateDerEve :
+            dateDerEve = cap.date
+            
+    for act in piece.actionneurs :
+        if act.date > dateDerEve :
+            dateDerEve = act.date
     #a ajouter : dernier changement en date
     #               interrupteur (changements jusqu a la base)
     #               reponse utilisateur eventuelle
@@ -186,7 +200,7 @@ def commande(item):
     for r in regles:
         conditionsRemplies = True
         i=0
-        while conditionsRemplies == True
+        while conditionsRemplies == True :
             nomCondition = r.conditions[i].nom
             switchCondition = {"tempInf" : tempInf,
                                "tempSup" : tempSup,
