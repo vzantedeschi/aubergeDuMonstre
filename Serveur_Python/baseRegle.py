@@ -80,7 +80,7 @@ def fermerVolets(idPiece):
     print "Verrouillage actif : volets en cours de fermeture"
     for a in actionneursPiece:
         if a.capteur_type == 'VOL':
-            desactiverActionneur(a.actionneur_id))  
+            desactiverActionneur(a.actionneur_id)  
 
 def commande(item):
     global rfidDetected
@@ -112,27 +112,26 @@ def commande(item):
             # Un seul intrus dans la maison en même temps sinon => comment savoir si un
             # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
             # vient de changer de pièce (enlever id de la pièce précédente)
+
+            # Si l'intrus est dans la pièce 1 'Couloir', il n'est plus ignoré
+
             if piece_id == 1:
-                newPerso = tables.Personne(personne_id = idIntrus, name ="Intrus", ignore = False)
-                newPerso.save()
-                idIntrus = idIntrus+1
-                
-            persoAjoute = tables.Personne.objects(ignore = False)
+                persoAjoute = tables.Personne.objects(nom = "Intrus").first()
+                persoAjoute.ignore = False
+                persoAjoute.save()
 
-            if persoAjoute != None:
-                persoAjoute = persoAjoute.first()
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.persosPresents.append(persoAjoute)
-                etatPiece.save()        
+            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+            etatPiece.persosPresents.append(persoAjoute)
+            etatPiece.save()        
 
-                ## Enlever le perso des autres pieces
-                listePieces = tables.Etat.objects
-                for p in listePieces :
-                    if p.piece_id != piece_id:
-                        etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
-                        if persoAjoute in etatAChanger.persosPresents:
-                            etatAChanger.persosPresents.remove(persoAjoute)
-                            etatAChanger.save()
+            ## Enlever le perso des autres pieces
+            listePieces = tables.Etat.objects
+            for p in listePieces :
+                if p.piece_id != piece_id:
+                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                    if persoAjoute in etatAChanger.persosPresents:
+                        etatAChanger.persosPresents.remove(persoAjoute)
+                        etatAChanger.save()
                             
         elif rfidDetected == 1 :
             print ("Meduse est dans la piece :",piece_id)
@@ -187,19 +186,29 @@ def commande(item):
         ## La trame crée est fausse, c'est un exemple
         if tempDonnees > 19 and climActive == False :
             print "Activation de la climatisation"
+
             # Modifier l'information de la BDD pour mettre "climActive" à True
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger.climActivee = True
+            etatAChanger.save()
+            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
+
             if connected == True :
                 connectProxy.send( 'A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
+                
         elif tempDonnees <= 19 and climActive == True :
             print "Desactivation de la climatisation"
+
             # Modifier l'information de la BDD pour mettre "climActive" à False
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger.climActivee = False
+            etatAChanger.save()
+            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
+
             if connected == True :
                 connectProxy.send( 'A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
 
     elif (typeInfo == "Donnee.Humidite"):
-        type = 'HUMID'
         
         humDonnees = item[u'valeur']
         print humDonnees
@@ -207,24 +216,35 @@ def commande(item):
         antiIncendieActive = etat[u'antiIncendieDeclenche']
         print antiIncendieActive
 
+        db.etat.update({u'piece_id' : piece_id},{ "$set": {u'humidite' : humDonnees} },upsert=False,multi=True)
         print '\nCommande suivant un changement d''humidite en cours'
 
         ## Valeur 70 à modifier dans une interface graphique par exemple
         ## La trame crée est fausse, c'est un exemple
         if humDonnees < 70 and antiIncendieActive == False:
             print "Activation du systeme anti-incendie"
+
             # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger.antiIncendieDeclenche = True
+            etatAChanger.save()
+            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
+
             if connected == True :
                 connectProxy.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
         elif humDonnees > 70 and antiIncendieActive == True:
             print "Desactivation du systeme anti-incendie"
+
             # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger.antiIncendieDeclenche = False
+            etatAChanger.save()
+            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+
             if connected == True :
                 connectProxy.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
     
-        db.etat.update({u'piece_id' : piece_id},{ "$set": {u'humidite' : humDonnees} },upsert=False,multi=True)
+
         
     elif (typeInfo == "Donnee.RFID"):
         resident = item[u'resident_id']
@@ -248,10 +268,16 @@ def commande(item):
         
         if fenDonnees == False:
             print '\nCommande suivant une fermeture de volets en cours'
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger.voletsOuverts = False
+            etatAChanger.save()
+            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
         elif fenDonnees == True:
             print '\nCommande suivant une ouverture de volets en cours'
-            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger.voletsOuverts = True
+            etatAChanger.save()
+            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
 
 
 #### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
