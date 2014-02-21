@@ -56,7 +56,7 @@ def hello():
 def surveillance():
     return render_template('surveillance.html')
 
-@app.route('/controle', methods=['GET', 'POST'])
+@app.route('/controle')
 def controle():
     return render_template('controle.html')
 
