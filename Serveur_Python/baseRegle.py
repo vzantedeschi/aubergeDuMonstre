@@ -20,7 +20,6 @@ connected = False
 
 # Aucune puce RFID détectée
 rfidDetected = 0
-idIntrus = 5
 
 hote = '134.214.106.23'
 port = 5000
@@ -29,11 +28,9 @@ db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
 def RFIDFunc():
-    global rfidDetected
     rfidDetected = 0
-    print '\nRFID DETECTED REMIS A 0'
 
-def calcCheckSum(chaine):
+def calcCheckSum(trame):
     checksum = 0
     i = 0
     while i < len(trame) :
@@ -44,21 +41,22 @@ def calcCheckSum(chaine):
     checksum &= 0xFF
     return hex(checksum)[2:4]
 
-def trameActionneur(actionneur, activation):
+def trameActionneur(actionneurId, activation):
     sync = 'A55A'
-    message = 'B0550000000'
+    message = '6B0550000000'
     if activation:
-        message = 'B0570000000'
-    message += actionneurConcerne.actionneur_id
-    status = "30"
+        message = '6B0570000000'
+    message += format(actionneurId, '08x')
+    message += "30"
     checksum = calcCheckSum(message)
-    queueTrame = status + checksum
-    return sync + message + queueTrame
+    return sync + message + checksum
+
 
 
 def activerActionneur(idPiece, idAct):
     actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
+
     print "Activation de l'actionneur"
     # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
@@ -78,8 +76,6 @@ def activerActionneur_type(idPiece, typeActionneur):
 def desactiverActionneur(idPiece, idAct):
     actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
-    print "Desactivation de l'actionneur"
-    # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
         print "Envoi au proxy"
         connectProxy.send(trameActionneur(actionneurConcerne, False))
@@ -97,16 +93,15 @@ def desactiverActionneur_type(idPiece, typeActionneur):
 def ouvrirVolets(idPiece):    
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
-    activerActionneur_type(idPiece, 'ContactFen')        
+    activerActionneur_type(idPiece, 'VOL')        
 
 def fermerVolets(idPiece):
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
-    desactiverActionneur_type(idPiece, 'ContactFen')  
+    desactiverActionneur_type(idPiece, 'VOL')   
 
 def commande(item):
     global rfidDetected
-    global idIntrus
     #récupération type de donnée
     typeInfo = item[u'_cls']
     #récupération de l'id de la pièce concernée
@@ -182,12 +177,12 @@ def commande(item):
     # ------partie recherche des regles ---------------------------------------------
     #récupération des regles de la base de donnees
     regles = tables.Regle.objects()
-    #on applique la premiere qui marche ***********
+    #on applique la premiere regle qui marche ***********
     #uneQuiMarche = False
     #i = 0
     #while uneQuiMarche == False and i < len(regles):
-    # fin on applique la premiere qui marche ***********
-    #on applique toutes celles qui marchent ***********
+    # fin on applique la premiere regle qui marche ***********
+    #on applique toutes les regles qui marchent ***********
     for r in regles:
         conditionsRemplies = True
         i=0
@@ -342,7 +337,7 @@ def commande(item):
             def intEt() : 
             def repNon() : 
             def repOui() :
-    # fin on applique toutes celles qui marchent ***********
+    # fin on applique toutes les regles qui marchent ***********
     
         
     # ------fin partie recherche des regles ---------------------------------------------
@@ -470,38 +465,21 @@ def commande(item):
         
     # ------fin partie execution des regles trouvees -----------------------------------
 
-
-
 #### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
     elif(typeInfo == "Donnee.DonneeAppli"):
         #Recherche des actionneurs de la piece du type demande
-        capteurType = item[u'capteur_type']
-        actionneursPiece = tables.Piece.objects(piece_id = piece_id).first().actionneurs
-        actionneursConcernes = actionneursPiece.objects(capteur_type = capteurType)
-
-        if connected == True :
-            print "Envoi au proxy"
-            connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
-            for a in actionneursConcernes:
-                #TODO : connectProxy.send(...)
-                pass
+        capteurType = item[u'actionneur_id']
+        actionType = item[u'action_type']      
+        if actionType:
+            activerActionneur(actionneur_id)
+        else:
+            desactiverActionneur(actionneur_id)
 
     elif(typeInfo == "Donnee.ReponseAppli"):
         reponse = item[u'reponse']
         if reponse:
+            fermerVolets(piece_id)
 
-            fermerVolets()
-            actionneurs = tables.Piece.objects(piece_id = piece_id).first().actionneurs
-            actionneursConcernes = actionneursPiece.objects(capteur_type = 'ContactFen')
-            # Allume l'interrupteur simulant les volets
-            print "Verrouillage actif : volets en cours de fermeture"
-            # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
-            if connected == True :
-                print "Envoi au proxy"
-                connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
-                for a in actionneursConcernes:
-                    #TODO : connectProxy.send(...)
-                    pass
 
 #### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
 
