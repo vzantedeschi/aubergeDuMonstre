@@ -60,6 +60,10 @@ def surveillance():
 def controle():
     return render_template('controle.html')
 
+@app.route('/parametrage')
+def parametrage():
+    return render_template('parametrage.html')
+
 @app.route('/surveillance/pieces')
 def get_pieces():
 	pieces = [p.to_dict() for p in tables.Piece.objects.order_by('+piece_id')]
