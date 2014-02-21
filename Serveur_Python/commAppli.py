@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import requests
 import json
 from mongoengine import *
@@ -80,20 +80,29 @@ def get_etat_piece(piece_id):
 	etat = etat_to_tuples(piece_id)
 	return json.dumps(etat)
 
-
 @app.route('/controle/<piece_id>')
 def get_actionneurs(piece_id):
 	piece = tables.Piece.objects(piece_id=piece_id).first()
 	actionneurs = [a.to_dict() for a in piece.actionneurs]
-	return json.dumps(actionneurs)
+	return jsonify(ok=True, result=actionneurs)
 
+@app.route('/controle/action')
+def send_action():
+	id_act = request.args.get('action')
+	piece = request.args.get('piece')
+	act_type = request.args.get('type')
+	print str(id_act)
+	now = datetime.datetime.now()
+	reponse = tables.DonneeAppli(date=now,piece_id=piece,actionneur_id=id_act,action_type=act_type)
+	reponse.save()
+	return "ok"
 
-"""@app.route('/surveillance/<perso_id>')
+@app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
 	perso = tables.Personne.objects(personne_id=perso_id).first()
 	perso.ignore = True
 	perso.save()
-	return "ok"""
+	return "ok"
 
 @app.route('/surveillance/reponse')
 def reponse():

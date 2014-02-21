@@ -1,5 +1,5 @@
 $(document).ready(function() { 
-	formuTemplate = loadTemplate('#formu-template'); 
+	liTemplate = loadTemplate('#li-template'); 
 	//design constants
 	var WIDTH = $(document).width() * 0.4; 
 	var HEIGHT = $(document).height() * 0.7;
@@ -59,21 +59,30 @@ $(document).ready(function() {
 		});
 	}
 
+	var piece_id;
+
 	function showForm(obj) {
-		var $formu = $("#formu");
-		var piece_id = rects.indexOf(obj);
+		var $actionneurs = $("#formu");
+		piece_id = rects.indexOf(obj);
 		piece_id ++;
-		$formu.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
-
+		//$actionneurs.html("<form method=\"POST\" action=\"/controle\"><select name=\"actionneur\">");
+		$actionneurs.html("");
 		$.getJSON('/controle/' + piece_id, {}, function(data) {
-			for(donnee in data){
-				console.log(donnee);		
-				$formu.append(formuTemplate(donnee));
-			}
-
-			$formu.append("</select><br><br><input type=\"radio\" value=\"On\" id=\"on\" name=\"onOff\"> On <input type=\"radio\" value=\"Off\" id=\"off\" name=\"onOff\"> Off <br><br><br><input type=\"submit\" value=\"Envoyer\" name=\"boutonEnv\" onclick=\"valider()\"></form>")
+			$actionneurs.append(liTemplate(data));
 		});
 	}
-
-
 })
+
+function valider() {
+	console.log('tout va bien');
+	var id = $(this).val();
+	var action = $(this).text();
+	console.log('tout va bien');
+	var bool = false;
+	console.log(piece_id);
+	if (value == "Activer") {
+		console.log(value);
+		bool = true;
+	}
+	$.getJSON('/controle/action', {piece : piece_id, type : bool, action : action});
+}

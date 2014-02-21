@@ -20,7 +20,6 @@ connected = False
 
 # Aucune puce RFID détectée
 rfidDetected = 0
-idIntrus = 5
 
 hote = '134.214.106.23'
 port = 5000
@@ -29,11 +28,9 @@ db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
 def RFIDFunc():
-    global rfidDetected
     rfidDetected = 0
-    print '\nRFID DETECTED REMIS A 0'
 
-def calcCheckSum(chaine):
+def calcCheckSum(trame):
     checksum = 0
     i = 0
     while i < len(trame) :
@@ -44,21 +41,22 @@ def calcCheckSum(chaine):
     checksum &= 0xFF
     return hex(checksum)[2:4]
 
-def trameActionneur(actionneur, activation):
+def trameActionneur(actionneurId, activation):
     sync = 'A55A'
-    message = 'B0550000000'
+    message = '6B0550000000'
     if activation:
-        message = 'B0570000000'
-    message += actionneurConcerne.actionneur_id
-    status = "30"
+        message = '6B0570000000'
+    message += format(actionneurId, '08x')
+    message += "30"
     checksum = calcCheckSum(message)
-    queueTrame = status + checksum
-    return sync + message + queueTrame
+    return sync + message + checksum
+
 
 
 def activerActionneur(idPiece, idAct):
     actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
+
     print "Activation de l'actionneur"
     # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
@@ -78,8 +76,6 @@ def activerActionneur_type(idPiece, typeActionneur):
 def desactiverActionneur(idPiece, idAct):
     actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
-    print "Desactivation de l'actionneur"
-    # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
         print "Envoi au proxy"
         connectProxy.send(trameActionneur(actionneurConcerne, False))
@@ -106,7 +102,6 @@ def fermerVolets(idPiece):
 
 def commande(item):
     global rfidDetected
-    global idIntrus
     #récupération type de donnée
     typeInfo = item[u'_cls']
     #récupération de l'id de la pièce concernée
@@ -176,9 +171,6 @@ def commande(item):
                         etatAChanger.persosPresents.remove(persoAjoute)
                         etatAChanger.save()
 
-            # Remettre rfidDetected a 0
-            rfidDetected = 0
-
         elif rfidDetected == 2 :
             print ("Vampire est dans la piece :",piece_id)
             pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
@@ -198,9 +190,6 @@ def commande(item):
                         etatAChanger.persosPresents.remove(persoAjoute)
                         etatAChanger.save()
 
-            # Remettre rfidDetected a 0
-            rfidDetected = 0
-
     elif (typeInfo == "Donnee.Temperature"):
         #Détermine la commande et mettre "traite" à True        
         tempDonnees = item[u'valeur']
@@ -216,64 +205,44 @@ def commande(item):
         ## La trame crée est fausse, c'est un exemple
         if tempDonnees > 19 and climActive == False :
             print "Activation de la climatisation"
-            
             # Modifier l'information de la BDD pour mettre "climActive" à True
-            #change = True
-            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : change} },upsert=False,multi=True)
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.climActivee = True
-            etatPiece.save()
-            
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
             if connected == True :
                 connectProxy.send( 'A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
-                
         elif tempDonnees <= 19 and climActive == True :
             print "Desactivation de la climatisation"
-
             # Modifier l'information de la BDD pour mettre "climActive" à False
-            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.climActivee = False
-            etatPiece.save()
-            
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
             if connected == True :
                 connectProxy.send( 'A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
 
     elif (typeInfo == "Donnee.Humidite"):
+        type = 'HUMID'
+        
         humDonnees = item[u'valeur']
         print humDonnees
 
         antiIncendieActive = etat[u'antiIncendieDeclenche']
         print antiIncendieActive
 
-        db.etat.update({u'_id' : piece_id},{ "$set": {u'humidite' : humDonnees}},upsert=False,multi=True)
         print '\nCommande suivant un changement d''humidite en cours'
 
         ## Valeur 70 à modifier dans une interface graphique par exemple
         ## La trame crée est fausse, c'est un exemple
         if humDonnees < 70 and antiIncendieActive == False:
             print "Activation du systeme anti-incendie"
-
             # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
-            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.antiIncendieDeclenche = True
-            etatPiece.save()
-            
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
             if connected == True :
                 connectProxy.send('A55A6B05XXXXXXXXYYYYYYYY30ZZ' )
-                                             
         elif humDonnees > 70 and antiIncendieActive == True:
             print "Desactivation du systeme anti-incendie"
-
             # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.antiIncendieDeclenche = False
-            etatPiece.save()
-            
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
             if connected == True :
                 connectProxy.send('A55A6B05WWWWWWWWYYYYYYYY30ZZ' )
+    
+        db.etat.update({u'piece_id' : piece_id},{ "$set": {u'humidite' : humDonnees} },upsert=False,multi=True)
         
     elif (typeInfo == "Donnee.RFID"):
         resident = item[u'resident_id']
@@ -289,61 +258,44 @@ def commande(item):
     elif (typeInfo == "Donnee.Interrupteur"):
         print '\nCommande suivant un interrupteur en cours'
         if connected == True :
-            intrDonnees = item[u'ouverte']
-            if intrDonnees == True:
-                print "Ouverture des volets"
-                connectProxy.send('A55A6B0550000000FF9F1E0530D1' )
-            elif intrDonnees == False:
-                print "Fermeture des volets"
-                connectProxy.send('A55A6B0570000000FF9F1E0530D1' )
+            print "Ouverture des volets"
+            connectProxy.send('A55A6B0570000000FF9F1E0530D1' )
 
     elif (typeInfo == "Donnee.ContactFen"):
         fenDonnees = item[u'ouverte']
         
         if fenDonnees == False:
             print '\nCommande suivant une fermeture de volets en cours'
-            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.voletsOuverts = False
-            etatPiece.save()
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
         elif fenDonnees == True:
             print '\nCommande suivant une ouverture de volets en cours'
-            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.voletsOuverts = True
-            etatPiece.save()
+            db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
 
 
 #### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
     elif(typeInfo == "Donnee.DonneeAppli"):
         #Recherche des actionneurs de la piece du type demande
-        capteurType = item[u'capteur_type']
-        actionneursPiece = tables.Piece.objects(piece_id = piece_id).first().actionneurs
-        actionneursConcernes = actionneursPiece.objects(capteur_type = capteurType)
+        capteurType = item[u'actionneur_id']
+        actionType = item[u'action_type']      
+        if actionType:
+            activerActionneur(actionneur_id)
+        else:
+            desactiverActionneur(actionneur_id)
+        # actionneursPiece = tables.Piece.objects(piece_id = piece_id).first().actionneurs
+        # actionneursConcernes = actionneursPiece.objects(capteur_type = capteurType)
 
-        if connected == True :
-            print "Envoi au proxy"
-            connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
-            for a in actionneursConcernes:
-                #TODO : connectProxy.send(...)
-                pass
+        # if connected == True :
+        #     print "Envoi au proxy"
+        #     connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
+        #     for a in actionneursConcernes:
+        #         #TODO : connectProxy.send(...)
+        #         pass
 
     elif(typeInfo == "Donnee.ReponseAppli"):
         reponse = item[u'reponse']
         if reponse:
+            fermerVolets(piece_id)
 
-            fermerVolets()
-            actionneurs = tables.Piece.objects(piece_id = piece_id).first().actionneurs
-            actionneursConcernes = actionneursPiece.objects(capteur_type = 'ContactFen')
-            # Allume l'interrupteur simulant les volets
-            print "Verrouillage actif : volets en cours de fermeture"
-            # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
-            if connected == True :
-                print "Envoi au proxy"
-                connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
-                for a in actionneursConcernes:
-                    #TODO : connectProxy.send(...)
-                    pass
 
 #### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
 
