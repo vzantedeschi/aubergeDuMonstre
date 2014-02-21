@@ -324,9 +324,9 @@ def commande(item):
             def mouv() : 
             
             def lumEt() :
-                
+                return etat.lumiereAllumee == False
             def lumAll() :
-            
+                return etat.lumiereAllumee == True
             def pasBouge() : 
             
             #Les id des pieces sont-ils dans pieces.txt ou dans nom_piece.txt, les deux fichiers ne correspondent pas.
