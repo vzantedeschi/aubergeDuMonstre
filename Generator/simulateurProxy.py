@@ -122,28 +122,28 @@ while True :
                                 socketClient.send(trame)
                                 ## Laisse le temps aux volets de se fermer avant
                                 ## que le capteur ne le signale
-                                time.sleep(10)
-                                trame = gen.contactVoletFerme(1)
+                                #time.sleep(10)
+                                #trame = gen.contactVoletFerme(1)
                             elif piece == 2:
                                 trame = gen.presenceDetected(2)
                                 socketClient.send(trame)
-                                time.sleep(10)
-                                trame = gen.contactVoletFerme(2)
+                                #time.sleep(10)
+                                #trame = gen.contactVoletFerme(2)
                             elif piece == 3:
                                 trame = gen.presenceDetected(2)
                                 socketClient.send(trame)
-                                time.sleep(10)
-                                trame = gen.contactVoletFerme(2)
+                                #time.sleep(10)
+                                #trame = gen.contactVoletFerme(2)
                             elif piece == 4:
                                 trame = gen.presenceDetected(4)
                                 socketClient.send(trame)
-                                time.sleep(10)
-                                trame = gen.contactVoletFerme(4)
+                                #time.sleep(10)
+                                #trame = gen.contactVoletFerme(4)
                             elif piece == 5:
                                 trame = gen.presenceDetected(5)
                                 socketClient.send(trame)
-                                time.sleep(10)
-                                trame = gen.contactVoletFerme(5)
+                                #time.sleep(10)
+                                #trame = gen.contactVoletFerme(5)
                         else :
                             if piece == 1:
                                 trame = gen.rfidDetected(perso,1)

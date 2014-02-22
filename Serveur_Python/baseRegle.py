@@ -84,7 +84,7 @@ def desactiverActionneur_type(idPiece, typeActionneur):
             if connected == True :
                 print "Envoi au proxy"
                 connectProxy.send(trameActionneur(a.actionneur_id, False))
-
+                
 def ouvrirVolets(idPiece):    
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
@@ -190,9 +190,11 @@ def commande(item):
         print tempDonnees
 
         climActive = etat[u'climActivee']
-        print climActive
 
-        db.etat.update({u'_id' : piece_id},{ "$set": {u'temperature' : tempDonnees} },upsert=False,multi=True)
+        #db.etat.update({u'_id' : piece_id},{ "$set": {u'temperature' : tempDonnees} },upsert=False,multi=True)
+        etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
+        etatAChanger.temperature = tempDonnees
+        etatAChanger.save()
         print '\nCommande suivant un changement de temperature en cours'
 
         ## Valeur 19 à modifier dans une interface graphique par exemple
@@ -201,7 +203,7 @@ def commande(item):
             print "Activation de la climatisation"
 
             # Modifier l'information de la BDD pour mettre "climActive" à True
-            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
             etatAChanger.climActivee = True
             etatAChanger.save()
             #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : True} },upsert=False,multi=True)
@@ -213,7 +215,7 @@ def commande(item):
             print "Desactivation de la climatisation"
 
             # Modifier l'information de la BDD pour mettre "climActive" à False
-            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
             etatAChanger.climActivee = False
             etatAChanger.save()
             #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
@@ -227,9 +229,11 @@ def commande(item):
         print humDonnees
 
         antiIncendieActive = etat[u'antiIncendieDeclenche']
-        print antiIncendieActive
 
-        db.etat.update({u'piece_id' : piece_id},{ "$set": {u'humidite' : humDonnees} },upsert=False,multi=True)
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'humidite' : humDonnees} },upsert=False,multi=True)
+        etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
+        etatAChanger.humidite = humDonnees
+        etatAChanger.save()
         print '\nCommande suivant un changement d''humidite en cours'
 
         ## Valeur 70 à modifier dans une interface graphique par exemple
@@ -238,7 +242,7 @@ def commande(item):
             print "Activation du systeme anti-incendie"
 
             # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
-            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
             etatAChanger.antiIncendieDeclenche = True
             etatAChanger.save()
             #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
@@ -249,7 +253,7 @@ def commande(item):
             print "Desactivation du systeme anti-incendie"
 
             # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
             etatAChanger.antiIncendieDeclenche = False
             etatAChanger.save()
             #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
@@ -281,13 +285,13 @@ def commande(item):
         
         if fenDonnees == False:
             print '\nCommande suivant une fermeture de volets en cours'
-            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
             etatAChanger.voletsOuverts = False
             etatAChanger.save()
             #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
         elif fenDonnees == True:
             print '\nCommande suivant une ouverture de volets en cours'
-            etatAChanger = tables.Etat.objects(piece_id = piece_id)
+            etatAChanger = tables.Etat.objects(piece_id = piece_id).first()
             etatAChanger.voletsOuverts = True
             etatAChanger.save()
             #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)

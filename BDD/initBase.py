@@ -142,6 +142,10 @@ def initialize() :
 	    personnage = tables.Personne(personne_id=ident, nom=name)
 	    personnage.save()
 
+	# Création d'un type intrus dans la base des personnages
+	personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
+	personnage.save()
+
 	####### Création d'un superutilisateur pour le paramétrage des règles #######
 	admin = tables.Utilisateur(identifiant='administrateur',mot_de_passe='123456')
 	admin.save()
