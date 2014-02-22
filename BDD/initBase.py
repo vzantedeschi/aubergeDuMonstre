@@ -131,7 +131,7 @@ def initialize() :
 	    piece.actionneurs.append(actionneur)
 	    piece.save()
 
-	#Initialisation des personnages
+	#Initialisation des personnages et des utilisateurs
 	fic_id = open('../personnages.txt',"r")
 	liste = fic_id.readlines()
 	fic_id.close()
@@ -141,14 +141,17 @@ def initialize() :
 	    ident = int(ident,16)
 	    personnage = tables.Personne(personne_id=ident, nom=name)
 	    personnage.save()
+	    user = tables.Utilisateur(identifiant=name, secret_hash='IFODJI2973', salt='2')
+	    user.save()
 
 	# Création d'un type intrus dans la base des personnages
 	personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
 	personnage.save()
 
-	####### Création d'un superutilisateur pour le paramétrage des règles #######
-	admin = tables.Utilisateur(identifiant='administrateur',mot_de_passe='123456')
+	####### Création d'un superutilisateur #######
+	admin = tables.Utilisateur(identifiant='administrateur',secret_hash='IFODJI2973', salt='2')
 	admin.save()
+
 	print 'base reinitialisee'
 
 if __name__ == '__main__' :

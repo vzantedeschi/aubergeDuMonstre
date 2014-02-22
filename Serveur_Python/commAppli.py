@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from functools import wraps
 from flask import Flask, render_template, request, redirect, jsonify, session
 import requests
 import json
@@ -48,19 +49,42 @@ def etat_to_tuples(piece_id):
 			}
 	return result
 
+def requires_login(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in', None):
+            return redirect('/login')
+        else:
+            return f(*args, **kwargs)
+    return decorated_function
+
+def requires_admin_rights(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in', None):
+            return redirect('/login')
+        elif session['logged_in'] != 'administrateur':
+        	return redirect('/')
+        else :
+            return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/')
 def hello():
     return render_template('index.html')
 
 @app.route('/surveillance')
+@requires_login
 def surveillance():
     return render_template('surveillance.html')
 
 @app.route('/controle')
+@requires_login
 def controle():
     return render_template('controle.html')
 
 @app.route('/parametrage')
+@requires_admin_rights
 def parametrage():
     return render_template('parametrage.html')
 
@@ -127,8 +151,8 @@ def login():
 @app.route('/login', methods=['POST'])
 def process_login():
     ident, mot = request.form['username'], request.form['password']
-    user = tables.Utilisateur.objects(identifiant=ident,mot_de_passe=mot).first()
-    if user is None:
+    user = tables.Utilisateur.objects(identifiant=ident).first()
+    if user is None or user.valider_mot_passe(mot):
         app.logger.warning("Impossible de se logger : {}".format(user))
         return render_template('login.html', error=True, username=ident)
     else:
