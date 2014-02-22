@@ -20,6 +20,7 @@ Document.to_dict = lambda s : json.loads(s.to_json())
 def etat_to_tuples(piece_id):
 	etat = tables.Etat.objects(piece_id=piece_id).first()
 	piece = tables.Piece.objects(piece_id=piece_id).first()
+	
 	rid = "Fermés"
 	if etat.rideauxOuverts : rid = "Ouverts"
 
@@ -27,19 +28,19 @@ def etat_to_tuples(piece_id):
 	if etat.antiIncendieDeclenche : inc = "Déclenchée"
 
 	clim = "Eteinte"
-	if etat.climActivee : rid = "Active"
+	if etat.climActivee : clim = "Active"
 
 	vol = "Fermés"
 	if etat.voletsOuverts : vol = "Ouverts"
 
-	prise = "Fermés"
-	if etat.priseDeclenchee : prise = "Ouverts"
+	prise = "Eteinte"
+	if etat.priseDeclenchee : prise = "Active"
 
 	result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name },
 							{ "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
 							{ "image" : "hum.png", "width" : "20px","nom":"Humidité" , "valeur": etat.humidite },
 							{ "image" : "rideaux.png", "width" : "30px","nom":"Rideaux" , "valeur": rid },
-							{ "image" : "hotel.png", "width" : "40px","nom":"Climatisation" , "valeur": piece.name },
+							{ "image" : "hotel.png", "width" : "40px","nom":"Climatisation" , "valeur": clim },
 							{ "image" : "hotel.png", "width" : "40px","nom":"Prise intelligente" , "valeur": prise },
 							{ "image" : "fire.png", "width" : "30px","nom":"Antincendie" , "valeur": inc },
 							{ "image" : "hotel.png", "width" : "40px","nom":"Volets" , "valeur": vol }
