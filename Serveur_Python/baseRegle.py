@@ -339,8 +339,10 @@ def repNon() :
 def repOui() :
     pass
     #penser à mettre en "prises en compte" les variables utilisées pour trouver les règles
-#----------------------------FIN CONDITIONS--------------------------------------------------------------------------------------------------------
+
+#-----------------------------FIN CONDITIONS--------------------------------------------------------------------------------------------------------
 #----------------------------FONCTIONNALITES--------------------------------------------------------------------------------------------------------
+
 def eteintClim():
     if connected == True :
         #envoi de la trame 
@@ -627,6 +629,7 @@ def commande(item):
                                "intEt" : intEt,
                                "repNon" : repNon,
                                "repOui" : repOui}
+            #switchCondition[num]()
     
     # fin on applique toutes les regles qui marchent ***********
 
