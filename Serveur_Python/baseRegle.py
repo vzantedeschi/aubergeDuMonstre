@@ -9,7 +9,6 @@ import socket
 import threading
 sys.path.append('../BDD')
 import tables
-import datetime
 
 
 ## Variables globales ##
@@ -55,7 +54,7 @@ def trameActionneur(actionneurId, activation):
 
 
 def activerActionneur(idPiece, idAct):
-    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
 
     print "Activation de l'actionneur"
@@ -65,7 +64,7 @@ def activerActionneur(idPiece, idAct):
         connectProxy.send(trameActionneur(actionneurConcerne, True))
         
 def activerActionneur_type(idPiece, typeActionneur):
-    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     l = actionneursPiece.objects(capteur_type = typeActionneur)
     for actionneurConcerne in l :
         print "Activation de l'actionneur"
@@ -75,14 +74,14 @@ def activerActionneur_type(idPiece, typeActionneur):
             connectProxy.send(trameActionneur(actionneurConcerne, True))
 
 def desactiverActionneur(idPiece, idAct):
-    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     actionneurConcerne = actionneursPiece.objects(capteur_id = idAct).first()
     if connected == True :
         print "Envoi au proxy"
         connectProxy.send(trameActionneur(actionneurConcerne, False))
             
 def desactiverActionneur_type(idPiece, typeActionneur):
-    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+    actionneurs = tables.Piece.objects(piece_id = idPiece.first().actionneurs
     l = actionneursPiece.objects(capteur_type = typeActionneur)
     for actionneurConcerne in l :
         print "Desactivation de l'actionneur"
@@ -103,7 +102,6 @@ def fermerVolets(idPiece):
 
 def commande(item):
     global rfidDetected
-    now = datetime.datetime.now()
     #récupération type de donnée
     typeInfo = item[u'_cls']
     #récupération de l'id de la pièce concernée
@@ -121,24 +119,7 @@ def commande(item):
     print("Temperature :",etat.temperature)
     print("Humidite :",etat.humidite)
     print("Personnages presents :",etat.persosPresents)
-    
-    # remarque :  now est calcule plus haut
-    dateDerMouv = 0
-    dateDerEve = 0
-    piece = tables.Piece.objects(piece_id = piece_id).first()
-    for cap in piece.capteurs :
-        if cap.capteur_type == "PRES" :
-            if cap.date > dateDerMouv :
-                dateDerMouv = cap.date
-        if cap.date > dateDerEve :
-            dateDerEve = cap.date
-            
-    for act in piece.actionneurs :
-        if act.date > dateDerEve :
-            dateDerEve = act.date
-            
-    
-    #a ajouter : 
+    #a ajouter : dernier changement en date
     #               interrupteur (changements jusqu a la base)
     #               reponse utilisateur eventuelle
     
@@ -205,7 +186,7 @@ def commande(item):
     for r in regles:
         conditionsRemplies = True
         i=0
-        while conditionsRemplies == True :
+        while conditionsRemplies == True
             nomCondition = r.conditions[i].nom
             listeConditions = nomCondition.split()
             if listeConditions.len > 1 :
@@ -366,15 +347,75 @@ def commande(item):
             
             #Les id des pieces sont-ils dans pieces.txt ou dans nom_piece.txt, les deux fichiers ne correspondent pas.
             def dansCuisine() :
-                return etat.piece_id == 3 
+                trouve = False
+                fic_id = open('../pieces.txt',"r")
+                liste = fic_id.readlines()
+                fic_id.close()
+
+                for l in liste:
+                    while trouve == False
+                    idfilepiece, nompiece = l.split()
+                        if nompiece == "Cuisine" :                            
+                            idpiece = int(idfilepiece,16)
+                            trouve = True                      
+                return idpiece 
+                
             def dansChambre() : 
-                return etat.piece_id == 5
+                trouve = False
+                fic_id = open('../pieces.txt',"r")
+                liste = fic_id.readlines()
+                fic_id.close()
+
+                for l in liste:
+                    while trouve == False
+                    idfilepiece, nompiece = l.split()
+                        if nompiece == "Chambre" :                            
+                            idpiece = int(idfilepiece,16)
+                            trouve = True                      
+                return idpiece 
             def dansSalon() : 
-                return etat.piece_id == 2 
+                trouve = False
+                fic_id = open('../pieces.txt',"r")
+                liste = fic_id.readlines()
+                fic_id.close()
+
+                for l in liste:
+                    while trouve == False
+                    idfilepiece, nompiece = l.split()
+                        if nompiece == "Salon" :                            
+                            idpiece = int(idfilepiece,16)
+                            trouve = True                      
+                return idpiece 
             def dansCouloir(): 
-                return etat.piece_id == 1
+                trouve = False
+                fic_id = open('../pieces.txt',"r")
+                liste = fic_id.readlines()
+                fic_id.close()
+
+                for l in liste:
+                    while trouve == False
+                    idfilepiece, nompiece = l.split()
+                        if nompiece == "Couloir" :                            
+                            idpiece = int(idfilepiece,16)
+                            trouve = True                      
+                return idpiece 
+                
+            def dansBain : 
+                trouve = False
+                fic_id = open('../pieces.txt',"r")
+                liste = fic_id.readlines()
+                fic_id.close()
+
+                for l in liste:
+                    while trouve == False
+                    idfilepiece, nompiece = l.split()
+                        if nompiece == "Bain" :                            
+                            idpiece = int(idfilepiece,16)
+                            trouve = True                      
+                return idpiece
+                
             def dansPiece() : 
-            
+                
             def climAll() :
                 return etat.climActivee == True
             def climEt() :
@@ -389,6 +430,9 @@ def commande(item):
                 return etat.priseDeclenchee == False
             def repNon() : 
             def repOui() :
+            
+    #penser à mettre en "prises en compte" les variables utilisées pour trouver les règles
+    
     # fin on applique toutes les regles qui marchent ***********
 
     
