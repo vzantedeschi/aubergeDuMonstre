@@ -478,35 +478,34 @@ def notifierRes():
 
 #----------------------------FIN FONCTIONNALITES--------------------------------------------------------------------------------------------------------
 
-def commande(item):
+def commande():
     print "appel de la base de regle"
     global rfidDetected
-    #récupération type de donnée
-    typeInfo = item[u'_cls']
-    #récupération de l'id de la pièce concernée
-    piece_id = item[u'piece_id']
-    #récupération état de la pièce concernée
-    etat = tables.Etat.objects(piece_id = piece_id).first()
-    piece = tables.Piece.objects(piece_id = idPiece).first()
-    print("\nEtat de la piece concernée")
-    print("Numero :",etat.piece_id)
-    print("Rideaux ouverts :",etat.rideauxOuverts)
-    print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
-    print("Climatisation activee :",etat.climActivee)
-    print("Portes fermees :",etat.portesFermees)
-    print("Volets ouverts :",etat.voletsOuverts)
-    print("Prise allumee :",etat.priseDeclenchee)
-    print("Temperature :",etat.temperature)
-    print("Humidite :",etat.humidite)
-    print("Personnages presents :",etat.persosPresents)
-    #a ajouter : dernier changement en date
-    #               interrupteur (changements jusqu a la base)
-    #               reponse utilisateur eventuelle
-    
-    print '\n'
+    #pour chaque piece de la base
+    for piece in tables.Piece.objects:
+        piece_id = piece.piece_id
+        #récupération état de la pièce concernée
+        etat = tables.Etat.objects(piece_id = piece.piece_id).first()
+        print("\nEtat de la piece concernée")
+        print("Numero :",etat.piece_id)
+        print("Rideaux ouverts :",etat.rideauxOuverts)
+        print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
+        print("Climatisation activee :",etat.climActivee)
+        print("Portes fermees :",etat.portesFermees)
+        print("Volets ouverts :",etat.voletsOuverts)
+        print("Prise allumee :",etat.priseDeclenchee)
+        print("Temperature :",etat.temperature)
+        print("Humidite :",etat.humidite)
+        print("Personnages presents :",etat.persosPresents)
+        #a ajouter : dernier changement en date
+        #               interrupteur (changements jusqu a la base)
+        #               reponse utilisateur eventuelle
+        
+        print '\n'
 
-    # ------partie deplacer les personnages dans les donnees -------------------------------
-    if (typeInfo == "Donnee.Presence"):
+        # ------partie deplacer les personnages dans les donnees -------------------------------
+        #!!!!!!!!!!!!!!!!!!!!!!!!!partie obsolete !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #if (typeInfo == "Donnee.Presence"):
         if rfidDetected == 0 :
             print ("Intrus est dans la piece :",piece_id)
 
@@ -553,107 +552,107 @@ def commande(item):
 
         # Remettre rfidDetected a 0
         rfidDetected = 0
-    # ------fin partie deplacer les personnages dans les donnees -------------------------------   
-    # ------partie recherche des regles ---------------------------------------------
-    #récupération des regles de la base de donnees
-    regles = tables.Regle.objects()
-    reglesRemplies = []
-    #on applique la premiere regle qui marche ***********
-    #uneQuiMarche = False
-    #i = 0
-    #while uneQuiMarche == False and i < len(regles):
-    # fin on applique la premiere regle qui marche ***********
-    #on applique toutes les regles qui marchent ***********
-    for r in regles:
-        conditionsRemplies = True
-        i=0
-        #on vérifie si la regle r remplit les conditions
-        while conditionsRemplies == True and i < len(r.conditions) :
-            nomCondition = r.conditions[i].nom
-            listeConditions = nomCondition.split()
-            if listeConditions.len > 1 :
-                condition = listeConditions[0]
-                valeur = listeConditions[1]
-            switchCondition = {"tempInf" : tempInf,
-                               "tempSup" : tempSup,
-                               "porteOuv" : porteOuv,
-                               "porteFer"  : porteFer,
-                               "vampire" : vampire,
-                               "meduse" : meduse,
-                               "intrus" : intrus,
-                               "sirene" : sirene,
-                               "invite" : invite,
-                               "fenOuv" : fenOuv,
-                               "fenFer" : fenFer,
-                               "humInf" : humInf,
-                               "humSup" : humSup,
-                               "pasChange" : pasChange,
-                               "mouv" : mouv,
-                               "lumEt" : lumEt,
-                               "lumAll" : lumAll,
-                               "pasBouge" : pasBouge,
-                               "dansCuisine" : dansCuisine,
-                               "dansChambre" : dansChambre,
-                               "dansSalon" : dansSalon,
-                               "dansCouloir" : dansCouloir,
-                               "dansBain" : dansBain,
-                               "dansPiece" : dansPiece,
-                               "climAll" : climAll,
-                               "climEt" : climEt,
-                               "eauAll" : eauAll,
-                               "eauEt" : eauEt,
-                               "intAll" : intAll,
-                               "intEt" : intEt,
-                               "repNon" : repNon,
-                               "repOui" : repOui}
-            conditionsRemplies = switchCondition[condition]()
-            i = i + 1
-        
-        #si r verifie les conditions on l ajoute a la liste des regles a appliquer
-        if conditionsRemplies : 
-            reglesRemplies.append(r)
+        # ------fin partie deplacer les personnages dans les donnees -------------------------------   
+        # ------partie recherche des regles ---------------------------------------------
+        #récupération des regles de la base de donnees
+        regles = tables.Regle.objects()
+        reglesRemplies = []
+        #on applique la premiere regle qui marche ***********
+        #uneQuiMarche = False
+        #i = 0
+        #while uneQuiMarche == False and i < len(regles):
+        # fin on applique la premiere regle qui marche ***********
+        #on applique toutes les regles qui marchent ***********
+        for r in regles:
+            conditionsRemplies = True
+            i=0
+            #on vérifie si la regle r remplit les conditions
+            while conditionsRemplies == True and i < len(r.conditions) :
+                nomCondition = r.conditions[i].nom
+                listeConditions = nomCondition.split()
+                if listeConditions.len > 1 :
+                    condition = listeConditions[0]
+                    valeur = listeConditions[1]
+                switchCondition = {"tempInf" : tempInf,
+                                   "tempSup" : tempSup,
+                                   "porteOuv" : porteOuv,
+                                   "porteFer"  : porteFer,
+                                   "vampire" : vampire,
+                                   "meduse" : meduse,
+                                   "intrus" : intrus,
+                                   "sirene" : sirene,
+                                   "invite" : invite,
+                                   "fenOuv" : fenOuv,
+                                   "fenFer" : fenFer,
+                                   "humInf" : humInf,
+                                   "humSup" : humSup,
+                                   "pasChange" : pasChange,
+                                   "mouv" : mouv,
+                                   "lumEt" : lumEt,
+                                   "lumAll" : lumAll,
+                                   "pasBouge" : pasBouge,
+                                   "dansCuisine" : dansCuisine,
+                                   "dansChambre" : dansChambre,
+                                   "dansSalon" : dansSalon,
+                                   "dansCouloir" : dansCouloir,
+                                   "dansBain" : dansBain,
+                                   "dansPiece" : dansPiece,
+                                   "climAll" : climAll,
+                                   "climEt" : climEt,
+                                   "eauAll" : eauAll,
+                                   "eauEt" : eauEt,
+                                   "intAll" : intAll,
+                                   "intEt" : intEt,
+                                   "repNon" : repNon,
+                                   "repOui" : repOui}
+                conditionsRemplies = switchCondition[condition]()
+                i = i + 1
             
+            #si r verifie les conditions on l ajoute a la liste des regles a appliquer
+            if conditionsRemplies : 
+                reglesRemplies.append(r)
                 
-    
-    # fin on applique toutes les regles qui marchent ***********
-
-    
+                    
         
-    # ------fin partie recherche des regles ---------------------------------------------
-    # ------partie execution des regles trouvees -----------------------------------
-    
+        # fin on applique toutes les regles qui marchent ***********
 
-    for r in reglesRemplies :
-        enFonctionnement == 0
-        i =0
-        while enFonctionnement==0 and i < len(r.actions) :
-            act = r.actions[i]
-            baseregle = {"allumeClim" : allumeClim,
-                         "eteintClim" : eteintClim,
-                         "ouvreVolet" : ouvreVolet,
-                         "fermeVolet" : fermeVolet, 
-                         "allumeLum" : allumeLum, 
-                         "eteintLum" : eteintLum,
-                         "allumeInt" : allumeInt,
-                         "eteintInt" : eteintInt,
-                         "fermePiece" : fermePiece, 
-                         "ouvrePiece" : ouvrePiece,
-                         "question" : question, 
-                         "allumeEau" : allumeEau, 
-                         "eteintEau" : eteintEau, 
-                         "fermeRideau" : fermeRideau, 
-                         "ouvreRideau" : ouvreRideau,
-                         "notifierRes" : notifierRes
-                         }
-            enFonctionnement = baseregle[act]()
-            i = i + 1
+        
+            
+        # ------fin partie recherche des regles ---------------------------------------------
+        # ------partie execution des regles trouvees -----------------------------------
+        
+
+        for r in reglesRemplies :
+            enFonctionnement == 0
+            i =0
+            while enFonctionnement==0 and i < len(r.actions) :
+                act = r.actions[i]
+                baseregle = {"allumeClim" : allumeClim,
+                             "eteintClim" : eteintClim,
+                             "ouvreVolet" : ouvreVolet,
+                             "fermeVolet" : fermeVolet, 
+                             "allumeLum" : allumeLum, 
+                             "eteintLum" : eteintLum,
+                             "allumeInt" : allumeInt,
+                             "eteintInt" : eteintInt,
+                             "fermePiece" : fermePiece, 
+                             "ouvrePiece" : ouvrePiece,
+                             "question" : question, 
+                             "allumeEau" : allumeEau, 
+                             "eteintEau" : eteintEau, 
+                             "fermeRideau" : fermeRideau, 
+                             "ouvreRideau" : ouvreRideau,
+                             "notifierRes" : notifierRes
+                             }
+                enFonctionnement = baseregle[act]()
+                i = i + 1
         
         
     # ------fin partie execution des regles trouvees -----------------------------------
 
 ### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
     # if(typeInfo == "Donnee.DonneeAppli"):
-        Recherche des actionneurs de la piece du type demande
+        ##Recherche des actionneurs de la piece du type demande
         # capteurType = item[u'actionneur_id']
         # actionType = item[u'action_type']      
         # if actionType:
