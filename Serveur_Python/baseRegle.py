@@ -52,7 +52,7 @@ def trameActionneur(actionneurId, activation):
     return sync + message + checksum
 
 def activerActionneur(idPiece, idAct):
-    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+    actionneurs = piece.actionneurs
     for a in actionneurs : 
         if a.capteur_type == idAct : 
             print "Activation de l'actionneur"
@@ -243,77 +243,34 @@ def pasBouge() :
 
 #Les id des pieces sont-ils dans pieces.txt ou dans nom_piece.txt, les deux fichiers ne correspondent pas.
 def dansCuisine() :
-    trouve = False
-    fic_id = open('../pieces.txt',"r")
-    liste = fic_id.readlines()
-    fic_id.close()
-
-    for l in liste:
-        while trouve == False : 
-            idfilepiece, nompiece = l.split()
-            if nompiece == "Cuisine" :                            
-                idpiece = int(idfilepiece,16)
-                trouve = True                      
-    return idpiece 
+    if piece.name == "Cuisine" :                                               
+        return True
+    return False
     
 def dansChambre() : 
-    trouve = False
-    fic_id = open('../pieces.txt',"r")
-    liste = fic_id.readlines()
-    fic_id.close()
-
-    for l in liste:
-        while trouve == False : 
-            idfilepiece, nompiece = l.split()
-            if nompiece == "Chambre" :                            
-                idpiece = int(idfilepiece,16)
-                trouve = True                      
-    return idpiece 
+    if piece.name == "Chambre" :                            
+        return True
+    return False
 
 def dansSalon() : 
-    trouve = False
-    fic_id = open('../pieces.txt',"r")
-    liste = fic_id.readlines()
-    fic_id.close()
-
-    for l in liste:
-        while trouve == False : 
-            idfilepiece, nompiece = l.split()
-            if nompiece == "Salon" :                            
-                idpiece = int(idfilepiece,16)
-                trouve = True                      
-    return idpiece 
+    if piece.name == "Salon" :                            
+        return True
+    return False 
 
 def dansCouloir(): 
-    trouve = False
-    fic_id = open('../pieces.txt',"r")
-    liste = fic_id.readlines()
-    fic_id.close()
-
-    for l in liste:
-        while trouve == False : 
-            idfilepiece, nompiece = l.split()
-            if nompiece == "Couloir" :                            
-                idpiece = int(idfilepiece,16)
-                trouve = True                      
-    return idpiece 
+    if piece.name == "Couloir" :                            
+        return True
+    return False
     
 def dansBain() : 
-    trouve = False
-    fic_id = open('../pieces.txt',"r")
-    liste = fic_id.readlines()
-    fic_id.close()
-
-    for l in liste:
-        while trouve == False : 
-            idfilepiece, nompiece = l.split()
-            if nompiece == "Bain" :                            
-                idpiece = int(idfilepiece,16)
-                trouve = True                      
-    return idpiece
+    if piece.name == "Bain" :                            
+        return True
+    return False
     
 def dansPiece() : 
-    pass
+    if piece.name == valeur :                            
+        return True
+    return False
     
 def climAll() :
     return etat.climActivee == True
@@ -353,8 +310,9 @@ def eteintClim():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.climActivee = False
         etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1
+        return 1
 
 def allumeClim():        
     if connected == True :
@@ -367,8 +325,9 @@ def allumeClim():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.climActivee = True
         etatPiece.save()
+        return 0 
     elif connected ==False :    
-        enFonctionnement == 1
+        return 1
  
 def ouvreVolet():
     if connected == True :
@@ -379,8 +338,9 @@ def ouvreVolet():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.voletsOuverts = True
         etatPiece.save()
+        return 0
     elif connected ==False :    
-        enFonctionnement == 1
+        return 1
 
 def fermeVolet():
         if connected == True :
@@ -391,8 +351,9 @@ def fermeVolet():
             etatPiece = tables.Etat.objects(piece_id = piece_id).first()
             etatPiece.voletsOuverts = False
             etatPiece.save()
+            return 0
         elif connected ==False :   
-            enFonctionnement == 1
+            return 1 
 
 def allumeEau(): 
     #pas d'envoi de trame pour l'instant
@@ -403,9 +364,10 @@ def allumeEau():
         #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.antiIncendieDeclenche = True
-        etatPiece.save() 
+        etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1        
+        return 1        
 
 def eteintEau(): 
     if connected == True :    
@@ -416,8 +378,9 @@ def eteintEau():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.antiIncendieDeclenche = False
         etatPiece.save()
+        return 0 
     elif connected ==False :   
-        enFonctionnement == 1 
+        return 1 
 
 def allumeLum():
     if connected == True :    
@@ -428,8 +391,9 @@ def allumeLum():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.lumiereAllumee = True
         etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1
+        return 1
 
 def eteintLum():
     if connected == True :    
@@ -440,8 +404,9 @@ def eteintLum():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.lumiereAllumee = False
         etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1
+        return 1
         
 def allumeInt():
     if connected == True :    
@@ -452,8 +417,9 @@ def allumeInt():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.priseDeclenchee = True
         etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1
+        return 1
         
 def eteintInt():
     if connected == True :    
@@ -464,8 +430,9 @@ def eteintInt():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.priseDeclenchee =False
         etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1
+        return 1
         
 def fermePiece():
     pass
@@ -485,8 +452,9 @@ def fermeRideau():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.rideauxOuverts = False
         etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1
+        return 1
         
 def ouvreRideau(): 
     if connected == True :    
@@ -497,8 +465,9 @@ def ouvreRideau():
         etatPiece = tables.Etat.objects(piece_id = piece_id).first()
         etatPiece.rideauxOuverts = True
         etatPiece.save()
+        return 0
     elif connected ==False :   
-        enFonctionnement == 1
+        return 1
         
 def notifierRes():
     pass 
@@ -513,6 +482,7 @@ def commande(item):
     piece_id = item[u'piece_id']
     #récupération état de la pièce concernée
     etat = tables.Etat.objects(piece_id = piece_id).first()
+    piece = tables.Piece.objects(piece_id = idPiece).first()
     print("\nEtat de la piece concernée")
     print("Numero :",etat.piece_id)
     print("Rideaux ouverts :",etat.rideauxOuverts)
@@ -582,6 +552,7 @@ def commande(item):
     # ------partie recherche des regles ---------------------------------------------
     #récupération des regles de la base de donnees
     regles = tables.Regle.objects()
+    reglesRemplies = []
     #on applique la premiere regle qui marche ***********
     #uneQuiMarche = False
     #i = 0
@@ -591,7 +562,8 @@ def commande(item):
     for r in regles:
         conditionsRemplies = True
         i=0
-        while conditionsRemplies == True :
+        #on vérifie si la regle r remplit les conditions
+        while conditionsRemplies == True and i < len(r.conditions) :
             nomCondition = r.conditions[i].nom
             listeConditions = nomCondition.split()
             if listeConditions.len > 1 :
@@ -629,7 +601,14 @@ def commande(item):
                                "intEt" : intEt,
                                "repNon" : repNon,
                                "repOui" : repOui}
-            #switchCondition[num]()
+            conditionsRemplies = switchCondition[condition]()
+            i = i + 1
+        
+        #si r verifie les conditions on l ajoute a la liste des regles a appliquer
+        if conditionsRemplies : 
+            reglesRemplies.append(r)
+            
+                
     
     # fin on applique toutes les regles qui marchent ***********
 
@@ -637,76 +616,81 @@ def commande(item):
         
     # ------fin partie recherche des regles ---------------------------------------------
     # ------partie execution des regles trouvees -----------------------------------
-    enFonctionnement == 0
+    
 
-    while enFonctionnement==0 : 
-        baseregle = {"allumeClim" : allumeClim,
-                     "eteintClim" : eteintClim,
-                     "ouvreVolet" : ouvreVolet,
-                     "fermeVolet" : fermeVolet, 
-                     "allumeLum" : allumeLum, 
-                     "eteintLum" : eteintLum,
-                     "allumeInt" : allumeInt,
-                     "eteintInt" : eteintInt,
-                     "fermePiece" : fermePiece, 
-                     "ouvrePiece" : ouvrePiece,
-                     "question" : question, 
-                     "allumeEau" : allumeEau, 
-                     "eteintEau" : eteintEau, 
-                     "fermeRideau" : fermeRideau, 
-                     "ouvreRideau" : ouvreRideau,
-                     "notifierRes" : notifierRes
-                     }
-        #baseregle[num]()
+    for r in reglesRemplies :
+        enFonctionnement == 0
+        i =0
+        while enFonctionnement==0 and i < len(r.actions) :
+            act = r.actions[i]
+            baseregle = {"allumeClim" : allumeClim,
+                         "eteintClim" : eteintClim,
+                         "ouvreVolet" : ouvreVolet,
+                         "fermeVolet" : fermeVolet, 
+                         "allumeLum" : allumeLum, 
+                         "eteintLum" : eteintLum,
+                         "allumeInt" : allumeInt,
+                         "eteintInt" : eteintInt,
+                         "fermePiece" : fermePiece, 
+                         "ouvrePiece" : ouvrePiece,
+                         "question" : question, 
+                         "allumeEau" : allumeEau, 
+                         "eteintEau" : eteintEau, 
+                         "fermeRideau" : fermeRideau, 
+                         "ouvreRideau" : ouvreRideau,
+                         "notifierRes" : notifierRes
+                         }
+            enFonctionnement = baseregle[act]()
+            i = i + 1
         
         
     # ------fin partie execution des regles trouvees -----------------------------------
 
-#### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
-    if(typeInfo == "Donnee.DonneeAppli"):
-        #Recherche des actionneurs de la piece du type demande
-        capteurType = item[u'actionneur_id']
-        actionType = item[u'action_type']      
-        if actionType:
-            activerActionneur(actionneur_id)
-        else:
-            desactiverActionneur(actionneur_id)
+### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
+    # if(typeInfo == "Donnee.DonneeAppli"):
+        Recherche des actionneurs de la piece du type demande
+        # capteurType = item[u'actionneur_id']
+        # actionType = item[u'action_type']      
+        # if actionType:
+            # activerActionneur(actionneur_id)
+        # else:
+            # desactiverActionneur(actionneur_id)
 
-    elif(typeInfo == "Donnee.ReponseAppli"):
-        reponse = item[u'reponse']
-        if reponse:
-            fermerVolets(piece_id)
-
-
-#### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
+    # elif(typeInfo == "Donnee.ReponseAppli"):
+        # reponse = item[u'reponse']
+        # if reponse:
+            # fermerVolets(piece_id)
 
 
-    else:
-        print '\nPas de commande implementee'
+### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
+
+
+    # else:
+        # print '\nPas de commande implementee'
         
-    if (item != None):
-        # Modifier l'information de la BDD pour mettre "traite" à True            
-        db.donnee.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
+    # if (item != None):
+        ## Modifier l'information de la BDD pour mettre "traite" à True            
+        # db.donnee.update({"_id" : item[u'_id']},{ "$set": {u'traite' : True} },upsert=False,multi=True)
       
-try :
-    print 'Attente connexion au proxy'
-    connectProxy.connect((hote, port))
-    print("Connexion établie avec la passerelle sur le port {}".format(port))
-    connected = True
-except socket.error :
-    print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
+# try :
+    # print 'Attente connexion au proxy'
+    # connectProxy.connect((hote, port))
+    # print("Connexion établie avec la passerelle sur le port {}".format(port))
+    # connected = True
+# except socket.error :
+    # print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
 
-while True :
-    try :
-        # Permet d'examiner les informations nouvelles dans la BDD
-        liste = db.donnee.find({u'traite':False}).sort("_id", 1)
-        for item in liste:
-            print "\n"
-            print item
-            commande(item)
-        else :
-            #s'il n'y a pas de données à traiter
-            print 'Aucune nouvelle donnee'
-            time.sleep(2)
-    except KeyboardInterrupt:
-        break
+# while True :
+    # try :
+        ## Permet d'examiner les informations nouvelles dans la BDD
+        # liste = db.donnee.find({u'traite':False}).sort("_id", 1)
+        # for item in liste:
+            # print "\n"
+            # print item
+            # commande(item)
+        # else :
+            ##s'il n'y a pas de données à traiter
+            # print 'Aucune nouvelle donnee'
+            # time.sleep(2)
+    # except KeyboardInterrupt:
+        # break
