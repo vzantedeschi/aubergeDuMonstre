@@ -106,12 +106,12 @@ def fermerVolets(idPiece):
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
     desactiverActionneur_type(idPiece, 'VOL')   
+#----------------------------CONDITIONS--------------------------------------------------------------------------------------------------------     
+
 def tempInf() :
     currentTemp = etat.temperature
     if currentTemp < valeur : 
-        return "tempInf"
-
-#----------------------------CONDITIONS--------------------------------------------------------------------------------------------------------        
+        return "tempInf"   
 
 def tempSup() : 
     currentTemp = etat.temperature
@@ -120,8 +120,10 @@ def tempSup() :
         
 def porteOuv() :
     return etat.portesFermees == False
+    
 def porteFer() :
     return etat.portesFermees == True
+
 def vampire():
     trouve = False
     for p in etat.persosPresents : 
@@ -139,6 +141,7 @@ def vampire():
         if trouve == True : 
             break
     return trouve                        
+
 def meduse ():
     trouve = False
     for p in etat.persosPresents : 
@@ -436,7 +439,8 @@ def eteintInt():
         
 def fermePiece():
     pass
-    #fermeture porte ou fermeture portes fenetres? 
+    #fermeture porte ou fermeture portes fenetres?
+    
 def ouvrePiece():
     pass
     
@@ -475,6 +479,7 @@ def notifierRes():
 #----------------------------FIN FONCTIONNALITES--------------------------------------------------------------------------------------------------------
 
 def commande(item):
+    print "appel de la base de regle"
     global rfidDetected
     #récupération type de donnée
     typeInfo = item[u'_cls']
