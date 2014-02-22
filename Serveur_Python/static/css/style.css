@@ -149,3 +149,7 @@ body {
     background-color: #E5E5E5;
     border-bottom: 1px solid #FFF;
 }
+
+.navbar-right {
+  margin-right: -15px;
+}

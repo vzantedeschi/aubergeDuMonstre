@@ -139,15 +139,12 @@ def initialize() :
 	for l in liste:
 	    ident, name = l.split()
 	    ident = int(ident,16)
-	    personnage = tables.Personne(personne_id = ident, nom = name, secret_hash='IFODJI2973', salt='2')
+	    personnage = tables.Personne(personne_id=ident, nom=name)
 	    personnage.save()
 
-	#Ajout d'un personnage "Intrus"
-	#personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
-	#personnage.save()
-
-        #pieces = tables.Piece.objects
-
+	####### Création d'un superutilisateur pour le paramétrage des règles #######
+	admin = tables.Utilisateur(identifiant='administrateur',mot_de_passe='123456')
+	admin.save()
 	print 'base reinitialisee'
 
 if __name__ == '__main__' :
@@ -157,7 +154,7 @@ if __name__ == '__main__' :
 	piece = tables.Piece.objects(name="Couloir").first()
 	etat = tables.Etat.objects(piece_id=piece.piece_id).first()
 	id = random.randint(10, 100)
-	intrus = tables.Personne(personne_id=id,ignore=False, secret_hash='IFODJI2973', salt='2')
+	intrus = tables.Personne(personne_id=id,ignore=False)
 	intrus.save()
 	etat.persosPresents.append(intrus)
 	etat.save()

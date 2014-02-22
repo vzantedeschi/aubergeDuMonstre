@@ -13,9 +13,8 @@ import tables
 app = Flask(__name__)
 db_connec = connect('GHome_BDD')
 app.secret_key = '\xdf\x0e4\xaa\xdb:\xa8\xc6\r\x14\x96|\xc56\xfaq=\xb3\xb9\xc6\xaf\xab\x7fe'
-app.register_blueprint(rest_api)
 
-# \ ! / Monkey patching mongoengine to make json dumping easier
+### fonction de conversion des instances mongoengine en dictionnaires json ###
 Document.to_dict = lambda s : json.loads(s.to_json())
 
 def etat_to_tuples(piece_id):
@@ -126,20 +125,24 @@ def login():
 
 @app.route('/login', methods=['POST'])
 def process_login():
-    name, password = request.form['username'], request.form['password']
-    user = tables.Personne.objects(nom=name).first()
-    if user is None :
-        app.logger.warning("Couldn't login : {}".format(user))
-        return render_template('login.html', error=True, username=name)
+    ident, mot = request.form['username'], request.form['password']
+    user = tables.Utilisateur.objects(identifiant=ident,mot_de_passe=mot).first()
+    if user is None:
+        app.logger.warning("Impossible de se logger : {}".format(user))
+        return render_template('login.html', error=True, username=ident)
     else:
-        session['logged_in'] = user.nom
+        session['logged_in'] = user.identifiant
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
     return redirect('/')
 
 @app.context_processor
 def inject_user():
-    """ Injects a 'user' variable in templates' context when a user is logged in """
     if session.get('logged_in', None):
-        return dict(user=tables.Personne.objects.get(nom=session['logged_in']))
+        return dict(user=tables.Utilisateur.objects.get(identifiant=session['logged_in']))
     else:
         return dict(user=None)
 

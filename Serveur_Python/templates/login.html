@@ -10,23 +10,23 @@
 <div class="container">
 {%if error%}
     <div class="alert alert-danger">
-        Wrong email or password !
+        Identifiant ou mot de passe incorrect!
     </div>
 {%endif%}
 
-<form action="/login" method="POST" autocomplete="on">
+    <form action="/login" method="POST" autocomplete="on">
 
         <div class="form-group">
-            <label for="username-input">Username</label>
+            <label for="username-input">Identifiant</label>
             <input type="text" class="form-control" name="username" value="{{username}}" />
         </div>
 
         <div class="form-group">
-            <label for="password-input">Password</label>
+            <label for="password-input">Mot de passe</label>
             <input type="password" class="form-control" name="password" />
         </div>
 
-        <input class="form-control" type="submit" value="Login" />
+        <input class="form-control" type="submit" value="S'identifier" />
     </form>
 
 </div>
