@@ -106,6 +106,402 @@ def fermerVolets(idPiece):
     # Allume l'interrupteur simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
     desactiverActionneur_type(idPiece, 'VOL')   
+def tempInf() :
+    currentTemp = etat.temperature
+    if currentTemp < valeur : 
+        return "tempInf"
+
+#----------------------------CONDITIONS--------------------------------------------------------------------------------------------------------        
+
+def tempSup() : 
+    currentTemp = etat.temperature
+    if currentTemp > valeur :
+        return "tempSup"
+        
+def porteOuv() :
+    return etat.portesFermees == False
+def porteFer() :
+    return etat.portesFermees == True
+def vampire():
+    trouve = False
+    for p in etat.persosPresents : 
+        fic_id = open('../personnages.txt',"r")
+        liste = fic_id.readlines()
+        fic_id.close()
+
+        for l in liste:
+            ident, name = l.split()
+            ident = int(ident,16)
+            if name == "Vampire" :                            
+                if p.personne_id  == ident :
+                    trouve = True
+                    break                            
+        if trouve == True : 
+            break
+    return trouve                        
+def meduse ():
+    trouve = False
+    for p in etat.persosPresents : 
+        fic_id = open('../personnages.txt',"r")
+        liste = fic_id.readlines()
+        fic_id.close()
+
+        for l in liste:
+            ident, name = l.split()
+            ident = int(ident,16)
+            if name == "Meduse" :                            
+                if p.personne_id  == ident :
+                    trouve = True
+                    break                            
+        if trouve == True : 
+            break
+    return trouve 
+    
+def intrus() :
+    trouve = False
+    for p in etat.persosPresents : 
+        fic_id = open('../personnages.txt',"r")
+        liste = fic_id.readlines()
+        fic_id.close()
+
+        for l in liste:
+            ident, name = l.split()
+            ident = int(ident,16)                           
+            if p.personne_id  == ident :
+                trouve = True
+                break                            
+        if trouve == True : 
+            break
+    return trouve == False
+
+def sirene() : 
+    trouve = False
+    for p in etat.persosPresents : 
+        fic_id = open('../personnages.txt',"r")
+        liste = fic_id.readlines()
+        fic_id.close()
+
+        for l in liste:
+            ident, name = l.split()
+            ident = int(ident,16)
+            if name == "Sirene" :                            
+                if p.personne_id  == ident :
+                    trouve = True
+                    break                            
+        if trouve == True : 
+            break
+    return trouve 
+
+def invite() : 
+    trouve = False
+    for p in etat.persosPresents : 
+        fic_id = open('../personnages.txt',"r")
+        liste = fic_id.readlines()
+        fic_id.close()
+
+        for l in liste:
+            ident, name = l.split()
+            ident = int(ident,16)
+            if name == "Invite" :                            
+                if p.personne_id  == ident :
+                    trouve = True
+                    break                            
+        if trouve == True : 
+            break
+    return trouve 
+
+def fenOuv() : 
+    return etat.voletsOuverts == True
+
+def fenFer() : 
+    return etat.voletsOuverts == False
+
+def humInf() : 
+    currentHum = etat.humidite
+    if currentTemp < valeur :
+        return "humInf"
+
+def humSup() : 
+    currentHum = etat.humidite
+    if currentSup < valeur :
+        return "humSup"
+
+def pasChange() : 
+    pass
+
+def mouv() : 
+    pass
+
+def lumEt() :
+    return etat.lumiereAllumee == False
+
+def lumAll() :
+    return etat.lumiereAllumee == True
+
+def pasBouge() : 
+    pass
+
+#Les id des pieces sont-ils dans pieces.txt ou dans nom_piece.txt, les deux fichiers ne correspondent pas.
+def dansCuisine() :
+    trouve = False
+    fic_id = open('../pieces.txt',"r")
+    liste = fic_id.readlines()
+    fic_id.close()
+
+    for l in liste:
+        while trouve == False : 
+            idfilepiece, nompiece = l.split()
+            if nompiece == "Cuisine" :                            
+                idpiece = int(idfilepiece,16)
+                trouve = True                      
+    return idpiece 
+    
+def dansChambre() : 
+    trouve = False
+    fic_id = open('../pieces.txt',"r")
+    liste = fic_id.readlines()
+    fic_id.close()
+
+    for l in liste:
+        while trouve == False : 
+            idfilepiece, nompiece = l.split()
+            if nompiece == "Chambre" :                            
+                idpiece = int(idfilepiece,16)
+                trouve = True                      
+    return idpiece 
+
+def dansSalon() : 
+    trouve = False
+    fic_id = open('../pieces.txt',"r")
+    liste = fic_id.readlines()
+    fic_id.close()
+
+    for l in liste:
+        while trouve == False : 
+            idfilepiece, nompiece = l.split()
+            if nompiece == "Salon" :                            
+                idpiece = int(idfilepiece,16)
+                trouve = True                      
+    return idpiece 
+
+def dansCouloir(): 
+    trouve = False
+    fic_id = open('../pieces.txt',"r")
+    liste = fic_id.readlines()
+    fic_id.close()
+
+    for l in liste:
+        while trouve == False : 
+            idfilepiece, nompiece = l.split()
+            if nompiece == "Couloir" :                            
+                idpiece = int(idfilepiece,16)
+                trouve = True                      
+    return idpiece 
+    
+def dansBain() : 
+    trouve = False
+    fic_id = open('../pieces.txt',"r")
+    liste = fic_id.readlines()
+    fic_id.close()
+
+    for l in liste:
+        while trouve == False : 
+            idfilepiece, nompiece = l.split()
+            if nompiece == "Bain" :                            
+                idpiece = int(idfilepiece,16)
+                trouve = True                      
+    return idpiece
+    
+def dansPiece() : 
+    pass
+    
+def climAll() :
+    return etat.climActivee == True
+
+def climEt() :
+    return etat.climActivee == False
+
+def eauAll() : 
+    return etat.antiIncendieDeclenche == True
+
+def eauEt() : 
+    return etat.antiIncendieDeclenche == False
+
+def intAll() : 
+    return etat.priseDeclenchee == True
+
+def intEt() :
+    return etat.priseDeclenchee == False
+
+def repNon() : 
+    pass
+
+def repOui() :
+    pass
+    #penser à mettre en "prises en compte" les variables utilisées pour trouver les règles
+#----------------------------FIN CONDITIONS--------------------------------------------------------------------------------------------------------
+#----------------------------FONCTIONNALITES--------------------------------------------------------------------------------------------------------
+def eteintClim():
+    if connected == True :
+        #envoi de la trame 
+        print "Desactivation de la climatisation"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "climActive" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.climActivee = False
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1
+
+def allumeClim():        
+    if connected == True :
+        #envoi de la trame
+        print "Activation de la climatisation"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "climActive" à True
+        #change = True
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : change} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.climActivee = True
+        etatPiece.save()
+    elif connected ==False :    
+        enFonctionnement == 1
+ 
+def ouvreVolet():
+    if connected == True :
+        print "ouverture des volets"
+        ouvrirVolets(piece_id)
+        #Mettre à jour l'état de la pièce dans la BDD
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.voletsOuverts = True
+        etatPiece.save()
+    elif connected ==False :    
+        enFonctionnement == 1
+
+def fermeVolet():
+        if connected == True :
+            print "Fermeture des volets"
+            fermerVolets(piece_id)
+            #Mettre à jour l'état de la mpièce dans la BDD
+            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
+            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+            etatPiece.voletsOuverts = False
+            etatPiece.save()
+        elif connected ==False :   
+            enFonctionnement == 1
+
+def allumeEau(): 
+    #pas d'envoi de trame pour l'instant
+    if connected ==True :
+        print "Activation du systeme anti-incendie"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.antiIncendieDeclenche = True
+        etatPiece.save() 
+    elif connected ==False :   
+        enFonctionnement == 1        
+
+def eteintEau(): 
+    if connected == True :    
+        print "Desactivation du systeme anti-incendie"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.antiIncendieDeclenche = False
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1 
+
+def allumeLum():
+    if connected == True :    
+        print "Allumer la lumière"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.lumiereAllumee = True
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1
+
+def eteintLum():
+    if connected == True :    
+        print "Éteindre la lumière"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.lumiereAllumee = False
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1
+        
+def allumeInt():
+    if connected == True :    
+        print "Allumer la prise"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.priseDeclenchee = True
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1
+        
+def eteintInt():
+    if connected == True :    
+        print "Éteindre la prise"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.priseDeclenchee =False
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1
+        
+def fermePiece():
+    pass
+    #fermeture porte ou fermeture portes fenetres? 
+def ouvrePiece():
+    pass
+    
+def question():
+    pass
+
+def fermeRideau():
+    if connected == True :    
+        print "Fermer le rideau"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.rideauxOuverts = False
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1
+        
+def ouvreRideau(): 
+    if connected == True :    
+        print "Ouvrir le rideau"
+        activerActionneur(idPiece, capteur_id)
+        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+        etatPiece.rideauxOuverts = True
+        etatPiece.save()
+    elif connected ==False :   
+        enFonctionnement == 1
+        
+def notifierRes():
+    pass 
+
+#----------------------------FIN FONCTIONNALITES--------------------------------------------------------------------------------------------------------
 
 def commande(item):
     global rfidDetected
@@ -221,6 +617,7 @@ def commande(item):
                                "dansChambre" : dansChambre,
                                "dansSalon" : dansSalon,
                                "dansCouloir" : dansCouloir,
+                               "dansBain" : dansBain,
                                "dansPiece" : dansPiece,
                                "climAll" : climAll,
                                "climEt" : climEt,
@@ -230,239 +627,6 @@ def commande(item):
                                "intEt" : intEt,
                                "repNon" : repNon,
                                "repOui" : repOui}
-            
-            
-            def tempInf() :
-                currentTemp = etat.temperature
-                if currentTemp < valeur : 
-                    return "tempInf"
-                    
-            def tempSup() : 
-                currentTemp = etat.temperature
-                if currentTemp > valeur :
-                    return "tempSup"
-                    
-            def porteOuv() :
-                return etat.portesFermees == False
-            def porteFer() :
-                return etat.portesFermees == True
-            def vampire():
-                trouve = False
-                for p in etat.persosPresents : 
-                    fic_id = open('../personnages.txt',"r")
-                    liste = fic_id.readlines()
-                    fic_id.close()
-
-                    for l in liste:
-                        ident, name = l.split()
-                        ident = int(ident,16)
-                        if name == "Vampire" :                            
-                            if p.personne_id  == ident :
-                                trouve = True
-                                break                            
-                    if trouve == True : 
-                        break
-                return trouve                        
-            def meduse ():
-                trouve = False
-                for p in etat.persosPresents : 
-                    fic_id = open('../personnages.txt',"r")
-                    liste = fic_id.readlines()
-                    fic_id.close()
-
-                    for l in liste:
-                        ident, name = l.split()
-                        ident = int(ident,16)
-                        if name == "Meduse" :                            
-                            if p.personne_id  == ident :
-                                trouve = True
-                                break                            
-                    if trouve == True : 
-                        break
-                return trouve 
-                
-            def intrus() :
-                trouve = False
-                for p in etat.persosPresents : 
-                    fic_id = open('../personnages.txt',"r")
-                    liste = fic_id.readlines()
-                    fic_id.close()
-
-                    for l in liste:
-                        ident, name = l.split()
-                        ident = int(ident,16)                           
-                        if p.personne_id  == ident :
-                            trouve = True
-                            break                            
-                    if trouve == True : 
-                        break
-                return trouve == False
-            
-            def sirene() : 
-                trouve = False
-                for p in etat.persosPresents : 
-                    fic_id = open('../personnages.txt',"r")
-                    liste = fic_id.readlines()
-                    fic_id.close()
-
-                    for l in liste:
-                        ident, name = l.split()
-                        ident = int(ident,16)
-                        if name == "Sirene" :                            
-                            if p.personne_id  == ident :
-                                trouve = True
-                                break                            
-                    if trouve == True : 
-                        break
-                return trouve 
-            
-            def invite() : 
-                trouve = False
-                for p in etat.persosPresents : 
-                    fic_id = open('../personnages.txt',"r")
-                    liste = fic_id.readlines()
-                    fic_id.close()
-
-                    for l in liste:
-                        ident, name = l.split()
-                        ident = int(ident,16)
-                        if name == "Invite" :                            
-                            if p.personne_id  == ident :
-                                trouve = True
-                                break                            
-                    if trouve == True : 
-                        break
-                return trouve 
-            
-            def fenOuv() : 
-                return etat.voletsOuverts == True
-            
-            def fenFer() : 
-                return etat.voletsOuverts == False
-            
-            def humInf() : 
-                currentHum = etat.humidite
-                if currentTemp < valeur :
-                    return "humInf"
-            
-            def humSup() : 
-                currentHum = etat.humidite
-                if currentSup < valeur :
-                    return "humSup"
-            
-            def pasChange() : 
-                pass
-            
-            def mouv() : 
-                pass
-            
-            def lumEt() :
-                return etat.lumiereAllumee == False
-            
-            def lumAll() :
-                return etat.lumiereAllumee == True
-            
-            def pasBouge() : 
-                pass
-            
-            #Les id des pieces sont-ils dans pieces.txt ou dans nom_piece.txt, les deux fichiers ne correspondent pas.
-            def dansCuisine() :
-                trouve = False
-                fic_id = open('../pieces.txt',"r")
-                liste = fic_id.readlines()
-                fic_id.close()
-
-                for l in liste:
-                    while trouve == False : 
-                        idfilepiece, nompiece = l.split()
-                        if nompiece == "Cuisine" :                            
-                            idpiece = int(idfilepiece,16)
-                            trouve = True                      
-                return idpiece 
-                
-            def dansChambre() : 
-                trouve = False
-                fic_id = open('../pieces.txt',"r")
-                liste = fic_id.readlines()
-                fic_id.close()
-
-                for l in liste:
-                    while trouve == False : 
-                        idfilepiece, nompiece = l.split()
-                        if nompiece == "Chambre" :                            
-                            idpiece = int(idfilepiece,16)
-                            trouve = True                      
-                return idpiece 
-            
-            def dansSalon() : 
-                trouve = False
-                fic_id = open('../pieces.txt',"r")
-                liste = fic_id.readlines()
-                fic_id.close()
-
-                for l in liste:
-                    while trouve == False : 
-                        idfilepiece, nompiece = l.split()
-                        if nompiece == "Salon" :                            
-                            idpiece = int(idfilepiece,16)
-                            trouve = True                      
-                return idpiece 
-            
-            def dansCouloir(): 
-                trouve = False
-                fic_id = open('../pieces.txt',"r")
-                liste = fic_id.readlines()
-                fic_id.close()
-
-                for l in liste:
-                    while trouve == False : 
-                        idfilepiece, nompiece = l.split()
-                        if nompiece == "Couloir" :                            
-                            idpiece = int(idfilepiece,16)
-                            trouve = True                      
-                return idpiece 
-                
-            def dansBain() : 
-                trouve = False
-                fic_id = open('../pieces.txt',"r")
-                liste = fic_id.readlines()
-                fic_id.close()
-
-                for l in liste:
-                    while trouve == False : 
-                        idfilepiece, nompiece = l.split()
-                        if nompiece == "Bain" :                            
-                            idpiece = int(idfilepiece,16)
-                            trouve = True                      
-                return idpiece
-                
-            def dansPiece() : 
-                pass
-                
-            def climAll() :
-                return etat.climActivee == True
-            
-            def climEt() :
-                return etat.climActivee == False
-            
-            def eauAll() : 
-                return etat.antiIncendieDeclenche == True
-            
-            def eauEt() : 
-                return etat.antiIncendieDeclenche == False
-            
-            def intAll() : 
-                return etat.priseDeclenchee == True
-            
-            def intEt() :
-                return etat.priseDeclenchee == False
-            
-            def repNon() : 
-                pass
-            
-            def repOui() :
-                pass
-    #penser à mettre en "prises en compte" les variables utilisées pour trouver les règles
     
     # fin on applique toutes les regles qui marchent ***********
 
@@ -490,167 +654,6 @@ def commande(item):
                      "ouvreRideau" : ouvreRideau,
                      "notifierRes" : notifierRes
                      }
-     
-        def eteintClim():
-            if connected == True :
-                #envoi de la trame 
-                print "Desactivation de la climatisation"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "climActive" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.climActivee = False
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1
-
-        def allumeClim():        
-            if connected == True :
-                #envoi de la trame
-                print "Activation de la climatisation"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "climActive" à True
-                #change = True
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : change} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.climActivee = True
-                etatPiece.save()
-            elif connected ==False :    
-                enFonctionnement == 1
-         
-        def ouvreVolet():
-            if connected == True :
-                print "ouverture des volets"
-                ouvrirVolets(piece_id)
-                #Mettre à jour l'état de la pièce dans la BDD
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.voletsOuverts = True
-                etatPiece.save()
-            elif connected ==False :    
-                enFonctionnement == 1
-
-        def fermeVolet():
-                if connected == True :
-                    print "Fermeture des volets"
-                    fermerVolets(piece_id)
-                    #Mettre à jour l'état de la mpièce dans la BDD
-                    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-                    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                    etatPiece.voletsOuverts = False
-                    etatPiece.save()
-                elif connected ==False :   
-                    enFonctionnement == 1
-
-        def allumeEau(): 
-            #pas d'envoi de trame pour l'instant
-            if connected ==True :
-                print "Activation du systeme anti-incendie"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.antiIncendieDeclenche = True
-                etatPiece.save() 
-            elif connected ==False :   
-                enFonctionnement == 1        
-
-        def eteintEau(): 
-            if connected == True :    
-                print "Desactivation du systeme anti-incendie"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.antiIncendieDeclenche = False
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1 
-
-        def allumeLum():
-            if connected == True :    
-                print "Allumer la lumière"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.lumiereAllumee = True
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1
-        
-        def eteintLum():
-            if connected == True :    
-                print "Éteindre la lumière"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.lumiereAllumee = False
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1
-                
-        def allumeInt():
-            if connected == True :    
-                print "Allumer la prise"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.priseDeclenchee = True
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1
-                
-        def eteintInt():
-            if connected == True :    
-                print "Éteindre la prise"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.priseDeclenchee =False
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1
-                
-        def fermePiece():
-            pass
-            #fermeture porte ou fermeture portes fenetres? 
-        def ouvrePiece():
-            pass
-            
-        def question():
-            pass
-        
-        def fermeRideau():
-            if connected == True :    
-                print "Fermer le rideau"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.rideauxOuverts = False
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1
-                
-        def ouvreRideau(): 
-            if connected == True :    
-                print "Ouvrir le rideau"
-                activerActionneur(idPiece, capteur_id)
-                # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-                #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.rideauxOuverts = True
-                etatPiece.save()
-            elif connected ==False :   
-                enFonctionnement == 1
-                
-        def notifierRes():
-            pass 
-            
         #baseregle[num]()
         
         
