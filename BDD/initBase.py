@@ -143,10 +143,10 @@ def initialize() :
 	    personnage.save()
 
 	#Ajout d'un personnage "Intrus"
-	personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
-	personnage.save()
+	#personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
+	#personnage.save()
 
-        pieces = tables.Piece.objects
+        #pieces = tables.Piece.objects
 
 	print 'base reinitialisee'
 
