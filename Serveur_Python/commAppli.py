@@ -117,7 +117,15 @@ def parametrage():
 @app.route('/parametrage', methods=['POST'])
 @requires_admin_rights
 def send_parametrage():
+	#si submit=supprimer verifier que quelque chose est coché et supprimer 
+	#puis réaffiche parametrage, sinon go page ajout
     return render_template('parametrage.html')
+
+@app.route('/parametrage/chargerRegles')
+@requires_admin_rights
+def get_regles():
+	regles = [a.to_dict() for a in regles]
+	return jsonify(ok=True, result=regles)
 
 @app.route('/surveillance/pieces')
 def get_pieces():
