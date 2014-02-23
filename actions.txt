@@ -1,17 +1,17 @@
-allumeClim	Allumer la climatisation 
-eteintClim	Éteindre la climatisation 
-ouvreVolet	Ouvrir les volets 
-fermeVolet	Fermer les volets
-allumeLum	Allumer la lumière 
-eteintLum	Éteindre la lumière 
-fermePiece	fermer une pièce
-ouvreVolet 	ouvrir une "porte"
-ouvrePiece	ouvrir une piece
-question	Poser question aux résidents (pour manger uniquement ?)
-allumeEau	Activer le système anti-incendie
-eteintEau	Éteindre le système anti-incendie
-fermeRideau	Cacher les miroirs 
-ouvreRideau	Dévoiler les miroirs
-notifieRes	Envoyer notification aux résidents ?
-allumeInt	Allumer un interrupteur
-eteintInt	Eteindre un interrupteur
+allumeClim,Allumer la climatisation 
+eteintClim,Éteindre la climatisation 
+ouvreVolet,Ouvrir les volets 
+fermeVolet,Fermer les volets
+allumeLum,Allumer la lumière 
+eteintLum,Éteindre la lumière 
+fermePiece,fermer une pièce
+ouvreVolet ,ouvrir une "porte"
+ouvrePiece,ouvrir une piece
+question,Poser question aux résidents (pour manger uniquement ?)
+allumeEau,Activer le système anti-incendie
+eteintEau,Éteindre le système anti-incendie
+fermeRideau,Cacher les miroirs 
+ouvreRideau,Dévoiler les miroirs
+notifieRes,Envoyer notification aux résidents ?
+allumeInt,Allumer un interrupteur
+eteintInt,Eteindre un interrupteur

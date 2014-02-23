@@ -56,8 +56,14 @@ def initialize() :
     fic_id.close()
 
     for l in liste:
-        c_nom, desc = l.split('\t')
-        cond = tables.Condition(nom =c_nom, description = desc)
+        c_nom, desc = l.split(',')
+        listeConditions = c_nom.split()
+        if len(listeConditions) > 1 :
+            condition = listeConditions[0]
+            valeur = listeConditions[1]
+        else :
+            condition = c_nom
+        cond = tables.Condition(nom = condition, description = desc)
         cond.save()
         
     #Initialisation actions
@@ -66,7 +72,7 @@ def initialize() :
     fic_id.close()
 
     for l in liste:
-        a_nom, desc = l.split('\t')
+        a_nom, desc = l.split(',')
         act = tables.Action(nom =a_nom, description = desc)
         act.save()
         
@@ -74,20 +80,22 @@ def initialize() :
     fic_id = open('../regles.txt',"r")
     liste = fic_id.readlines()
     fic_id.close()
-    
+    taille = len(liste)
     for l in liste:
-        id, reste = l.split(';')
-        nom, reste = reste.split(';')
-        conds, acts = reste.split(';')
-        print 'id : '+ id
-        print 'nom : ' + nom
+        id, nom, conds, acts, rebut = l.split(';')
         l_cond = conds.split(',', conds.count(','))
         pb = False
         if pb == False :
             r_conds = [] 
             for elem in l_cond:
-                print 'cond: ' + elem
-                obj =tables.Condition.objects(nom = elem).first()
+                
+                listeConditions = elem.split()
+                if len(listeConditions) > 1 :
+                    condition = listeConditions[0]
+                    valeur = listeConditions[1]
+                else :
+                    condition = elem
+                obj =tables.Condition.objects(nom = condition).first()
                 if obj == None :
                     print 'condition ' + elem +' ne correspond a rien'
                     pb = True
@@ -97,27 +105,27 @@ def initialize() :
                     
             l_act = acts.split(',', acts.count(','))
             
-        print "====================================================="
         if pb == False :
             #ajoute les conditions de la regle
             r_acts = [] 
             for elem in l_act:
-                print 'act: ' + elem
-                obj =tables.Action.objects(nom = elem).first()  
+            
+                listeActions = elem.split()
+                if len(listeActions) > 1 :
+                    action = listeActions[0]
+                    valeur = listeActions[1]
+                else :
+                    action = elem
+                obj =tables.Action.objects(nom = action).first()  
                 if obj == None :
                     print 'action ' + elem +' ne correspond a rien'
                     pb = True
                     break
                 else :
                     r_acts.append(obj)
-        print "====================================================="
-        print pb
         if pb == False :
             #ajoute les actions de la regle
-            print "on ajoute les actions dans la table regle"
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
-            print "Saving regle"
-            print regle.id
             regle.save()
 
         
