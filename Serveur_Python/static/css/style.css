@@ -153,3 +153,7 @@ body {
 .navbar-right {
   margin-right: -15px;
 }
+
+option {
+  color : black;
+}
