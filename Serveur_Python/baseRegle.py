@@ -86,14 +86,38 @@ def desactiverActionneur_type(idPiece, typeActionneur):
                 connectProxy.send(trameActionneur(a.actionneur_id, False))
                 
 def ouvrirVolets(idPiece):    
-    # Allume l'interrupteur simulant les volets
+    # Allume la prise simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
     activerActionneur_type(idPiece, 'VOL')        
 
 def fermerVolets(idPiece):
-    # Allume l'interrupteur simulant les volets
-    print "Verrouillage actif : volets en cours de fermeture"
-    desactiverActionneur_type(idPiece, 'VOL')   
+    # Eteint la prise simulant les volets
+    print "Verrouillage desactive : volets en cours de fermeture"
+    desactiverActionneur_type(idPiece, 'VOL')
+
+def ouvrirRideaux(idPiece):
+    print "Ouverture des rideaux"
+    activerActionneur_type(idPiece, 'RID') 
+
+def fermerRideaux(idPiece):
+    print "Fermeture des rideaux"
+    desactiverActionneur_type(idPiece, 'RID')
+
+def allumerClim(idPiece):
+    print "Allumage de la climatisation"
+    activerActionneur_type(idPiece, 'CLIM')
+
+def eteindreClim(idPiece):
+    print "Extinction de la climatisation"
+    desactiverActionneur_type(idPiece, 'CLIM')
+
+def allumerAnIn(idPiece):
+    print "Allumage du systeme anti incendie"
+    activerActionneur_type(idPiece, 'ANIN')
+
+def eteindreAnIn(idPiece):
+    print "Extinction du systeme anti incendie"
+    desactiverActionneur_type(idPiece, 'ANIN')
 
 def commande(item):
     global rfidDetected
