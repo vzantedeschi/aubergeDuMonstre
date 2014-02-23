@@ -214,18 +214,18 @@ def invite() :
     return trouve 
 
 def fenOuv() : 
-    return etat.voletsOuverts == True
+    return tables.Etat.voletsOuverts == True
 
 def fenFer() : 
-    return etat.voletsOuverts == False
+    return tables.Etat.voletsOuverts == False
 
 def humInf() : 
-    currentHum = etat.humidite
+    currentHum = tables.Etat.humidite
     if currentTemp < valeur :
         return "humInf"
 
 def humSup() : 
-    currentHum = etat.humidite
+    currentHum = tables.Etat.humidite
     if currentSup < valeur :
         return "humSup"
 
@@ -236,10 +236,10 @@ def mouv() :
     pass
 
 def lumEt() :
-    return etat.lumiereAllumee == False
+    return tables.Etat.lumiereAllumee == False
 
 def lumAll() :
-    return etat.lumiereAllumee == True
+    return tables.Etat.lumiereAllumee == True
 
 def pasBouge() : 
     pass
@@ -276,22 +276,22 @@ def dansPiece() :
     return False
     
 def climAll() :
-    return etat.climActivee == True
+    return tables.Etat.climActivee == True
 
 def climEt() :
-    return etat.climActivee == False
+    return tables.Etat.climActivee == False
 
 def eauAll() : 
-    return etat.antiIncendieDeclenche == True
+    return tables.Etat.antiIncendieDeclenche == True
 
 def eauEt() : 
-    return etat.antiIncendieDeclenche == False
+    return tables.Etat.antiIncendieDeclenche == False
 
 def intAll() : 
-    return etat.priseDeclenchee == True
+    return tables.Etat.priseDeclenchee == True
 
 def intEt() :
-    return etat.priseDeclenchee == False
+    return tables.Etat.priseDeclenchee == False
 
 def repNon() : 
     pass
@@ -577,9 +577,12 @@ def commande():
                 print "on a au moins une condition remplie"
                 nomCondition = r.conditions[i].nom
                 listeConditions = nomCondition.split()
-                if listeConditions.len > 1 :
+                if len(listeConditions) > 1 :
                     condition = listeConditions[0]
                     valeur = listeConditions[1]
+                else :
+                    condition = nomCondition
+                print condition
                 switchCondition = {"tempInf" : tempInf,
                                    "tempSup" : tempSup,
                                    "porteOuv" : porteOuv,
@@ -614,6 +617,7 @@ def commande():
                                    "repOui" : repOui}
                 conditionsRemplies = switchCondition[condition]()
                 i = i + 1
+                print i
             
             #si r verifie les conditions on l ajoute a la liste des regles a appliquer
             if conditionsRemplies : 
