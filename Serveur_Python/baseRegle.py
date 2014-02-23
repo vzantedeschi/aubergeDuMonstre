@@ -221,12 +221,12 @@ def fenFer() :
 
 def humInf(valeur) : 
     currentHum = tables.Etat.humidite
-    if currentTemp < valeur :
+    if currentHum < valeur :
         return "humInf"
 
 def humSup(valeur) : 
     currentHum = tables.Etat.humidite
-    if currentSup < valeur :
+    if currentHum > valeur :
         return "humSup"
 
 def pasChange() : 
@@ -506,7 +506,6 @@ def commande():
         # ------partie deplacer les personnages dans les donnees -------------------------------
         #!!!!!!!!!!!!!!!!!!!!!!!!!partie obsolete !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #if (typeInfo == "Donnee.Presence"):
-        print "ou sont les personnages" 
         if len(etat.persosPresents) != 0 :
             if rfidDetected == 0 :
                 print ("Intrus est dans la piece :",piece_id)
@@ -554,13 +553,11 @@ def commande():
                             etatAChanger.save()
 
         # Remettre rfidDetected a 0
-        print "RFID remis a zero"
         rfidDetected = 0
         # ------fin partie deplacer les personnages dans les donnees -------------------------------   
         # ------partie recherche des regles ---------------------------------------------
         #récupération des regles de la base de donnees
         regles = tables.Regle.objects
-        print len(regles)
         reglesRemplies = []
         #on applique la premiere regle qui marche ***********
         #uneQuiMarche = False
@@ -569,12 +566,10 @@ def commande():
         # fin on applique la premiere regle qui marche ***********
         #on applique toutes les regles qui marchent ***********
         for r in regles:
-            print "on entre dans le for de l'etape 2"
             conditionsRemplies = True
             i=0
             #on vérifie si la regle r remplit les conditions
             while conditionsRemplies == True and i < len(r.conditions) :
-                print "on a au moins une condition remplie"
                     
                 switchCondition = {"tempInf" : tempInf,
                                    "tempSup" : tempSup,
@@ -618,27 +613,23 @@ def commande():
                     conditionsRemplies = switchCondition[nomCondition]()
                 
                 i = i + 1
-                print i
             
             #si r verifie les conditions on l ajoute a la liste des regles a appliquer
             if conditionsRemplies : 
-                print "on ajoute cette condition remplie a une liste pour que les regles concernees s'executent"
                 reglesRemplies.append(r)
-                
+            
                     
         
         # fin on applique toutes les regles qui marchent ***********
             
         # ------fin partie recherche des regles ---------------------------------------------
         # ------partie execution des regles trouvees -----------------------------------
-        
         for r in reglesRemplies :
-            print "on entre dans la boucle de l'etape 3"
-            enFonctionnement == 0
+            enFonctionnement = 0
             i =0
             while enFonctionnement==0 and i < len(r.actions) :
-                print "on fait une action"
-                act = r.actions[i]
+            
+                act = r.actions[i].nom
                 baseregle = {"allumeClim" : allumeClim,
                              "eteintClim" : eteintClim,
                              "ouvreVolet" : ouvreVolet,
