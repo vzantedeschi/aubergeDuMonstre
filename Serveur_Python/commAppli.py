@@ -36,7 +36,7 @@ def etat_to_tuples(piece_id):
 	prise = "Eteinte"
 	if etat.priseDeclenchee : prise = "Active"
 
-	result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name },
+	result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name , "title" : True},
 							{ "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
 							{ "image" : "hum.png", "width" : "20px","nom":"Humidité" , "valeur": etat.humidite },
 							{ "image" : "rideaux.png", "width" : "30px","nom":"Rideaux" , "valeur": rid },

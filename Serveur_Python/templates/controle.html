@@ -20,10 +20,6 @@
 	</div>
 </div>
 
-
-
-
-
 <div class="text-center">
 	<p>Copyright By H4213</p>
 </div>
@@ -43,15 +39,32 @@
 		</div>
         {{#each result}}
         <li class="list-group-item">
-        <div class="row">
-        <div class="col-lg-3 text-center">{{_id}}</div>
-        <div class="col-lg-3">{{capteur_type}}</div>
-		<div class="col-lg-3"><button onclick="valider(this)" value="{{_id}}" class="btn btn-default">Activer</button></div>
-    	<div class="col-lg-3"><button onclick="valider(this)" value="{{_id}}" class="btn btn-default">Désactiver</button></div>
-        </div>
+	        <div class="row">
+		        <div class="col-lg-3 text-center">{{_id}}</div>
+		        <div class="col-lg-3">{{capteur_type}}</div>
+				<div class="col-lg-3"><button onclick="valider(this)" value="{{_id}}" class="btn btn-default">Activer</button></div>
+		    	<div class="col-lg-3"><button onclick="valider(this)" value="{{_id}}" class="btn btn-default">Désactiver</button></div>
+	        </div>
         </li>
         {{/each}}
 	</div>
+	<li class="list-group-item">
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				Ajouter un dispositif
+			</div>
+			<div class="col-lg-4 text-center">
+				<a href="/add/capteur">
+			    	<button class="btn btn-default">Nouveau Capteur</button>
+			    </a>
+			</div>
+			<div class="col-lg-4 text-center">
+			    <a href="/add/actionneur">
+			    	<button class="btn btn-default">Nouveau Actionneur</button>
+			    </a>
+			</div>
+		</div>
+	</li>
 </script>
 {% endraw %}
 {% endblock %}
