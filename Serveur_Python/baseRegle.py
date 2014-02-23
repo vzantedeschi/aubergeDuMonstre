@@ -506,56 +506,61 @@ def commande():
         # ------partie deplacer les personnages dans les donnees -------------------------------
         #!!!!!!!!!!!!!!!!!!!!!!!!!partie obsolete !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #if (typeInfo == "Donnee.Presence"):
-        if rfidDetected == 0 :
-            print ("Intrus est dans la piece :",piece_id)
+        print "ou sont les personnages" 
+        if len(etat.persosPresents) != 0 :
+            if rfidDetected == 0 :
+                print ("Intrus est dans la piece :",piece_id)
 
-            # Un seul intrus dans la maison en même temps sinon => comment savoir si un
-            # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
-            # vient de changer de pièce (enlever id de la pièce précédente)
-            if piece_id == 1:
-                newPerso = tables.Personne(personne_id = idIntrus, name ="Intrus", ignore = False)
-                newPerso.save()
-                idIntrus = idIntrus+1
-                
-            persoABouge = tables.Personne.objects(ignore = False)
+                # Un seul intrus dans la maison en même temps sinon => comment savoir si un
+                # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
+                # vient de changer de pièce (enlever id de la pièce précédente)
+                if piece_id == 1:
+                    newPerso = tables.Personne(personne_id = idIntrus, name ="Intrus", ignore = False)
+                    newPerso.save()
+                    idIntrus = idIntrus+1
+                    
+                persoABouge = tables.Personne.objects(ignore = False)
 
-            if persoABouge != None:
+                if persoABouge != None:
+                    #enregistrer le perso dans la nouvelle piece
+                    persoABouge = persoABouge.first()
+                    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+                    etatPiece.persosPresents.append(persoABouge)
+                    etatPiece.save()  
+                    
+            else:                 
+                #TODO ------ parcourir le fichier personnage.txt pour reconnaitre dedans que 1 c est meduse -----
+                    
+                if rfidDetected == 1 :
+                    print ("Meduse est dans la piece :",piece_id)
+                    
+                elif rfidDetected == 2 :
+                    print ("Vampire est dans la piece :",piece_id)
+
+                persoABouge = tables.Personne.objects(personne_id = rfidDetected).first()
                 #enregistrer le perso dans la nouvelle piece
-                persoABouge = persoABouge.first()
                 etatPiece = tables.Etat.objects(piece_id = piece_id).first()
                 etatPiece.persosPresents.append(persoABouge)
-                etatPiece.save()  
-                
-        else:                 
-            #TODO ------ parcourir le fichier personnage.txt pour reconnaitre dedans que 1 c est meduse -----
-            if rfidDetected == 1 :
-                print ("Meduse est dans la piece :",piece_id)
-                
-            elif rfidDetected == 2 :
-                print ("Vampire est dans la piece :",piece_id)
+                etatPiece.save()        
 
-            persoABouge = tables.Personne.objects(personne_id = rfidDetected).first()
-            #enregistrer le perso dans la nouvelle piece
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.persosPresents.append(persoABouge)
-            etatPiece.save()        
-
-        if persoABouge != None:            
-            ## Enlever le perso des autres pieces
-            listePieces = tables.Etat.objects
-            for p in listePieces :
-                if p.piece_id != piece_id:
-                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
-                    if persoABouge in etatAChanger.persosPresents:
-                        etatAChanger.persosPresents.remove(persoABouge)
-                        etatAChanger.save()
+            if persoABouge != None:            
+                ## Enlever le perso des autres pieces
+                listePieces = tables.Etat.objects
+                for p in listePieces :
+                    if p.piece_id != piece_id:
+                        etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                        if persoABouge in etatAChanger.persosPresents:
+                            etatAChanger.persosPresents.remove(persoABouge)
+                            etatAChanger.save()
 
         # Remettre rfidDetected a 0
+        print "RFID remis a zero"
         rfidDetected = 0
         # ------fin partie deplacer les personnages dans les donnees -------------------------------   
         # ------partie recherche des regles ---------------------------------------------
         #récupération des regles de la base de donnees
-        regles = tables.Regle.objects()
+        regles = tables.Regle.objects
+        print len(regles)
         reglesRemplies = []
         #on applique la premiere regle qui marche ***********
         #uneQuiMarche = False
@@ -564,10 +569,12 @@ def commande():
         # fin on applique la premiere regle qui marche ***********
         #on applique toutes les regles qui marchent ***********
         for r in regles:
+            print "on entre dans le for de l'etape 2"
             conditionsRemplies = True
             i=0
             #on vérifie si la regle r remplit les conditions
             while conditionsRemplies == True and i < len(r.conditions) :
+                print "on a au moins une condition remplie"
                 nomCondition = r.conditions[i].nom
                 listeConditions = nomCondition.split()
                 if listeConditions.len > 1 :
@@ -610,22 +617,22 @@ def commande():
             
             #si r verifie les conditions on l ajoute a la liste des regles a appliquer
             if conditionsRemplies : 
+                print "on ajoute cette condition remplie a une liste pour que les regles concernees s'executent"
                 reglesRemplies.append(r)
                 
                     
         
         # fin on applique toutes les regles qui marchent ***********
-
-        
             
         # ------fin partie recherche des regles ---------------------------------------------
         # ------partie execution des regles trouvees -----------------------------------
         
-
         for r in reglesRemplies :
+            print "on entre dans la boucle de l'etape 3"
             enFonctionnement == 0
             i =0
             while enFonctionnement==0 and i < len(r.actions) :
+                print "on fait une action"
                 act = r.actions[i]
                 baseregle = {"allumeClim" : allumeClim,
                              "eteintClim" : eteintClim,
@@ -646,7 +653,6 @@ def commande():
                              }
                 enFonctionnement = baseregle[act]()
                 i = i + 1
-        
         
     # ------fin partie execution des regles trouvees -----------------------------------
 

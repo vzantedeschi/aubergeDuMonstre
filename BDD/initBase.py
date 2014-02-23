@@ -83,7 +83,8 @@ def initialize() :
         if pb == False :
             r_conds = [] 
             for elem in l_cond:
-                obj =tables.Condition.objects(nom = elem).first()
+                obj = tables.Condition.objects(nom = elem).first()
+                print obj
                 if obj == None :
                     pb = True
                     break
@@ -102,10 +103,12 @@ def initialize() :
                     break
                 else :
                     r_acts.append(obj)
- 
+        print pb
         if pb == False :
             #ajoute les actions de la regle
+            print "on ajoute les actions dans la table regle"
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
+            print "Saving regle"
             regle.save()
 
         
