@@ -1,5 +1,5 @@
-tempInf,Seuil inférieur à de température atteint
-tempSup,Seuil supérieur à de température atteint
+tempInf 19,Seuil inférieur à de température atteint
+tempSup 19,Seuil supérieur à de température atteint
 porteOuv,Porte ouverte
 porteFer,Porte fermée
 vampire,Présence vampire
@@ -9,13 +9,13 @@ sirene,Présence sirène
 invite,Présence invité
 fenOuv,Fenêtre ouverte
 fenFer,Fenêtre fermée
-humInf,Seuil inférieur d'humidité atteint
-humSup,Seuil supérieur à d'humidité atteint
-pasChange,Pas de changement depuis temps ?
+humInf 50,Seuil inférieur d'humidité atteint
+humSup 50,Seuil supérieur à d'humidité atteint
+pasChange 4,Pas de changement depuis temps ?
 mouv,Détection mouvement
 lumEt,Lumière éteinte ?
 lumAll,Lumière allumée ?
-pasBouge,Pas de mouvement depuis temps
+pasBouge 4,Pas de mouvement depuis temps
 dansCuisine,Dans cuisine
 dansChambre,Dans chambre
 dansSalon,Dans salon

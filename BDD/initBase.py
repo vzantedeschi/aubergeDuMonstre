@@ -127,6 +127,10 @@ def initialize() :
                     r_acts.append(obj)
         if pb == False :
             #ajoute les actions de la regle
+            for cond in r_conds:
+                newCond = tables.Condition(nom= cond.nom, valeur=cond.valeur, description = cond.description)
+                newCond.save()
+                
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
             regle.save()
 

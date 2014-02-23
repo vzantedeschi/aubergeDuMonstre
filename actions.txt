@@ -13,5 +13,5 @@ eteintEau,Éteindre le système anti-incendie
 fermeRideau,Cacher les miroirs 
 ouvreRideau,Dévoiler les miroirs
 notifieRes,Envoyer notification aux résidents ?
-allumeInt,Allumer un interrupteur
-eteintInt,Eteindre un interrupteur
+allumePris,Allumer une prise
+eteintPris,Eteindre une prise
