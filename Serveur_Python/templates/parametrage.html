@@ -7,6 +7,313 @@
 {% block body %}
 
 {% include "header.html" %}
+<div class="container">
+
+    <form action="/parametrage" method="POST">
+
+        <div class="row">
+        <div class="col-lg-6">
+        	<h2> Conditions </h2>
+        	<div class="checkbox">
+        		<label>
+            		<input type="checkbox" name="condition" value="porteOuv">
+            		Porte ouverte
+            	</label>
+            </div>
+
+            <div class="checkbox">
+        		<label>
+            		<input type="checkbox"  name="condition" value="porteFer" />
+            		Porte fermée
+            	</label>
+            </div>
+
+            <div class="checkbox">
+        		<label>
+            		<input type="checkbox"  name="condition" value="fenOuv" />
+            		Fenêtre ouverte
+            	</label>
+            </div>
+
+            <div class="checkbox">
+        		<label>
+            		<input type="checkbox"  name="condition" value="fenFer" />
+            		Fenêtre fermée
+            	</label>
+            </div>
+            
+            <div class="checkbox">
+        		<label>
+            		<input type="checkbox"  name="condition" value="lumAll" />
+            		Lumière allumée
+            	</label>
+            </div>
+
+            <div class="checkbox">
+        		<label>
+            		<input type="checkbox"  name="condition" value="lumEt" />
+            		Lumière éteinte
+            	</label>
+            </div>
+
+            <div class="checkbox">
+        		<label>
+            		<input type="checkbox"  name="condition" value="climAll" />
+            		Climatisation allumée
+            	</label>
+            </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="climEt" />
+	            	Climatisation éteinte
+	            </label>
+	        </div>
+
+	        <div class="checkbox">
+            	<label>
+            		<input type="checkbox"  name="condition" value="eauAll" />
+            		Système anti-incendie allumé
+            	</label>
+            </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="eauEt" />
+	            	Système anti-incendie éteint
+	            </label>
+	        </div>
+
+	        <div class="checkbox">
+	            <label>
+		            <input type="checkbox"  name="condition" value="intAll" />
+		            Interrupteur enclenché
+		        </label>
+		    </div>
+
+		    <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="intEt" />
+	            	Interrupteur désenclenché
+	            </label>
+	        </div>
+
+	        <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="repNon" />
+	            	L'utilisateur répond non
+	            </label>
+	        </div>
+
+	        <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="repOui" />
+	            	L'utilisateur répond oui
+	            </label>
+	        </div>
+
+	        <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="mouv" />
+	            	Détection mouvement
+	            </label>
+	        </div>
+
+	        <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="vampire" />
+	            	Présence Vampire
+	            </label>
+	        </div>
+
+	        <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="meduse" />
+	            	Présence Méduse
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="intrus" />
+	            	Présence intrus
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="sirene" />
+	            	Présence Sirène
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="invite" />
+	            	Présence invité
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="dansCuisine" />
+	            	Dans cuisine
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="dansChambre" />
+	            	Dans chambre
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="dansSalon" />
+	            	Dans salon
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="dansCouloir" />
+	            	Dans couloir
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="condition" value="dansBain" />
+	            	Dans salle de bain
+	            </label>
+	        </div>
+        </div>
+
+        <div class="col-lg-6 form-group">
+        	<h2> Actions </h2>
+        	<div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="allumeClim" />
+	            	Allumer la climatisation
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="eteintClim" />
+	            	Eteindre la climatisation
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="ouvreVolet" />
+	            	Ouvrir les volets
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="fermeVolet" />
+	            	Fermer les volets
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="allumeLum" />
+	            	Allumer la lumière
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="eteintLum" />
+	            	Eteindre la lumière
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="fermePiece" />
+	            	Fermer une piece
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="ouvrePiece" />
+	            	Ouvrir une pièce
+	            </label>
+	        </div>
+            <!--<label>Ouvrir une "porte"</label>
+            <input type="checkbox"  name="action" value="ouvreVolet" />
+            <label>Fermer une "porte"</label>
+            <input type="checkbox"  name="action" value="fermeVolet" />-->
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="allumeEau" />
+	            	Activer le système anti-incendie
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="eteintEau" />
+	            	Désactiver le système anti-incendie
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="fermeRideau" />
+	            	Cacher les miroirs
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="ouvreRideau" />
+	            	Dévoiler les miroirs
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="allumePrise" />
+	            	Allumer une prise
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="eteintPrise" />
+	            	Eteindre une prise
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="notifieRes" />
+	            	Envoyer notification aux résidents
+	            </label>
+	        </div>
+
+            <div class="checkbox">
+	            <label>
+	            	<input type="checkbox"  name="action" value="question" />
+	            	Poser question aux résidents
+	            </label>
+	        </div>
+        </div>
+    	</div>
+
+        <input class="form-control" type="submit" value="Creer" />
+    </form>
+
+</div>
 
 
 {% endblock body %}

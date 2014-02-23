@@ -10,7 +10,7 @@
       </button>
     </div>
     <div class="navbar-collapse collapse" id="navbar-main">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav navbar-left">
         <li>
           <a href="/">Accueil</a>
         </li>
@@ -23,33 +23,29 @@
         <li>
           <a href="/parametrage">Parametrages</a>
         </li>
+        
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+          {% if user %}
+              <a href="/logout"><span class="glyphicon glyphicon-remove"></span> Logout<span class="username">
+                  {{user.identifiant}}</span></a>
+          {% else %}
+              <a href="/login"><span class="glyphicon glyphicon-user"></span> S'identifier</a>
+          {% endif %}
+          </li>
+        </ul>
       </ul>
-    
-  
-
-<!--{% if user %}
-        <span class="logout right-link">
-            <a href="/logout"><span class="glyphicon glyphicon-remove"></span> Logout</a>
-        </span>
-        <span class="username right-link">
-            {{user.username}}
-        </span>
-    {% else %}-->
-        <span class="login right-link, pull-right">
-            <a href="/login"><span class="glyphicon glyphicon-user"></span> Login</a>
-        </span>
-    <!--{% endif %}-->
     </div>
 </div>
 
 </div>
 
-<div class="page-header" id="banner">
-  <div class="alert alert-warning alert-dismissable" id="notification">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <img src="../static/img/cutlery.png" width="40px"/>
-    <strong>Attention!</strong> Un intrus se trouve dans la pièce <strong id="piece">?</strong>. Souhaitez-vous le manger?
-    <button type="button" class="btn btn-default btn-sm" onclick="alertOui()">OUI</button>
-    <button type="button" class="btn btn-default btn-sm" onclick="alertNon()">NON</button>
+  <div class="page-header" id="banner">
+    <div class="hidden alert alert-warning alert-dismissable" id="notification">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <img src="../static/img/cutlery.png" width="40px"/>
+      <strong>Attention!</strong> Un intrus se trouve dans la pièce <strong id="piece">?</strong>. Souhaitez-vous le manger?
+      <button type="button" class="btn btn-default btn-sm" onclick="alertOui()">OUI</button>
+      <button type="button" class="btn btn-default btn-sm" onclick="alertNon()">NON</button>
+    </div>
   </div>
-</div>

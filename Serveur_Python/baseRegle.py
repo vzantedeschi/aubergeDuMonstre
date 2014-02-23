@@ -61,21 +61,22 @@ def activerActionneur(idPiece, idAct):
                 print "Envoi au proxy"
                 connectProxy.send(trameActionneur(actionneurConcerne, True))
 
+def activerActionneur(idAct):
     print "Activation de l'actionneur"
     # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
         print "Envoi au proxy"
-        connectProxy.send(trameActionneur(actionneurConcerne, True))
+        connectProxy.send(trameActionneur(idAct, True))
         
 def activerActionneur_type(idPiece, typeActionneur):
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
-    for a in actionneurs : 
-        if a.capteur_type == typeActionneur : 
+    for a in actionneurs: 
+        if a.capteur_type == typeActionneur: 
             print "Activation de l'actionneur"
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
                 print "Envoi au proxy"
-                connectProxy.send(trameActionneur(actionneurConcerne, True))
+                connectProxy.send(trameActionneur(a.actionneur_id, True))
 
 def desactiverActionneur(idPiece, idAct):
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
@@ -85,33 +86,120 @@ def desactiverActionneur(idPiece, idAct):
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
                 print "Envoi au proxy"
-                connectProxy.send(trameActionneur(actionneurConcerne, False))   
+                connectProxy.send(trameActionneur(actionneurConcerne, False)) 
+                
+def desactiverActionneur(idAct):
+    if connected == True :
+        print "Envoi au proxy"
+        connectProxy.send(trameActionneur(idAct, False))
             
 def desactiverActionneur_type(idPiece, typeActionneur):
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
-    for a in actionneurs : 
-        if a.capteur_type == typeActionneur : 
-            print "Désactivation de l'actionneur"
+    for a in actionneurs:
+        if a.capteur_type == typeActionneur:
+            print "Desactivation de l'actionneur"
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
                 print "Envoi au proxy"
-                connectProxy.send(trameActionneur(actionneurConcerne, False))
-
+                connectProxy.send(trameActionneur(a.actionneur_id, False))
+                
 def ouvrirVolets(idPiece):    
-    # Allume l'interrupteur simulant les volets
+    # Allume la prise simulant les volets
     print "Verrouillage actif : volets en cours d'ouverture"
     activerActionneur_type(idPiece, 'VOL')        
 
 def fermerVolets(idPiece):
-    # Allume l'interrupteur simulant les volets
-    print "Verrouillage actif : volets en cours d'ouverture"
-    desactiverActionneur_type(idPiece, 'VOL')   
+    # Eteint la prise simulant les volets
+    print "Verrouillage desactive : volets en cours de fermeture"
+    desactiverActionneur_type(idPiece, 'VOL')
+    
 #----------------------------CONDITIONS--------------------------------------------------------------------------------------------------------     
-
+   
 def tempInf(valeur) :
     currentTemp = tables.Etat.temperature
     if currentTemp < valeur : 
-        return "tempInf"   
+        return "tempInf" 
+    
+def ouvrirRideaux(idPiece):
+    print "Ouverture des rideaux"
+    activerActionneur_type(idPiece, 'RID') 
+
+def fermerRideaux(idPiece):
+    print "Fermeture des rideaux"
+    desactiverActionneur_type(idPiece, 'RID')
+
+def allumerClim(idPiece):
+    print "Allumage de la climatisation"
+    activerActionneur_type(idPiece, 'CLIM')
+
+def eteindreClim(idPiece):
+    print "Extinction de la climatisation"
+    desactiverActionneur_type(idPiece, 'CLIM')
+
+def allumerAnIn(idPiece):
+    print "Allumage du systeme anti incendie"
+    activerActionneur_type(idPiece, 'ANIN')
+
+def eteindreAnIn(idPiece):
+    print "Extinction du systeme anti incendie"
+    desactiverActionneur_type(idPiece, 'ANIN')
+
+def commande(item):
+    global rfidDetected
+    #récupération type de donnée
+    typeInfo = item[u'_cls']
+    #récupération de l'id de la pièce concernée
+    piece_id = item[u'piece_id']
+    #récupération état de la pièce concernée
+    etat = tables.Etat.objects(piece_id = piece_id).first()
+    print("\nEtat de la piece concernée")
+    print("Numero :",etat.piece_id)
+    print("Rideaux ouverts :",etat.rideauxOuverts)
+    print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
+    print("Climatisation activee :",etat.climActivee)
+    print("Portes fermees :",etat.portesFermees)
+    print("Volets ouverts :",etat.voletsOuverts)
+    print("Prise allumee :",etat.priseDeclenchee)
+    print("Temperature :",etat.temperature)
+    print("Humidite :",etat.humidite)
+    print("Personnages presents :",etat.persosPresents)
+    print '\n'
+
+    if (typeInfo == "Donnee.Presence"):
+        print '\nCommande suivant une presence en cours'
+
+        if rfidDetected == 0 :
+            print ("Intrus est dans la piece :",piece_id)
+
+            # Un seul intrus dans la maison en même temps sinon => comment savoir si un
+            # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
+            # vient de changer de pièce (enlever id de la pièce précédente)
+
+            # Si l'intrus est dans la pièce 1 'Couloir', il n'est plus ignoré
+
+            if piece_id == 1:
+                persoAjoute = tables.Personne.objects(nom = "Intrus").first()
+                persoAjoute.ignore = False
+                persoAjoute.save()
+
+            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+            etatPiece.persosPresents.append(persoAjoute)
+            etatPiece.save()        
+
+            ## Enlever le perso des autres pieces
+            listePieces = tables.Etat.objects
+            for p in listePieces :
+                if p.piece_id != piece_id:
+                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                    if persoAjoute in etatAChanger.persosPresents:
+                        etatAChanger.persosPresents.remove(persoAjoute)
+                        etatAChanger.save()
+                            
+        elif rfidDetected == 1 :
+            print ("Meduse est dans la piece :",piece_id)
+            pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
+
+            persoAjoute = tables.Personne.objects(personne_id = rfidDetected).first()
 
 def tempSup(valeur) : 
     currentTemp = tables.Etat.temperature

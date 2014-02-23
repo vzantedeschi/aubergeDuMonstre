@@ -11,7 +11,7 @@
 <div class="container">
 	<div class="page-header" id="banner">
 		<div class="row">
-			<div class="col-md-6" id="maisonCtrl">
+			<div class="col-md-6" id="maison">
 			</div>
 			<div class="col-md-6" id="formu">
 				<h3>Cliquez sur une pièce pour manipuler ses actionneurs</h3>
@@ -19,10 +19,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
 
 <div class="text-center">
 	<p>Copyright By H4213</p>
@@ -33,7 +29,7 @@
 
 {% block javascript %}
 {% raw %}
-<script src="static/js/maisonCtrl.js"></script>
+<script src="static/js/controle.js"></script>
 {% endraw %}
 {% raw %}
 <script id="li-template" type="text/x-handlebars-template">
@@ -43,15 +39,32 @@
 		</div>
         {{#each result}}
         <li class="list-group-item">
-        <div class="row">
-        <div class="col-lg-3 text-center">{{_id}}</div>
-        <div class="col-lg-3">{{capteur_type}}</div>
-		<div class="col-lg-3"><button onclick="valider()" value="{{_id}}" class="btn btn-default">Activer</button></div>
-    	<div class="col-lg-3"><button onclick="valider()" value="{{_id}}" class="btn btn-default">Désactiver</button></div>
-        </div>
+	        <div class="row">
+		        <div class="col-lg-3 text-center">{{_id}}</div>
+		        <div class="col-lg-3">{{capteur_type}}</div>
+				<div class="col-lg-3"><button onclick="valider(this)" value="{{_id}}" class="btn btn-default">Activer</button></div>
+		    	<div class="col-lg-3"><button onclick="valider(this)" value="{{_id}}" class="btn btn-default">Désactiver</button></div>
+	        </div>
         </li>
         {{/each}}
 	</div>
+	<li class="list-group-item">
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				Ajouter un dispositif
+			</div>
+			<div class="col-lg-4 text-center">
+				<a href="/add/capteur">
+			    	<button class="btn btn-default">Nouveau Capteur</button>
+			    </a>
+			</div>
+			<div class="col-lg-4 text-center">
+			    <a href="/add/actionneur">
+			    	<button class="btn btn-default">Nouveau Actionneur</button>
+			    </a>
+			</div>
+		</div>
+	</li>
 </script>
 {% endraw %}
 {% endblock %}

@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
+import hashlib
 
 from mongoengine import *
 import datetime
+
+def hash_password(password, salt):
+    return hashlib.sha512(salt + hashlib.sha256(password).hexdigest()).hexdigest()
 
 class Capteur(Document):
 	capteur_id = IntField(primary_key=True)
@@ -22,6 +27,15 @@ class Personne(Document):
 	personne_id = IntField(unique=True)	
 	nom = StringField(default="Intrus")
 	ignore = BooleanField(default=True)
+
+class Utilisateur(Document):
+	identifiant = StringField(unique=True)
+
+	secret_hash = StringField(required=True)
+	salt = StringField(required=True)
+
+	def valider_mot_passe(self, mot):
+		return hash_password(mot, self.salt) == self.secret_hash
 
 class Etat(Document):
     piece_id = IntField(primary_key=True)
