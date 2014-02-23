@@ -8,14 +8,67 @@ import time
 import random
 import threading
 import generateurTrames
+import mongoengine
+sys.path.append('../BDD')
+import tables
 
 def envoiTramesAbsence():
     trame = gen.nothingDetected()
     trame = trame.encode()
     socketClient.send(trame)
 
+class ThreadSimuActionneurs(threading.Thread):
+    # Simulation de la reponse des capteurs suite a l'activation d'un actionneur
+    def __init__(self):
+        threading.Thread.__init__(self)
+        
+    def run(self):
+        #récupération infos actionneurs dans la base
+        actionneurs = tables.Actionneur.objects
+        actionneursId = map(lambda i : i.actionneur_id, actionneurs)
+
+        continuer = True
+        while continuer:
+            continuer = False
+            # Reception des trames d'actionneurs
+            #msg_recu = socketProxy.recv(28)       
+            #msg_recu = msg_recu.decode()
+            # Pour tester
+            msg_recu = 'A55A6B0570000000FF9F1E0530D1'
+            # Recupere l'identifiant
+            ident = msg_recu[16:24] 
+            ident = int(ident,16)
+
+            if ident in actionneursId:
+                bitAction = msg_recu[8]
+                # Piece concernee
+                piece = tables.Piece.objects(__raw__={u'actionneurs':{u'$elemMatch':{u'$id':ident}}}).first().piece_id
+                # Type Capteur concerne
+                typeCapteur = tables.Actionneur.objects(actionneur_id=ident).first().capteur_type
+                if typeCapteur == 'VOL':
+                    if bitAction == '5':
+                        trameGen = gen.contactVoletFerme(piece)
+                    elif bitAction == '7':
+                        print "trame envoyee"
+                        trameGen = gen.contactVoletOuvert(piece)
+                elif typeCapteur == 'FEN':
+                    if bitAction == '5':
+                        trameGen = gen.contactFenetreFermee(piece)
+                    elif bitAction == '7':
+                        trameGen = gen.contactFenetreOuverte(piece)
+
+                trameGen = trameGen.encode()
+                socketClient.send(trameGen) 
+
+                
+
+
 hote = 'localhost'
 port = 13700
+
+#Connexion a la BDD
+db_connec = mongoengine.connect('GHome_BDD')
+db = db_connec.GHome_BDD
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -43,6 +96,9 @@ gen = generateurTrames.generateurTrames("../identifiants.txt")
 #Creation d'un timer pour l'envoi de trames nulles du capteur de presence toutes les 2 minutes
 t = threading.Timer(120, envoiTramesAbsence)
 t.start()
+
+tsa = ThreadSimuActionneurs()
+tsa.start()
 
 print "BIENVENUE DANS L'AUBERGE DU MONSTRE !"
 print "\nA travers ce menu, vous pourrez simuler des scenarios"
