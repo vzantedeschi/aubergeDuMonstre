@@ -51,7 +51,7 @@ def get_presence():
     return json.dumps(presence)
     
 def TimerFunc(thread):
-    thread.checkstatus = 1
+    thread.checkStatus = 1
     
 class ThreadCommand(threading.Thread):
 
@@ -86,14 +86,14 @@ class ThreadCommand(threading.Thread):
         db_connec = mongoengine.connect('GHome_BDD')
         db = db_connec.GHome_BDD
         self.checkStatus = 1
+        t = threading.Timer(2,TimerFunc,[self])
 
         while True :
             try :
                 if self.checkStatus == 1:
-                    print 'thread command status a 1'
-                    # Timer avec 2sec de période remettant le checkstatus à 1
-                    t = threading.Timer(10,TimerFunc,[self])
-                    t.start()
+                    # Timer avec 2sec de période remettant le checkstatus à 1         
+                    threading.Timer(2, TimerFunc, [self]).start()
+                    self.checkStatus = 0
 
                     
                     # Fais appel à la base de règle 
@@ -165,7 +165,7 @@ class ThreadCommand(threading.Thread):
                         # print 'Pas de commande implementee'
 
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
-                    self.checkStatus = 0
+                    
             except KeyboardInterrupt:
                 t.cancel()
                 break
