@@ -12,6 +12,10 @@
     <div class="alert alert-danger">
         Identifiant ou mot de passe incorrect!
     </div>
+{%elif warn%}
+    <div class="alert alert-warning">
+        Il faut se connecter pour accéder à cette section!
+    </div>
 {%endif%}
 
     <form action="/login" method="POST" autocomplete="on">
@@ -26,7 +30,7 @@
             <input type="password" class="form-control" name="password" />
         </div>
 
-        <input class="form-control" type="submit" value="S'identifier" />
+        <input class="form-control" type="submit" value="Se connecter" />
     </form>
 
 </div>

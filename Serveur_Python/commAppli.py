@@ -7,13 +7,12 @@ import json
 from mongoengine import *
 import sys
 import datetime
-from protege import rest_api
 sys.path.append('../BDD')
 import tables
 
 app = Flask(__name__)
 db_connec = connect('GHome_BDD')
-app.secret_key = '\xdf\x0e4\xaa\xdb:\xa8\xc6\r\x14\x96|\xc56\xfaq=\xb3\xb9\xc6\xaf\xab\x7fe'
+app.secret_key = '\x11\x7f\xa7\xd8\xb6\xac\x83[=O@\x9c\x89\x0b\x13Y\x16\xcb\xf9\xcd<c\xdc\x12'
 
 ### fonction de conversion des instances mongoengine en dictionnaires json ###
 Document.to_dict = lambda s : json.loads(s.to_json())
@@ -53,7 +52,7 @@ def requires_login(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('logged_in', None):
-            return redirect('/login')
+            return render_template('login.html', warn=True)
         else:
             return f(*args, **kwargs)
     return decorated_function
@@ -62,12 +61,39 @@ def requires_admin_rights(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('logged_in', None):
-            return redirect('/login')
+            return render_template('login.html', warn=True)
         elif session['logged_in'] != 'administrateur':
         	return redirect('/')
         else :
             return f(*args, **kwargs)
     return decorated_function
+
+@app.context_processor
+def inject_user():
+    if session.get('logged_in', None):
+        return dict(user=tables.Utilisateur.objects.get(identifiant=session['logged_in']))
+    else:
+        return dict(user=None)
+
+@app.route('/login', methods=['GET'])
+def login():
+	return render_template('login.html', error=False, warn=False)
+
+@app.route('/login', methods=['POST'])
+def process_login():
+    ident, mot = request.form['username'], request.form['password']
+    user = tables.Utilisateur.objects(identifiant=ident).first()
+    if user is None or user.valider_mot_passe(mot):
+        app.logger.warning("Impossible de se logger : {}".format(user))
+        return render_template('login.html', error=True, username=ident)
+    else:
+        session['logged_in'] = user.identifiant
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect('/')
 
 @app.route('/')
 def hello():
@@ -100,7 +126,8 @@ def get_persos():
 	piece_id = int(piece_id)
 	etat = tables.Etat.objects(piece_id=piece_id).first()
 	persos = [p.to_dict() for p in etat.persosPresents]
-	reponse = dict(ok=True, result=persos)
+	logged = session.get('logged_in', None)
+	reponse = dict(ok=True, result=persos, logged=str(logged))
 	return json.dumps(reponse)
 
 @app.route('/surveillance/etat/<piece_id>')
@@ -143,33 +170,6 @@ def reponse():
 		reponse.reponse = True
 	reponse.save()
 	return "ok"
-
-@app.route('/login', methods=['GET'])
-def login():
-	return render_template('login.html', error=False)
-
-@app.route('/login', methods=['POST'])
-def process_login():
-    ident, mot = request.form['username'], request.form['password']
-    user = tables.Utilisateur.objects(identifiant=ident).first()
-    if user is None or user.valider_mot_passe(mot):
-        app.logger.warning("Impossible de se logger : {}".format(user))
-        return render_template('login.html', error=True, username=ident)
-    else:
-        session['logged_in'] = user.identifiant
-    return redirect('/')
-
-@app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    return redirect('/')
-
-@app.context_processor
-def inject_user():
-    if session.get('logged_in', None):
-        return dict(user=tables.Utilisateur.objects.get(identifiant=session['logged_in']))
-    else:
-        return dict(user=None)
 
 if __name__ == '__main__':
     app.run(debug=True)
