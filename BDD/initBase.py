@@ -65,8 +65,7 @@ def initialize() :
             condition = c_nom
             valeur = None
             
-        print valeur
-        cond = tables.Condition(nom = condition, valeur=valeur, description = desc)
+        cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
         cond.save()
         
     #Initialisation actions
@@ -76,7 +75,7 @@ def initialize() :
 
     for l in liste:
         a_nom, desc = l.split(',')
-        act = tables.Action(nom =a_nom, description = desc)
+        act = tables.ActionGenerique(nom =a_nom, description = desc)
         act.save()
         
     #Initialisation regles
@@ -95,10 +94,10 @@ def initialize() :
                 if len(listeConditions) > 1 :
                     condition = listeConditions[0]
                     valeur = listeConditions[1]
-                    obj = tables.Condition.objects(nom = condition, valeur = valeur).first()
                 else :
                     condition = elem
-                    obj = tables.Condition.objects(nom = condition).first()
+                
+                obj = tables.Condition.objects(nom = condition).first()
                 if obj == None :
                     print 'condition ' + elem +' ne correspond a rien'
                     pb = True

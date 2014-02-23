@@ -9,7 +9,7 @@ sirene,Présence sirène
 invite,Présence invité
 fenOuv,Fenêtre ouverte
 fenFer,Fenêtre fermée
-humInf ,Seuil inférieur d'humidité atteint
+humInf,Seuil inférieur d'humidité atteint
 humSup,Seuil supérieur à d'humidité atteint
 pasChange,Pas de changement depuis temps ?
 mouv,Détection mouvement
