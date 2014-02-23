@@ -45,17 +45,13 @@ class ThreadSimuActionneurs(threading.Thread):
                 piece = tables.Piece.objects(__raw__={u'actionneurs':{u'$elemMatch':{u'$id':ident}}}).first().piece_id
                 # Type Capteur concerne
                 typeCapteur = tables.Actionneur.objects(actionneur_id=ident).first().capteur_type
+                # Le seul type de capteur donc on peut simuler la réponse est le contact pour les volets
                 if typeCapteur == 'VOL':
                     if bitAction == '5':
                         trameGen = gen.contactVoletFerme(piece)
                     elif bitAction == '7':
                         print "trame envoyee"
                         trameGen = gen.contactVoletOuvert(piece)
-                elif typeCapteur == 'FEN':
-                    if bitAction == '5':
-                        trameGen = gen.contactFenetreFermee(piece)
-                    elif bitAction == '7':
-                        trameGen = gen.contactFenetreOuverte(piece)
 
                 trameGen = trameGen.encode()
                 socketClient.send(trameGen) 
