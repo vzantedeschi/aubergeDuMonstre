@@ -504,56 +504,7 @@ def commande():
         print '\n'
 
         # ------partie deplacer les personnages dans les donnees -------------------------------
-        #!!!!!!!!!!!!!!!!!!!!!!!!!partie obsolete !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #if (typeInfo == "Donnee.Presence"):
-        if len(etat.persosPresents) != 0 :
-            if rfidDetected == 0 :
-                print ("Intrus est dans la piece :",piece_id)
-
-                # Un seul intrus dans la maison en même temps sinon => comment savoir si un
-                # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
-                # vient de changer de pièce (enlever id de la pièce précédente)
-                if piece_id == 1:
-                    newPerso = tables.Personne(personne_id = idIntrus, name ="Intrus", ignore = False)
-                    newPerso.save()
-                    idIntrus = idIntrus+1
-                    
-                persoABouge = tables.Personne.objects(ignore = False)
-
-                if persoABouge != None:
-                    #enregistrer le perso dans la nouvelle piece
-                    persoABouge = persoABouge.first()
-                    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                    etatPiece.persosPresents.append(persoABouge)
-                    etatPiece.save()  
-                    
-            else:                 
-                #TODO ------ parcourir le fichier personnage.txt pour reconnaitre dedans que 1 c est meduse -----
-                    
-                if rfidDetected == 1 :
-                    print ("Meduse est dans la piece :",piece_id)
-                    
-                elif rfidDetected == 2 :
-                    print ("Vampire est dans la piece :",piece_id)
-
-                persoABouge = tables.Personne.objects(personne_id = rfidDetected).first()
-                #enregistrer le perso dans la nouvelle piece
-                etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-                etatPiece.persosPresents.append(persoABouge)
-                etatPiece.save()        
-
-            if persoABouge != None:            
-                ## Enlever le perso des autres pieces
-                listePieces = tables.Etat.objects
-                for p in listePieces :
-                    if p.piece_id != piece_id:
-                        etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
-                        if persoABouge in etatAChanger.persosPresents:
-                            etatAChanger.persosPresents.remove(persoABouge)
-                            etatAChanger.save()
-
-        # Remettre rfidDetected a 0
-        rfidDetected = 0
+ 
         # ------fin partie deplacer les personnages dans les donnees -------------------------------   
         # ------partie recherche des regles ---------------------------------------------
         #récupération des regles de la base de donnees

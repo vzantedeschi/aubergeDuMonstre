@@ -34,6 +34,8 @@ class Etat(Document):
     lumiereAllumee = BooleanField(default=False)
     temperature = IntField()
     humidite = IntField()
+    dernierEvenement = DateTimeField(required=True)
+    dernierMouvement = DateTimeField(required=True)
     persosPresents = SortedListField(ReferenceField('Personne'))
 
 class Donnee(Document) :
