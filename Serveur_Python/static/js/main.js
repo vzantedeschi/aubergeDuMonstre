@@ -91,11 +91,13 @@ function updateEtatPiece(piece) {
             drawPerso(piece,persos[j]);
             if (new String(persos[j].nom).valueOf() == new String("Intrus")){
                 if (new String(persos[j].ignore).valueOf() == new String("false")) {
-                    $('#piece').text(pieces[piece - 1].name);
-                    $('#notification').show();
-                    $("#notification").removeClass('hidden');
-                    //la prochaine fois, on ignore cet intrus
-                    $.getJSON('/surveillance/' + persos[j].personne_id);
+                    if (new String(data.logged).valueOf() != new String("None")) {
+                        $('#piece').text(pieces[piece - 1].name);
+                        $('#notification').show();
+                        $("#notification").removeClass('hidden');
+                        //la prochaine fois, on ignore cet intrus
+                        $.getJSON('/surveillance/' + persos[j].personne_id);
+                    }
                 }
             }
         }   
