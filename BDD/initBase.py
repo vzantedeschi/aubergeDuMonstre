@@ -107,10 +107,12 @@ def initialize() :
                     break
                 else :
                     r_acts.append(obj)
- 
+        print pb
         if pb == False :
             #ajoute les actions de la regle
+            print "on ajoute les actions dans la table regle"
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
+            print "Saving regle"
             regle.save()
 
         

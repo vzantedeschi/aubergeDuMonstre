@@ -10,6 +10,7 @@ import interpreteur
 sys.path.append('../BDD')
 import tables
 import initBase
+import threadsDefined
 
 ############# CONNEXION PASSERELLE ###################
 connexion_avec_passerelle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -83,6 +84,9 @@ initBase.initialize()
 #récupération identifiants dans la base
 identifiants = tables.Capteur.objects
 identifiants = map(lambda i : i.capteur_id, identifiants)
+
+threadCommand = threadsDefined.ThreadCommand()
+threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
 try: 
