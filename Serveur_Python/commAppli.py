@@ -83,9 +83,14 @@ def surveillance():
 def controle():
     return render_template('controle.html')
 
-@app.route('/parametrage')
+@app.route('/parametrage', methods=['GET'])
 @requires_admin_rights
 def parametrage():
+    return render_template('parametrage.html')
+
+@app.route('/parametrage', methods=['POST'])
+@requires_admin_rights
+def send_parametrage():
     return render_template('parametrage.html')
 
 @app.route('/surveillance/pieces')
