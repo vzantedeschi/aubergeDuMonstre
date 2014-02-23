@@ -81,7 +81,7 @@ def interpretation(trame, now):
 
         capteur_rfid = tables.RFID(piece_id =piece_id, date = now, traite = False, resident_id = perso)
         capteur_rfid.save()
-        etatPiece.
+
         etatPiece.dernierEvenement = date
         etatPiece.save()  
 
