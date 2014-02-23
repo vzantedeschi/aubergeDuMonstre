@@ -183,11 +183,11 @@ if __name__ == '__main__' :
     initialize()
     import random
     ##### Ajout intrus dans le couloir ######
-    piece = tables.Piece.objects(name="Couloir").first()
-    etat = tables.Etat.objects(piece_id=piece.piece_id).first()
-    id = random.randint(10, 100)
-    intrus = tables.Personne(personne_id=id,ignore=False)
-    intrus.save()
-    etat.persosPresents.append(intrus)
-    etat.save()
-    print "ça y est : " + intrus.nom + " est dans le couloir"
+    #piece = tables.Piece.objects(name="Couloir").first()
+    #etat = tables.Etat.objects(piece_id=piece.piece_id).first()
+    #id = random.randint(10, 100)
+    #intrus = tables.Personne(personne_id=id,ignore=False)
+    #intrus.save()
+    #etat.persosPresents.append(intrus)
+    #etat.save()
+    #print "ça y est : " + intrus.nom + " est dans le couloir"
