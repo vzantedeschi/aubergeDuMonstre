@@ -84,8 +84,7 @@ class Action(Document):
 class Condition(Document):    
     nom = StringField(required = True)
     description = StringField(required = True)
-
-    
+    valeur = FloatField(default = None)
 
 if __name__ == '__main__' :
 

@@ -108,25 +108,25 @@ def fermerVolets(idPiece):
     desactiverActionneur_type(idPiece, 'VOL')   
 #----------------------------CONDITIONS--------------------------------------------------------------------------------------------------------     
 
-def tempInf() :
-    currentTemp = etat.temperature
+def tempInf(valeur) :
+    currentTemp = tables.Etat.temperature
     if currentTemp < valeur : 
         return "tempInf"   
 
-def tempSup() : 
-    currentTemp = etat.temperature
+def tempSup(valeur) : 
+    currentTemp = tables.Etat.temperature
     if currentTemp > valeur :
         return "tempSup"
         
 def porteOuv() :
-    return etat.portesFermees == False
+    return tables.Etat.portesFermees == False
     
 def porteFer() :
-    return etat.portesFermees == True
+    return tables.Etat.portesFermees == True
 
 def vampire():
     trouve = False
-    for p in etat.persosPresents : 
+    for p in tables.Etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -144,7 +144,7 @@ def vampire():
 
 def meduse ():
     trouve = False
-    for p in etat.persosPresents : 
+    for p in tables.Etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -162,7 +162,7 @@ def meduse ():
     
 def intrus() :
     trouve = False
-    for p in etat.persosPresents : 
+    for p in tables.Etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -179,7 +179,7 @@ def intrus() :
 
 def sirene() : 
     trouve = False
-    for p in etat.persosPresents : 
+    for p in tables.Etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -197,7 +197,7 @@ def sirene() :
 
 def invite() : 
     trouve = False
-    for p in etat.persosPresents : 
+    for p in tables.Etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -219,12 +219,12 @@ def fenOuv() :
 def fenFer() : 
     return tables.Etat.voletsOuverts == False
 
-def humInf() : 
+def humInf(valeur) : 
     currentHum = tables.Etat.humidite
     if currentTemp < valeur :
         return "humInf"
 
-def humSup() : 
+def humSup(valeur) : 
     currentHum = tables.Etat.humidite
     if currentSup < valeur :
         return "humSup"
@@ -486,17 +486,17 @@ def commande():
         piece_id = piece.piece_id
         #récupération état de la pièce concernée
         etat = tables.Etat.objects(piece_id = piece.piece_id).first()
-        print("\nEtat de la piece concernée")
-        print("Numero :",etat.piece_id)
-        print("Rideaux ouverts :",etat.rideauxOuverts)
-        print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
-        print("Climatisation activee :",etat.climActivee)
-        print("Portes fermees :",etat.portesFermees)
-        print("Volets ouverts :",etat.voletsOuverts)
-        print("Prise allumee :",etat.priseDeclenchee)
-        print("Temperature :",etat.temperature)
-        print("Humidite :",etat.humidite)
-        print("Personnages presents :",etat.persosPresents)
+        # print("\nEtat de la piece concernée")
+        # print("Numero :",etat.piece_id)
+        # print("Rideaux ouverts :",etat.rideauxOuverts)
+        # print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
+        # print("Climatisation activee :",etat.climActivee)
+        # print("Portes fermees :",etat.portesFermees)
+        # print("Volets ouverts :",etat.voletsOuverts)
+        # print("Prise allumee :",etat.priseDeclenchee)
+        # print("Temperature :",etat.temperature)
+        # print("Humidite :",etat.humidite)
+        # print("Personnages presents :",etat.persosPresents)
         #a ajouter : dernier changement en date
         #               interrupteur (changements jusqu a la base)
         #               reponse utilisateur eventuelle
@@ -575,14 +575,7 @@ def commande():
             #on vérifie si la regle r remplit les conditions
             while conditionsRemplies == True and i < len(r.conditions) :
                 print "on a au moins une condition remplie"
-                nomCondition = r.conditions[i].nom
-                listeConditions = nomCondition.split()
-                if len(listeConditions) > 1 :
-                    condition = listeConditions[0]
-                    valeur = listeConditions[1]
-                else :
-                    condition = nomCondition
-                print condition
+                    
                 switchCondition = {"tempInf" : tempInf,
                                    "tempSup" : tempSup,
                                    "porteOuv" : porteOuv,
@@ -615,7 +608,15 @@ def commande():
                                    "intEt" : intEt,
                                    "repNon" : repNon,
                                    "repOui" : repOui}
-                conditionsRemplies = switchCondition[condition]()
+                                   
+                nomCondition = r.conditions[i].nom
+                valeurCondition = r.conditions[i].valeur
+                
+                if valeurCondition != None: 
+                    conditionsRemplies = switchCondition[nomCondition](valeurCondition)
+                else :
+                    conditionsRemplies = switchCondition[nomCondition]()
+                
                 i = i + 1
                 print i
             

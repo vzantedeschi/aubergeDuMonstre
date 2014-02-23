@@ -63,7 +63,10 @@ def initialize() :
             valeur = listeConditions[1]
         else :
             condition = c_nom
-        cond = tables.Condition(nom = condition, description = desc)
+            valeur = None
+            
+        print valeur
+        cond = tables.Condition(nom = condition, valeur=valeur, description = desc)
         cond.save()
         
     #Initialisation actions
@@ -87,15 +90,15 @@ def initialize() :
         pb = False
         if pb == False :
             r_conds = [] 
-            for elem in l_cond:
-                
+            for elem in l_cond :
                 listeConditions = elem.split()
                 if len(listeConditions) > 1 :
                     condition = listeConditions[0]
                     valeur = listeConditions[1]
+                    obj = tables.Condition.objects(nom = condition, valeur = valeur).first()
                 else :
                     condition = elem
-                obj =tables.Condition.objects(nom = condition).first()
+                    obj = tables.Condition.objects(nom = condition).first()
                 if obj == None :
                     print 'condition ' + elem +' ne correspond a rien'
                     pb = True
@@ -128,7 +131,6 @@ def initialize() :
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
             regle.save()
 
-        
     #Initialisation actionneurs
     fic_id = open('../actionneurs.txt',"r")
     liste = fic_id.readlines()
