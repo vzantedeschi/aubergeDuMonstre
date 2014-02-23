@@ -77,14 +77,17 @@ def initialize() :
 
 	for l in liste:
 	    id, nom, conds, acts= l.split(';', 3)
-        
+        print 'id : '+ id
+        print 'nom : ' + nom
         l_cond = conds.split('\t', conds.count('\t'))
         pb = False
         if pb == False :
             r_conds = [] 
             for elem in l_cond:
+                print 'cond: ' + elem
                 obj =tables.Condition.objects(nom = elem).first()
                 if obj == None :
+                    print 'condition ' + elem +' ne correspond a rien'
                     pb = True
                     break
                 else :
@@ -96,8 +99,10 @@ def initialize() :
             #ajoute les conditions de la regle
             r_acts = [] 
             for elem in l_act:
+                print 'act: ' + elem
                 obj =tables.Action.objects(nom = elem).first()
                 if obj == None :
+                    print 'action ' + elem +' ne correspond a rien'
                     pb = True
                     break
                 else :
