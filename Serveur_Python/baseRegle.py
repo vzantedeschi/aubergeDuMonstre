@@ -152,7 +152,7 @@ def commande(item):
     piece_id = item[u'piece_id']
     #récupération état de la pièce concernée
     etat = tables.Etat.objects(piece_id = piece_id).first()
-    print("\nEtat de la piece concernée")
+    print("Etat de la piece concernée")
     print("Numero :",etat.piece_id)
     print("Rideaux ouverts :",etat.rideauxOuverts)
     print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
@@ -163,10 +163,9 @@ def commande(item):
     print("Temperature :",etat.temperature)
     print("Humidite :",etat.humidite)
     print("Personnages presents :",etat.persosPresents)
-    print '\n'
 
     if (typeInfo == "Donnee.Presence"):
-        print '\nCommande suivant une presence en cours'
+        print 'Commande suivant une presence en cours'
 
         if rfidDetected == 0 :
             print ("Intrus est dans la piece :",piece_id)
@@ -574,7 +573,7 @@ def commande():
         piece_id = piece.piece_id
         #récupération état de la pièce concernée
         etat = tables.Etat.objects(piece_id = piece.piece_id).first()
-        # print("\nEtat de la piece concernée")
+        # print("Etat de la piece concernée")
         # print("Numero :",etat.piece_id)
         # print("Rideaux ouverts :",etat.rideauxOuverts)
         # print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
@@ -589,7 +588,6 @@ def commande():
         #               interrupteur (changements jusqu a la base)
         #               reponse utilisateur eventuelle
         
-        print '\n'
 
         # ------partie deplacer les personnages dans les donnees -------------------------------
  

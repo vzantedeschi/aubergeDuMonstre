@@ -134,48 +134,49 @@ def initialize() :
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
             regle.save()
         
-	#Initialisation actionneurs
-	fic_id = open('../actionneurs.txt',"r")
-	liste = fic_id.readlines()
-	fic_id.close()
+    #Initialisation actionneurs
+    fic_id = open('../actionneurs.txt',"r")
+    liste = fic_id.readlines()
+    fic_id.close()
 
-	for l in liste:
-	    pi, typeA, ident = l.split()
-	    pi = int(pi)
-	    ident = int(ident,16)
-	    actionneur = tables.Actionneur(actionneur_id = ident, capteur_type = typeA)
-	    actionneur.save()
+    for l in liste:
+        pi, typeA, ident = l.split()
+        pi = int(pi)
+        ident = int(ident,16)
+        actionneur = tables.Actionneur(actionneur_id = ident, capteur_type = typeA)
+        actionneur.save()
 
-	    piece = tables.Piece.objects(piece_id = pi).first()
-	    if piece == None :
-			piece = tables.Piece(piece_id = pi, name = "")
-			piece.save()
-			etat = tables.Etat(piece_id = pi, persosPresents = [])
-			etat.save()
+        piece = tables.Piece.objects(piece_id = pi).first()
+        if piece == None :
+            piece = tables.Piece(piece_id = pi, name = "")
+            piece.save()
+            etat = tables.Etat(piece_id = pi, persosPresents = [])
+            etat.save()
 
-	    piece.actionneurs.append(actionneur)
-	    piece.save()
+        piece.actionneurs.append(actionneur)
+        piece.save()
 
-	#Initialisation des personnages et des utilisateurs
-	fic_id = open('../personnages.txt',"r")
-	liste = fic_id.readlines()
-	fic_id.close()
+    #Initialisation des personnages et des utilisateurs
+    fic_id = open('../personnages.txt',"r")
+    liste = fic_id.readlines()
+    fic_id.close()
 
-	for l in liste:
-	    ident, name = l.split()
-	    ident = int(ident,16)
-	    personnage = tables.Personne(personne_id=ident, nom=name)
-	    personnage.save()
-	    user = tables.Utilisateur(identifiant=name, secret_hash='IFODJI2973', salt='2')
-	    user.save()
+    for l in liste:
+        ident, name = l.split()
+        ident = int(ident,16)
+        print ident
+        personnage = tables.Personne(personne_id=ident, nom=name)
+        personnage.save()
+        user = tables.Utilisateur(identifiant=name, secret_hash='IFODJI2973', salt='2')
+        user.save()
 
-	# Création d'un type intrus dans la base des personnages
-	personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
-	personnage.save()
+    # Création d'un type intrus dans la base des personnages
+    personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
+    personnage.save()
 
-	####### Création d'un superutilisateur #######
-	admin = tables.Utilisateur(identifiant='administrateur',secret_hash='IFODJI2973', salt='2')
-	admin.save()
+    ####### Création d'un superutilisateur #######
+    admin = tables.Utilisateur(identifiant='administrateur',secret_hash='IFODJI2973', salt='2')
+    admin.save()
 
     print 'base reinitialisee'
 
