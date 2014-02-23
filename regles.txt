@@ -1,8 +1,8 @@
-1; air frais; tempSup 19   climEt; allumeClim
-2; pas trop frais; tempInf 19   climAll; eteintClim
-3; arroser sirene; dansChambre  humInf 70   eauEt; allumeEau
-4; pas noyer la piece; dansChambre  humSup 70   eauAll; eteintEau
-5; interrupteur volet; intAll; ouvreVolet
-6; interrupteur volet; intEt; ouvreVolet
-7; fenetre et volet fermes; fenFer; fermeVolet
-8; fenetre et volet ouverts; fenOuv; ouvrirVolet
+1; air frais;tempSup 19,climEt;allumeClim;
+2; pas trop frais;tempInf 19,climAll;eteintClim;
+3; arroser sirene;dansChambre,humInf 70,eauEt;allumeEau;
+4; pas noyer la piece;dansChambre,humSup 70,eauAll;eteintEau;
+5; interrupteur volet;intAll;ouvreVolet;
+6; interrupteur volet;intEt;ouvreVolet;
+7; fenetre et volet fermes;fenFer;fermeVolet;
+8; fenetre et volet ouverts;fenOuv;ouvreVolet;

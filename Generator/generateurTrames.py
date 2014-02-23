@@ -256,9 +256,9 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
  
     #Generation des trames du capteur de température
-    def currentTemperature(self,piece) : 
+    def currentTemperature(self,piece,dbytes) : 
         org = "07"
-        dataBytes = "0084990F"
+        dataBytes = dbytes
         
         if piece == 1:
             idBytes = self.temperature
@@ -278,9 +278,9 @@ class generateurTrames():
         return self.enteteTrames + message + queueTrame
 
     #Generation des trames du capteur d'humidité
-    def currentHumidite(self,piece) : 
+    def currentHumidite(self,piece,dbytes) : 
         org = "07"
-        dataBytes = "0084990F"
+        dataBytes = dbytes
         
         if piece == 1:
             idBytes = self.humidite

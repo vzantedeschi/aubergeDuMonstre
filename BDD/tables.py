@@ -45,8 +45,11 @@ class Etat(Document):
     portesFermees = BooleanField(default=False)
     voletsOuverts = BooleanField(default=True)
     priseDeclenchee = BooleanField(default=False)
+    lumiereAllumee = BooleanField(default=False)
     temperature = IntField()
     humidite = IntField()
+    dernierEvenement = DateTimeField()
+    dernierMouvement = DateTimeField()
     persosPresents = SortedListField(ReferenceField('Personne'))
 
 class Donnee(Document) :
@@ -93,13 +96,19 @@ class Regle(Document):
 class Action(Document):
     nom = StringField(required = True)
     description = StringField(required = True)
+    meta = {'allow_inheritance': True}
+
+class ActionGenerique(Action): 
+    pass
     
 class Condition(Document):    
     nom = StringField(required = True)
     description = StringField(required = True)
-
+    valeur = FloatField(default = None)
+    meta = {'allow_inheritance': True}
     
-
+class ConditionGenerique(Condition):    
+    pass
 if __name__ == '__main__' :
 
 	import time

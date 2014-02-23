@@ -21,6 +21,7 @@ def interpretation(trame, now):
     db_connec = mongoengine.connect('GHome_BDD')
 
     id = trame.idBytes
+    
 
     # a quelle piece correspond ce capteur v2
     # !!!solution temporaire : il doit y avoir une façon plus propre et directe
@@ -35,6 +36,7 @@ def interpretation(trame, now):
         break
 
     piece_id = p.piece_id
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
       
     #stockage des donnes selon le type du capteur
     if typeCapteur == 'PRES':
@@ -45,8 +47,12 @@ def interpretation(trame, now):
       #print (trame.dataBytes)
 
       if donnees == 1:
-        capteur_presence = tables.Presence(piece_id = piece_id, date = now, traite = False)
+        date = now
+        capteur_presence = tables.Presence(piece_id = piece_id, date = date, traite = False)
         capteur_presence.save()
+        etatPiece.dernierEvenement = date
+        etatPiece.dernierMouvement = date
+        etatPiece.save()
         
     elif typeCapteur == 'TEMP':
       # Recuperation de la temperature
@@ -58,12 +64,15 @@ def interpretation(trame, now):
       humDonnees = ((humBytes)*100)/250
       print ("Temperature : ", tempDonnees)
       print ("Humidite : " , humDonnees)
-
-      capteur_temperature = tables.Temperature(piece_id = piece_id, date = now, traite = False, valeur = tempDonnees)
+      date = now
+      capteur_temperature = tables.Temperature(piece_id = piece_id, date = date, traite = False, valeur = tempDonnees)
       capteur_temperature.save()
-      capteur_humidite = tables.Humidite(piece_id = piece_id, date = now, traite = False, valeur = humDonnees)
+      capteur_humidite = tables.Humidite(piece_id = piece_id, date = date, traite = False, valeur = humDonnees)
       capteur_humidite.save()
-        
+      etatPiece.temperature = tempDonnees
+      etatPiece.humidite = humDonnees
+      etatPiece.dernierEvenement = date
+      etatPiece.save()  
     elif typeCapteur == 'RFID':
         # Recuperation des donnees rfid
         # On fixe que l'octet DB.0 porte l'information de la puce RFID
@@ -73,27 +82,40 @@ def interpretation(trame, now):
         capteur_rfid = tables.RFID(piece_id =piece_id, date = now, traite = False, resident_id = perso)
         capteur_rfid.save()
 
+        etatPiece.dernierEvenement = date
+        etatPiece.save()  
+
     elif typeCapteur == 'INTR':
 
         intrDonnees = int(trame.dataBytes[0:1],16)
         print ("donnees :",intrDonnees)
-
+        date = now
         if intrDonnees == 5 or intrDonnees == 1:
-          capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = now, traite = False, ouverte = True)
+          capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = True)
         elif intrDonnees == 7 or intrDonnees == 3:
-          capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = now, traite = False, ouverte = False)
+          capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = False)
         
         capteur_interrupteur.save()
+        etatPiece.dernierEvenement = date
+        etatPiece.save()  
+        
 
     elif typeCapteur == 'FEN':
         fenBytes = int(trame.dataBytes[7:8], 16)
         print ("fenBytes : ",fenBytes)
+        date = now
         if fenBytes == 8:
-          capteur_fenetre = tables.ContactFen(piece_id = piece_id, date = now, traite = False, ouverte = True)
+          capteur_fenetre = tables.ContactFen(piece_id = piece_id, date = date, traite = False, ouverte = True)
+          etatPiece.voletsOuverts = True
         elif fenBytes == 9:
-          capteur_fenetre = tables.ContactFen(piece_id = piece_id, date = now, traite = False, ouverte = False)
+          capteur_fenetre = tables.ContactFen(piece_id = piece_id, date = date, traite = False, ouverte = False)
+          etatPiece.voletsOuverts = False
           
         capteur_fenetre.save()
+        
+        etatPiece.dernierEvenement = date
+        etatPiece.save()  
+        
 
 if __name__ == "__main__" :
     print '################# TESTS UNITAIRES ##################'
