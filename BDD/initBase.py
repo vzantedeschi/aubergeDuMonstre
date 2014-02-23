@@ -76,7 +76,9 @@ def initialize() :
     fic_id.close()
     
     for l in liste:
-        id, nom, conds, acts= l.split(';', 3)
+        id, reste = l.split(';')
+        nom, reste = reste.split(';')
+        conds, acts = reste.split(';')
         print 'id : '+ id
         print 'nom : ' + nom
         l_cond = conds.split(',', conds.count(','))
