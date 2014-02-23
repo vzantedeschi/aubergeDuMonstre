@@ -79,7 +79,7 @@ def initialize() :
 	    id, nom, conds, acts= l.split(';', 3)
         print 'id : '+ id
         print 'nom : ' + nom
-        l_cond = conds.split('\t', conds.count('\t'))
+        l_cond = conds.split(',', conds.count(','))
         pb = False
         if pb == False :
             r_conds = [] 
@@ -93,7 +93,7 @@ def initialize() :
                 else :
                     r_conds.append(obj)
                     
-            l_act = acts.split('\t', acts.count('\t'))
+            l_act = acts.split(',', acts.count(','))
             
         if pb == False :
             #ajoute les conditions de la regle
