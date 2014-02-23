@@ -118,6 +118,7 @@ while True :
             message = raw_input(">> ")
             print "\nPassez l'actionneur en mode Learn-In puis taper sur ""Entree"""
             event = raw_input()
+            ##'A55A6B0550000000FF9F1E0530B1' == Trame de la prise 05
             socketProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
                     
         elif event == 2 :
