@@ -17,9 +17,30 @@
 				<h3>Cliquez sur une pièce pour manipuler ses actionneurs</h3>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-6"></div>
+			<div class="col-md-6">
+				<li class="list-group-item">
+					<div class="row">
+						<div class="col-lg-4 text-center">
+							Ajouter un dispositif
+						</div>
+						<div class="col-lg-4 text-center">
+							<a href="/add/capteur">
+						    	<button class="btn btn-default">Nouveau Capteur</button>
+						    </a>
+						</div>
+						<div class="col-lg-4 text-center">
+						    <a href="/add/actionneur">
+						    	<button class="btn btn-default">Nouvel Actionneur</button>
+						    </a>
+						</div>
+					</div>
+				</li>
+			</div>
+		</div>
 	</div>
 </div>
-
 <div class="text-center">
 	<p>Copyright By H4213</p>
 </div>
@@ -51,23 +72,6 @@
         </li>
         {{/each}}
 	</div>
-	<li class="list-group-item">
-		<div class="row">
-			<div class="col-lg-4 text-center">
-				Ajouter un dispositif
-			</div>
-			<div class="col-lg-4 text-center">
-				<a href="/add/capteur">
-			    	<button class="btn btn-default">Nouveau Capteur</button>
-			    </a>
-			</div>
-			<div class="col-lg-4 text-center">
-			    <a href="/add/actionneur">
-			    	<button class="btn btn-default">Nouvel Actionneur</button>
-			    </a>
-			</div>
-		</div>
-	</li>
 </script>
 {% endraw %}
 {% endblock %}

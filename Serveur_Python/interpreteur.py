@@ -33,6 +33,7 @@ def interpretation(trame, now):
     print 'Piece concernee'
     capteur = tables.Capteur.objects(capteur_id = id).first()
     typeCapteur = capteur.capteur_type
+    print typeCapteur
     pieces = tables.Piece.objects
     for p in pieces :
       if capteur in p.capteurs :
@@ -42,6 +43,7 @@ def interpretation(trame, now):
 
     piece_id = p.piece_id
     etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    date = now
       
     #stockage des donnes selon le type du capteur
     if typeCapteur == 'PRES':
@@ -57,14 +59,13 @@ def interpretation(trame, now):
           newPerso = tables.Personne( personne_id=idIntrus , name ="Intrus", ignore = False)
           newPerso.save()
           etatPiece.persosPresents.append(newPerso)
-        date = now
         capteur_presence = tables.Presence(piece_id = piece_id, date = date, traite = False)
         capteur_presence.save()
         etatPiece.dernierEvenement = date
         etatPiece.dernierMouvement = date
         etatPiece.save()
         
-    elif typeCapteur == 'TEMP':
+    elif typeCapteur == 'TEMP' :
       # Recuperation de la temperature
       tempBytes = int(trame.dataBytes[4:6], 16)
       humBytes = int(trame.dataBytes[2:4], 16) 
@@ -74,7 +75,6 @@ def interpretation(trame, now):
       humDonnees = ((humBytes)*100)/250
       print ("Temperature : ", tempDonnees)
       print ("Humidite : " , humDonnees)
-      date = now
       capteur_temperature = tables.Temperature(piece_id = piece_id, date = date, traite = False, valeur = tempDonnees)
       capteur_temperature.save()
       capteur_humidite = tables.Humidite(piece_id = piece_id, date = date, traite = False, valeur = humDonnees)
@@ -93,7 +93,7 @@ def interpretation(trame, now):
         capteur_rfid.save()
         piecePrecedente = None
 
-        personneEnMouvement = tables.Personne.objects(personne_id=perso)
+        personneEnMouvement = tables.Personne.objects(personne_id=perso).first()
         #on cherche l'ancienne piece du personnage
         for pieceCherchee in tables.Etat.objects:
           for p in pieceCherchee.persosPresents:
@@ -109,18 +109,17 @@ def interpretation(trame, now):
         #on met le personnage dans la nouvelle piece
         etatPiece.persosPresents.append(personneEnMouvement)
         etatPiece.dernierEvenement = date
-        etatPiece.save()  
+        etatPiece.save()
 
     elif typeCapteur == 'INTR':
         intrDonnees = int(trame.dataBytes[0:1],16)
         print ("donnees :",intrDonnees)
-        date = now
         if intrDonnees == 5 or intrDonnees == 1:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = True)
-          etatPiece.priseDeclenchee = True
+          etatPiece.interrupteurEnclenche = 1
         elif intrDonnees == 7 or intrDonnees == 3:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = False)
-          etatPiece.priseDeclenchee = False
+          etatPiece.interrupteurEnclenche = -1
         capteur_interrupteur.save()
         etatPiece.dernierEvenement = date
         etatPiece.save()  
@@ -129,7 +128,6 @@ def interpretation(trame, now):
     elif typeCapteur == 'FEN':
         fenBytes = int(trame.dataBytes[7:8], 16)
         print ("fenBytes : ",fenBytes)
-        date = now
         if fenBytes == 8:
           capteur_fenetre = tables.ContactFen(piece_id = piece_id, date = date, traite = False, ouverte = True)
           etatPiece.voletsOuverts = True
