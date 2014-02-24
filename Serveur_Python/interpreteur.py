@@ -8,6 +8,7 @@ import mongoengine
 sys.path.append('../BDD')
 import tables
 
+
 ### plus nécessaire si on lit un fichier
 def enum(*sequential, **named):
   enums = dict(zip(sequential, range(len(sequential))), **named)
@@ -16,7 +17,11 @@ def enum(*sequential, **named):
 Capteurs = enum('TEMP', 'RFID', 'PRES','FEN','INTR')
 
 def interpretation(trame, now):
+  idIntrus = 13
   
+  while tables.Personne.objects(personne_id=idIntrus).first() != None: 
+    idIntrus = idIntrus+1 
+
   if(trame.valide):
     db_connec = mongoengine.connect('GHome_BDD')
 
@@ -28,6 +33,7 @@ def interpretation(trame, now):
     print 'Piece concernee'
     capteur = tables.Capteur.objects(capteur_id = id).first()
     typeCapteur = capteur.capteur_type
+    print typeCapteur
     pieces = tables.Piece.objects
     for p in pieces :
       if capteur in p.capteurs :
@@ -47,6 +53,11 @@ def interpretation(trame, now):
       #print (trame.dataBytes)
 
       if donnees == 1:
+      # cela signifie qu'il y a une presence
+        if len(etatPiece.persosPresents) == 0:
+          newPerso = tables.Personne( personne_id=idIntrus , name ="Intrus", ignore = False)
+          newPerso.save()
+          etatPiece.persosPresents.append(newPerso)
         date = now
         capteur_presence = tables.Presence(piece_id = piece_id, date = date, traite = False)
         capteur_presence.save()
@@ -54,7 +65,7 @@ def interpretation(trame, now):
         etatPiece.dernierMouvement = date
         etatPiece.save()
         
-    elif typeCapteur == 'TEMP':
+    elif typeCapteur == 'TEMP' :
       # Recuperation de la temperature
       tempBytes = int(trame.dataBytes[4:6], 16)
       humBytes = int(trame.dataBytes[2:4], 16) 
@@ -72,29 +83,45 @@ def interpretation(trame, now):
       etatPiece.temperature = tempDonnees
       etatPiece.humidite = humDonnees
       etatPiece.dernierEvenement = date
-      etatPiece.save()  
+      etatPiece.save() 
+
     elif typeCapteur == 'RFID':
         # Recuperation des donnees rfid
         # On fixe que l'octet DB.0 porte l'information de la puce RFID
         perso = int(trame.dataBytes[6:8],16)
         print ("Puce RFID : ", perso)
-
         capteur_rfid = tables.RFID(piece_id =piece_id, date = now, traite = False, resident_id = perso)
         capteur_rfid.save()
+        piecePrecedente = None
 
+        personneEnMouvement = tables.Personne.objects(personne_id=perso)
+        #on cherche l'ancienne piece du personnage
+        for pieceCherchee in tables.Etat.objects:
+          for p in pieceCherchee.persosPresents:
+            if p.personne_id == perso:
+              piecePrecedente = pieceCherchee
+              break
+            if piecePrecedente != None:
+              break
+        #quand on le trouve, on l'enlève de la piece
+        if piecePrecedente != None:
+          piecePrecedente.persosPresents.remove(personneEnMouvement)              
+        
+        #on met le personnage dans la nouvelle piece
+        etatPiece.persosPresents.append(personneEnMouvement)
         etatPiece.dernierEvenement = date
         etatPiece.save()  
 
     elif typeCapteur == 'INTR':
-
         intrDonnees = int(trame.dataBytes[0:1],16)
         print ("donnees :",intrDonnees)
         date = now
         if intrDonnees == 5 or intrDonnees == 1:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = True)
+          etatPiece.interrupteurEnclenche = 1
         elif intrDonnees == 7 or intrDonnees == 3:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = False)
-        
+          etatPiece.interrupteurEnclenche = -1
         capteur_interrupteur.save()
         etatPiece.dernierEvenement = date
         etatPiece.save()  

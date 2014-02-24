@@ -11,11 +11,11 @@ fenOuv,Fenêtre ouverte
 fenFer,Fenêtre fermée
 humInf 50,Seuil inférieur d'humidité atteint
 humSup 50,Seuil supérieur à d'humidité atteint
-pasChange 4,Pas de changement depuis temps ?
+pasChange 30,Pas de changement depuis temps ?
 mouv,Détection mouvement
 lumEt,Lumière éteinte ?
 lumAll,Lumière allumée ?
-pasBouge 4,Pas de mouvement depuis temps
+pasBouge 10,Pas de mouvement depuis temps
 dansCuisine,Dans cuisine
 dansChambre,Dans chambre
 dansSalon,Dans salon

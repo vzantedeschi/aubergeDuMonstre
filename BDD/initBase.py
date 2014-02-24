@@ -4,6 +4,7 @@
 from mongoengine import *
 import sys
 import tables
+import datetime
 
 def addCapteur() :
     print 'ajouté à la base'
@@ -25,7 +26,20 @@ def initialize() :
         pi = int(pi)
         piece = tables.Piece(piece_id = pi, name = nom)
         piece.save()
-        etat = tables.Etat(piece_id = piece.piece_id, persosPresents = [])
+        etat = tables.Etat(piece_id = piece.piece_id,
+                            rideauxOuverts = True,
+                            antiIncendieDeclenche = False,
+                            climActivee = False,
+                            portesFermees = False,
+                            voletsOuverts = True,
+                            priseDeclenchee = False,
+                            lumiereAllumee = False,
+                            temperature = 19,
+                            humidite =71,
+                            dernierEvenement = datetime.datetime.now(),
+                            dernierMouvement = datetime.datetime.now(),  
+                            interrupteurEnclenche = 0,
+                            persosPresents = [])
         etat.save()
 
     #Initialisation capteurs
@@ -96,6 +110,7 @@ def initialize() :
                     valeur = listeConditions[1]
                 else :
                     condition = elem
+                    valeur = None
                 
                 obj = tables.Condition.objects(nom = condition).first()
                 if obj == None :
@@ -103,7 +118,11 @@ def initialize() :
                     pb = True
                     break
                 else :
-                    r_conds.append(obj)
+                    if valeur != None:
+                        newCond = tables.Condition(nom= condition, valeur=valeur, description = cond.description)
+                    else:
+                        newCond = tables.Condition(nom= condition, description = cond.description)
+                    r_conds.append(newCond)
                     
             l_act = acts.split(',', acts.count(','))
             
@@ -128,9 +147,7 @@ def initialize() :
         if pb == False :
             #ajoute les actions de la regle
             for cond in r_conds:
-                newCond = tables.Condition(nom= cond.nom, valeur=cond.valeur, description = cond.description)
-                newCond.save()
-                
+                cond.save()
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
             regle.save()
         
@@ -150,7 +167,20 @@ def initialize() :
         if piece == None :
             piece = tables.Piece(piece_id = pi, name = "")
             piece.save()
-            etat = tables.Etat(piece_id = pi, persosPresents = [])
+            etat = tables.Etat(piece_id = pi, 
+                                rideauxOuverts = True,
+                                antiIncendieDeclenche = False,
+                                climActivee = False,
+                                portesFermees = False,
+                                voletsOuverts = False,
+                                priseDeclenchee = False,
+                                lumiereAllumee = False,
+                                temperature = 19,
+                                humidite =71,
+                                dernierEvenement = datetime.datetime.now(),
+                                dernierMouvement = datetime.datetime.now(),
+                                interrupteurEnclenche = 0,
+                                persosPresents = [])
             etat.save()
 
         piece.actionneurs.append(actionneur)
