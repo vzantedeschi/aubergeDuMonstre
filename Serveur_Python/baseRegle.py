@@ -466,6 +466,31 @@ def commande():
     global piece_id
     global etat
     global now
+    
+#### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
+    
+    for item in tables.Donnee.objects(traite=False):
+        typeDonnee = item[u'_cls']
+
+        if typeDonnee == 'Donnee.DonneeAppli':
+            #Recherche des actionneurs de la piece du type demande
+            actionneur_id = item[u'actionneur_id']
+            actionType = item[u'action_type']
+            if actionType:
+                activerActionneur(actionneur_id)
+            else:
+                desactiverActionneur(actionneur_id)
+        elif typeDonnee == 'Donnee.ReponseAppli':
+            piece_id = item[u'piece_id']
+            reponse = item[u'reponse']
+            if reponse:
+                fermerVolets(piece_id)
+
+        item.traite=True
+        item.save()  
+
+#### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
+
     #pour chaque piece de la base
     for piece in tables.Piece.objects:
         piece_id = piece.piece_id
