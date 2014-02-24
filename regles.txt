@@ -4,3 +4,5 @@
 4; pas noyer la piece;dansChambre,humSup 70,eauAll;eteintEau;
 5; interrupteur volet;intAll,fenFer;ouvreVolet;
 6; interrupteur volet;intEt,fenOuv;fermeVolet;
+7; enfermer les intrus (portes ouvertes);intrus,porteOuv;fermePiece,fermeVolet,question;
+8; enfermer les intrus (volets ouverts);intrus,fenOuv;fermePiece,fermeVolet,question;

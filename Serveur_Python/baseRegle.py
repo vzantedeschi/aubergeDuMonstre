@@ -126,7 +126,7 @@ def ouvrirPiece(idPiece):
     print "*****Verrouillage actif : portes en cours d'ouverture"
     activerActionneur_type(idPiece, 'PORTE') 
 
-def fermerVolets(idPiece):
+def fermerPiece(idPiece):
     # Eteint la prise simulant les portes
     print "*****Verrouillage desactive : portes en cours de fermeture"
     desactiverActionneur_type(idPiece, 'PORTE')    
@@ -224,6 +224,11 @@ def meduse ():
     return trouve 
     
 def intrus() :
+
+    if len(etat.persosPresents ) == 0:
+        #s il n y a personne dans la piece il n y a pas d intrus
+        return False
+        
     trouve = False
     for p in etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
@@ -366,123 +371,90 @@ def repOui() :
 
 def eteintClim():
     eteindreClim(piece_id)
-    # Modifier l'information de la BDD pour mettre "climActive" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.climActivee = False
-    etatPiece.save()
+    etat.climActivee = False
+    etat.save()
     return 0
 
 def allumeClim(): 
     allumerClim(piece_id)
-    # Modifier l'information de la BDD pour mettre "climActive" à True
-    #change = True
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : change} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.climActivee = True
-    etatPiece.save()
+    etat.climActivee = True
+    etat.save()
     return 0 
 
  
 def ouvreVolet():
     ouvrirVolets(piece_id)
-    #Mettre à jour l'état de la pièce dans la BDD
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.voletsOuverts = True
-    etatPiece.save()
+    etat.voletsOuverts = True
+    etat.save()
     return 0
 
 def fermeVolet():
     fermerVolets(piece_id)
-    #Mettre à jour l'état de la mpièce dans la BDD
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.voletsOuverts = False
-    etatPiece.save()
+    etat.voletsOuverts = False
+    etat.save()
     return 0
 
 def allumeEau(): 
     allumerAnIn(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.antiIncendieDeclenche = True
-    etatPiece.save()
+    etat.antiIncendieDeclenche = True
+    etat.save()
     return 0
    
 
 def eteintEau():    
     eteindreAnIn(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.antiIncendieDeclenche = False
-    etatPiece.save()
+    etat.antiIncendieDeclenche = False
+    etat.save()
     return 0 
 
 def allumeLum():  
     allumerLum(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.lumiereAllumee = True
-    etatPiece.save()
+    etat.lumiereAllumee = True
+    etat.save()
     return 0
 
 def eteintLum(): 
     eteindreLum(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.lumiereAllumee = False
-    etatPiece.save()
+    etat.lumiereAllumee = False
+    etat.save()
     return 0
         
 def allumeInt():      
     allumerPrise(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.priseDeclenchee = True
-    etatPiece.save()
+    etat.priseDeclenchee = True
+    etat.save()
     return 0
         
 def eteintInt():   
     eteindrePrise(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.priseDeclenchee =False
-    etatPiece.save()
+    etat.priseDeclenchee =False
+    etat.save()
     return 0
         
 def fermePiece():
     fermerPiece(piece_id)
+    etat.portesFermees = True
+    etat.save()
 
     
 def ouvrePiece():
     ouvrirPiece(piece_id)
+    etat.portesFermees =False
+    etat.save()
     
 def question():
     print "Question a faire"
 
 def fermeRideau(): 
     fermerRideaux(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.rideauxOuverts = False
-    etatPiece.save()
+    etat.rideauxOuverts = False
+    etat.save()
     return 0
         
 def ouvreRideau():   
     ouvrirRideaux(piece_id)
-    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-    etatPiece.rideauxOuverts = True
-    etatPiece.save()
+    etat.rideauxOuverts = True
+    etat.save()
     return 0
         
 #----------------------------FIN FONCTIONNALITES--------------------------------------------------------------------------------------------------------
