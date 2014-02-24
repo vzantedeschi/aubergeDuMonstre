@@ -5,7 +5,7 @@ $(document).ready(function() {
     $.getJSON('/surveillance/pieces', {}, function(data) {
         pieces = data.result;
     });
-    setInterval(updateEtats, 1000);
+    //setInterval(updateEtats, 1000);
 
     var $notification = $('#notification.hidden');
     $notification.hide();

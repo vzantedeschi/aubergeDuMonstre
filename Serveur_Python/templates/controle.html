@@ -35,7 +35,7 @@
 <script id="li-template" type="text/x-handlebars-template">
 	<div class="panel panel-default text-center">
 		<div class="panel-heading">
-			<h3 class="panel-title">Actionneurs disponibles</h3>
+			<h3 class="panel-title">Actionneurs disponibles dans la pièce <strong>{{piece}}</strong></h3>
 		</div>
         {{#each result}}
         <li class="list-group-item">
@@ -60,7 +60,7 @@
 			</div>
 			<div class="col-lg-4 text-center">
 			    <a href="/add/actionneur">
-			    	<button class="btn btn-default">Nouveau Actionneur</button>
+			    	<button class="btn btn-default">Nouvel Actionneur</button>
 			    </a>
 			</div>
 		</div>

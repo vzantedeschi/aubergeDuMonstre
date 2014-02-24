@@ -117,7 +117,15 @@ def parametrage():
 @app.route('/parametrage', methods=['POST'])
 @requires_admin_rights
 def send_parametrage():
+	#si submit=supprimer verifier que quelque chose est coché et supprimer 
+	#puis réaffiche parametrage, sinon go page ajout
     return render_template('parametrage.html')
+
+@app.route('/parametrage/chargerRegles')
+@requires_admin_rights
+def get_regles():
+	regles = [a.to_dict() for a in regles]
+	return jsonify(ok=True, result=regles)
 
 @app.route('/surveillance/pieces')
 def get_pieces():
@@ -144,7 +152,7 @@ def get_etat_piece(piece_id):
 def get_actionneurs(piece_id):
 	piece = tables.Piece.objects(piece_id=piece_id).first()
 	actionneurs = [a.to_dict() for a in piece.actionneurs]
-	return jsonify(ok=True, result=actionneurs)
+	return jsonify(ok=True, result=actionneurs, piece=piece.name)
 
 @app.route('/controle/action')
 def send_action():
@@ -175,6 +183,20 @@ def reponse():
 		reponse.reponse = True
 	reponse.save()
 	return "ok"
+
+@app.route('/add/capteur')
+@requires_login
+def add_capteur():
+	pieces = [p.name for p in tables.Piece.objects()]
+	types = set([c.capteur_type for c in tables.Capteur.objects()])
+	return render_template('capteur.html', pieces=pieces, types=types)
+
+@app.route('/add/actionneur')
+@requires_login
+def add_actionneur():
+	pieces = [p.name for p in tables.Piece.objects()]
+	types = set([c.capteur_type for c in tables.Actionneur.objects()])
+	return render_template('actionneur.html', pieces=pieces, types=types)
 
 if __name__ == '__main__':
     app.run(debug=True)
