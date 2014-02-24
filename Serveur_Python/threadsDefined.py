@@ -71,18 +71,6 @@ class ThreadCommand(threading.Thread):
         self.rfidDetected = False
         
     def run(self):
-        #hote = '134.214.106.23'
-        #port = 5000
-        #try :
-        #    self.socket.connect((hote, port))
-        #    print("Connexion établie avec la passerelle sur le port {}".format(port))
-        #    self.connected = True
-        #except socket.error :
-        #    print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
-
-        #webList = ThreadAppliWebListener()
-        #webList.start()
-
         db_connec = mongoengine.connect('GHome_BDD')
         db = db_connec.GHome_BDD
         self.checkStatus = 1

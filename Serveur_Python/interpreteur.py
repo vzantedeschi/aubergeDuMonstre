@@ -8,6 +8,12 @@ import mongoengine
 sys.path.append('../BDD')
 import tables
 
+rfidDetected = 0
+
+## Timer de RFID
+def RFIDFunc():
+    global rfidDetected
+    rfidDetected = 0
 
 ### plus nécessaire si on lit un fichier
 def enum(*sequential, **named):
@@ -18,6 +24,7 @@ Capteurs = enum('TEMP', 'RFID', 'PRES','FEN','INTR')
 
 def interpretation(trame, now):
   idIntrus = 13
+  global rfidDetected
   
   while tables.Personne.objects(personne_id=idIntrus).first() != None: 
     idIntrus = idIntrus+1 
@@ -55,30 +62,85 @@ def interpretation(trame, now):
 
       if donnees == 1:
       # cela signifie qu'il y a une presence
-        if len(etatPiece.persosPresents) == 0:
-          newPerso = tables.Personne( personne_id=idIntrus , name ="Intrus", ignore = False)
-          newPerso.save()
-          etatPiece.persosPresents.append(newPerso)
+
+      ########################
+      #  if len(etatPiece.persosPresents) == 0:
+      #    newPerso = tables.Personne( personne_id=idIntrus , name ="Intrus", ignore = False)
+      #    newPerso.save()
+      #    etatPiece.persosPresents.append(newPerso)
+      #
+      #######################
+          
         capteur_presence = tables.Presence(piece_id = piece_id, date = date, traite = False)
         capteur_presence.save()
         etatPiece.dernierEvenement = date
         etatPiece.dernierMouvement = date
         etatPiece.save()
+
+        if rfidDetected == 0 :
+            print ("Intrus est dans la piece :",piece_id)
+
+            # Un seul intrus dans la maison en même temps sinon => comment savoir si un
+            # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
+            # vient de changer de pièce (enlever id de la pièce précédente)
+
+            # Si l'intrus est dans la pièce 1 'Couloir', il n'est plus ignoré
+            persoAjoute = tables.Personne.objects(nom = "Intrus").first()
+            if piece_id == 1:
+                persoAjoute.ignore = False
+                persoAjoute.save()
+
+            etatPiece.persosPresents.append(persoAjoute)
+            etatPiece.save()
+
+            ## Enlever le perso des autres pieces
+            listePieces = tables.Etat.objects
+            for p in listePieces :
+                if p.piece_id != piece_id:
+                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                    if persoAjoute in etatAChanger.persosPresents:
+                        etatAChanger.persosPresents.remove(persoAjoute)
+                        etatAChanger.save()
+                            
+        else:
+            print ("Un résident est dans la piece :",piece_id)
+            print ("Le numéro du résident est :",rfidDetected)
+
+            persoAjoute = tables.Personne.objects(personne_id = rfidDetected).first()
+
+            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+            etatPiece.persosPresents.append(persoAjoute)
+            etatPiece.save()
+
+            ## Enlever le perso des autres pieces
+            listePieces = tables.Etat.objects
+            for p in listePieces :
+                if p.piece_id != piece_id:
+                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
+                    if persoAjoute in etatAChanger.persosPresents:
+                        etatAChanger.persosPresents.remove(persoAjoute)
+                        etatAChanger.save()
         
     elif typeCapteur == 'TEMP' :
       # Recuperation de la temperature
       tempBytes = int(trame.dataBytes[4:6], 16)
-      humBytes = int(trame.dataBytes[2:4], 16) 
+      humBytes = int(trame.dataBytes[2:4], 16)
+      
       tempBytes = float(tempBytes)
       humBytes = float(humBytes)
+      
       tempDonnees = ((tempBytes)*40)/250
       humDonnees = ((humBytes)*100)/250
+      
       print ("Temperature : ", tempDonnees)
       print ("Humidite : " , humDonnees)
+      
       capteur_temperature = tables.Temperature(piece_id = piece_id, date = date, traite = False, valeur = tempDonnees)
       capteur_temperature.save()
+      
       capteur_humidite = tables.Humidite(piece_id = piece_id, date = date, traite = False, valeur = humDonnees)
       capteur_humidite.save()
+      
       etatPiece.temperature = tempDonnees
       etatPiece.humidite = humDonnees
       etatPiece.dernierEvenement = date
@@ -93,23 +155,33 @@ def interpretation(trame, now):
         capteur_rfid.save()
         piecePrecedente = None
 
-        personneEnMouvement = tables.Personne.objects(personne_id=perso).first()
+        #################
+
+        #personneEnMouvement = tables.Personne.objects(personne_id=perso).first()
         #on cherche l'ancienne piece du personnage
-        for pieceCherchee in tables.Etat.objects:
-          for p in pieceCherchee.persosPresents:
-            if p.personne_id == perso:
-              piecePrecedente = pieceCherchee
-              break
-            if piecePrecedente != None:
-              break
+        #for pieceCherchee in tables.Etat.objects:
+        #  for p in pieceCherchee.persosPresents:
+        #    if p.personne_id == perso:
+        #      piecePrecedente = pieceCherchee
+        #      break
+        #    if piecePrecedente != None:
+        #     break
         #quand on le trouve, on l'enlève de la piece
-        if piecePrecedente != None:
-          piecePrecedente.persosPresents.remove(personneEnMouvement)              
-        
+        #if piecePrecedente != None:
+        #  piecePrecedente.persosPresents.remove(personneEnMouvement)                     
         #on met le personnage dans la nouvelle piece
-        etatPiece.persosPresents.append(personneEnMouvement)
-        etatPiece.dernierEvenement = date
-        etatPiece.save()
+        #etatPiece.persosPresents.append(personneEnMouvement)
+        #etatPiece.dernierEvenement = date
+        #etatPiece.save()
+
+        ###################
+        
+        rfidDetected = perso
+        # Mise en place d'un timer qui indique
+        # qu'il n'attend plus une détection de présence au bout
+        # de 20 secondes
+        timerRFID = threading.Timer(20,RFIDFunc)
+        timerRFID.start()
 
     elif typeCapteur == 'INTR':
         intrDonnees = int(trame.dataBytes[0:1],16)

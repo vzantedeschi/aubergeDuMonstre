@@ -75,7 +75,7 @@ class ThreadSimuActionneurs(threading.Thread):
 
 
 hote = 'localhost'
-port = 13700
+port = 13800
 
 #Connexion a la BDD
 db_connec = mongoengine.connect('GHome_BDD')
@@ -142,6 +142,7 @@ while True :
                     socketClient.send(trame)
 
                     print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
+                    print "\n"
 
                     event = 5
                     while event > 4 :
@@ -184,15 +185,21 @@ while True :
 
                         dbytes = "0084990F" #24.5° et 52.8%
                         
-                        print "\nQuelle temperature?"
-                        temperature = float(input())
+                        temperature = 0
+                        while not(temperature <= 40 and temperature >= 5):
+                            print "\nQuelle temperature? (5°-40°)"
+                            temperature = float(input())
+
                         temperature = (temperature/40)*250
                         temperature = int(temperature)
                         temperature &= 0xFF
                         temperature = hex(temperature)[2:4]
-                        
-                        print"\nQuelle humidite?"
-                        humidite = float(input())
+
+                        humidite = 0
+                        while not(humidite <= 100 and humidite >= 7):
+                            print"\nQuelle humidite? (7% - 100%)"
+                            humidite = float(input())
+
                         humidite = (humidite/100)*250
                         humidite = int(humidite)
                         humidite &= 0xFF
