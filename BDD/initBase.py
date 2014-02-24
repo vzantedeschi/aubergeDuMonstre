@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from mongoengine import *
-import sys
 import tables
 import datetime
 
@@ -74,12 +73,14 @@ def initialize() :
         listeConditions = c_nom.split()
         if len(listeConditions) > 1 :
             condition = listeConditions[0]
-            valeur = listeConditions[1]
+            valeur = float(listeConditions[1])
+            cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
         else :
             condition = c_nom
-            valeur = None
-            
-        cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
+
+            cond = tables.ConditionGenerique(nom = condition, description = desc)
+
+        #cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
         cond.save()
         
     #Initialisation actions
@@ -96,7 +97,6 @@ def initialize() :
     fic_id = open('../regles.txt',"r")
     liste = fic_id.readlines()
     fic_id.close()
-    taille = len(liste)
     for l in liste:
         id, nom, conds, acts, rebut = l.split(';')
         l_cond = conds.split(',', conds.count(','))
@@ -119,7 +119,7 @@ def initialize() :
                     break
                 else :
                     if valeur != None:
-                        newCond = tables.Condition(nom= condition, valeur=valeur, description = cond.description)
+                        newCond = tables.Condition(nom= condition, valeur=float(valeur), description = cond.description)
                     else:
                         newCond = tables.Condition(nom= condition, description = cond.description)
                     r_conds.append(newCond)
@@ -208,17 +208,14 @@ def initialize() :
     admin = tables.Utilisateur(identifiant='administrateur',secret_hash='IFODJI2973', salt='2')
     admin.save()
 
-    print 'base reinitialisee'
+    print 'base réinitialisée'
 
 if __name__ == '__main__' :
     initialize()
-    import random
     ##### Ajout intrus dans le couloir ######
-    #piece = tables.Piece.objects(name="Couloir").first()
-    #etat = tables.Etat.objects(piece_id=piece.piece_id).first()
+    piece = tables.Piece.objects(name="Couloir").first()
+    etat = tables.Etat.objects(piece_id=piece.piece_id).first()
     #id = random.randint(10, 100)
-    #intrus = tables.Personne(personne_id=id,ignore=False)
-    #intrus.save()
-    #etat.persosPresents.append(intrus)
-    #etat.save()
-    #print "ça y est : " + intrus.nom + " est dans le couloir"
+    intrus = tables.Personne.objects.get(nom='Intrus')
+    etat.persosPresents.append(intrus)
+    etat.save()

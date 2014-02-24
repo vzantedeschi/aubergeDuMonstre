@@ -211,6 +211,25 @@ def interpretation(trame, now):
         
         etatPiece.dernierEvenement = date
         etatPiece.save()  
+
+#### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
+    
+    # elif(typeInfo == "Donnee.DonneeAppli"):
+    #     #Recherche des actionneurs de la piece du type demande
+    #     actionneur_id = item[u'actionneur_id']
+    #     actionType = item[u'action_type']
+    #     if actionType:
+    #         activerActionneur(actionneur_id)
+    #     else:
+    #         desactiverActionneur(actionneur_id)
+
+    # elif(typeInfo == "Donnee.ReponseAppli"):
+    #     reponse = item[u'reponse']
+    #     if reponse:
+    #         fermerVolets(piece_id)
+
+
+#### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
         
 
 if __name__ == "__main__" :

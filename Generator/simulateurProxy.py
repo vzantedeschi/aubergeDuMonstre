@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import socket
-import select
 import sys
 import time
-import random
 import threading
 import generateurTrames
 import mongoengine
@@ -25,8 +23,7 @@ class ThreadSimuActionneurs(threading.Thread):
     def run(self):
         #récupération infos actionneurs dans la base
         actionneurs = tables.Actionneur.objects
-        actionneursId = map(lambda i : i.actionneur_id, actionneurs)
-
+        actionneursId = [i.actionneur_id for i in actionneurs]
         continuer = True
         while continuer:
             continuer = False
@@ -73,13 +70,9 @@ class ThreadSimuActionneurs(threading.Thread):
                     print ident
                     
 
-
 hote = 'localhost'
 port = 13800
 
-#Connexion a la BDD
-db_connec = mongoengine.connect('GHome_BDD')
-db = db_connec.GHome_BDD
 
 #Ouverture d'un port de connexion avec les clients
 socketSimulateur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -107,9 +100,6 @@ gen = generateurTrames.generateurTrames("../identifiants.txt")
 #Creation d'un timer pour l'envoi de trames nulles du capteur de presence toutes les 2 minutes
 t = threading.Timer(120, envoiTramesAbsence)
 t.start()
-
-tsa = ThreadSimuActionneurs()
-tsa.start()
 
 print "BIENVENUE DANS L'AUBERGE DU MONSTRE !"
 print "\nA travers ce menu, vous pourrez simuler des scenarios"

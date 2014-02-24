@@ -134,7 +134,7 @@ def get_actCond(regle_id):
 	regle = tables.Regle.objects(regle_id=regle_id).first()
 	actions = [p.to_dict() for p in regle.actions]
 	conditions = [a.to_dict() for a in regle.conditions]
-	reponse=dict(ok=True, actions=actions, conditions=conditions)
+	reponse=dict(ok=True, actions=actions, conditions=conditions, id_regle=regle_id)
 	return json.dumps(reponse)
 
 @app.route('/surveillance/pieces')
@@ -207,6 +207,22 @@ def add_actionneur():
 	pieces = [p.name for p in tables.Piece.objects()]
 	types = set([c.capteur_type for c in tables.Actionneur.objects()])
 	return render_template('actionneur.html', pieces=pieces, types=types)
+
+@app.route('/appareillage/capteur')
+@requires_login
+def appareillage():
+	id = request.args.get('id')
+	if id == '' :
+		return jsonify(error=True)
+	else:
+		id = int(id)
+		type = request.args.get('type')
+		piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+		now = datetime.datetime.now()
+		reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
+		reponse.save()
+		return jsonify(error=False)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
