@@ -38,7 +38,7 @@ def initialize() :
                             humidite =71,
                             dernierEvenement = datetime.datetime.now(),
                             dernierMouvement = datetime.datetime.now(),  
-                            interrupteurEnclenche = True,
+                            interrupteurEnclenche = 0,
                             persosPresents = [])
         etat.save()
 
@@ -179,7 +179,7 @@ def initialize() :
                                 humidite =71,
                                 dernierEvenement = datetime.datetime.now(),
                                 dernierMouvement = datetime.datetime.now(),
-                                interrupteurEnclenche = True,
+                                interrupteurEnclenche = 0,
                                 persosPresents = [])
             etat.save()
 

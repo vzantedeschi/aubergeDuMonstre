@@ -6,4 +6,3 @@
 6; interrupteur volet;intEt,fenOuv;fermeVolet;
 7; enfermer les intrus (portes ouvertes);intrus,porteOuv;fermePiece,fermeVolet,question;
 8; enfermer les intrus (volets ouverts);intrus,fenOuv;fermePiece,fermeVolet,question;
-9; si rien ne se passe on ferme les volets;pasChange 5,fenOuv;fermeVolet;

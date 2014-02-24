@@ -296,8 +296,6 @@ def humSup(valeur) :
     return currentHum > valeur 
 
 def pasChange(valeur) : 
-    print "date : "
-    print now - etat.dernierEvenement
     return (now - etat.dernierEvenement).total_seconds() > valeur
 
 def mouv() : 
@@ -356,10 +354,10 @@ def eauEt() :
     return etat.antiIncendieDeclenche == False
 
 def intAll() : 
-    return etat.interrupteurEnclenche == True
+    return etat.interrupteurEnclenche == 1
 
 def intEt() :
-    return etat.interrupteurEnclenche == False
+    return etat.interrupteurEnclenche == -1
 
 def repNon() : 
     pass
@@ -462,6 +460,7 @@ def ouvreRideau():
 #----------------------------FIN FONCTIONNALITES--------------------------------------------------------------------------------------------------------
 
 def commande():
+    print "appel de la base de regle"
     global rfidDetected
     global piece
     global piece_id

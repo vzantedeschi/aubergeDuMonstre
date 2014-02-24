@@ -33,6 +33,7 @@ def interpretation(trame, now):
     print 'Piece concernee'
     capteur = tables.Capteur.objects(capteur_id = id).first()
     typeCapteur = capteur.capteur_type
+    print typeCapteur
     pieces = tables.Piece.objects
     for p in pieces :
       if capteur in p.capteurs :
@@ -64,7 +65,7 @@ def interpretation(trame, now):
         etatPiece.dernierMouvement = date
         etatPiece.save()
         
-    elif typeCapteur == 'TEMP':
+    elif typeCapteur == 'TEMP' :
       # Recuperation de la temperature
       tempBytes = int(trame.dataBytes[4:6], 16)
       humBytes = int(trame.dataBytes[2:4], 16) 
@@ -117,10 +118,10 @@ def interpretation(trame, now):
         date = now
         if intrDonnees == 5 or intrDonnees == 1:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = True)
-          etatPiece.priseDeclenchee = True
+          etatPiece.interrupteurEnclenche = 1
         elif intrDonnees == 7 or intrDonnees == 3:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = False)
-          etatPiece.priseDeclenchee = False
+          etatPiece.interrupteurEnclenche = -1
         capteur_interrupteur.save()
         etatPiece.dernierEvenement = date
         etatPiece.save()  
