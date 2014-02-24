@@ -121,8 +121,3 @@ function alertNon() {
     $.getJSON('/surveillance/reponse', {piece : piece, rep : "non"});
 }
 
-/* Handlebars */
-loadTemplate = function(template_id) {
-    var source = $(template_id).html();
-    return Handlebars.compile(source);
-}
