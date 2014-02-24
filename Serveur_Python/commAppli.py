@@ -124,8 +124,18 @@ def send_parametrage():
 @app.route('/parametrage/chargerRegles')
 @requires_admin_rights
 def get_regles():
-	listeRegles = [r.to_dict() for r in tables.Regle.objects]
-	return jsonify(ok=True, result=listeRegles)
+	listeRegles = [p.to_dict() for p in tables.Regle.objects]
+	reponse= dict(ok=True, result=listeRegles)
+	return json.dumps(reponse)
+
+@app.route('/parametrage/ActCond/<regle_id>')
+@requires_admin_rights
+def get_actCond(regle_id):
+	regle = tables.Regle.objects(regle_id=regle_id).first()
+	actions = [p.to_dict() for p in regle.actions]
+	conditions = [a.to_dict() for a in regle.conditions]
+	reponse=dict(ok=True, actions=actions, conditions=conditions, id_regle=regle_id)
+	return json.dumps(reponse)
 
 @app.route('/surveillance/pieces')
 def get_pieces():

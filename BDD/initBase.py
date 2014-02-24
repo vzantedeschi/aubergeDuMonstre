@@ -73,12 +73,14 @@ def initialize() :
         listeConditions = c_nom.split()
         if len(listeConditions) > 1 :
             condition = listeConditions[0]
-            valeur = listeConditions[1]
+            valeur = float(listeConditions[1])
+            cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
         else :
             condition = c_nom
-            valeur = None
-            
-        cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
+
+            cond = tables.ConditionGenerique(nom = condition, description = desc)
+
+        #cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
         cond.save()
         
     #Initialisation actions
@@ -117,7 +119,7 @@ def initialize() :
                     break
                 else :
                     if valeur != None:
-                        newCond = tables.Condition(nom= condition, valeur=valeur, description = cond.description)
+                        newCond = tables.Condition(nom= condition, valeur=float(valeur), description = cond.description)
                     else:
                         newCond = tables.Condition(nom= condition, description = cond.description)
                     r_conds.append(newCond)

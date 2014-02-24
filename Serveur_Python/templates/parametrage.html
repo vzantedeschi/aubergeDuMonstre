@@ -8,9 +8,25 @@
 
 {% include "header.html" %}
 <div class="container">
-	<div class="col-md-12" id="listeRegles">
-		<button onClick="valider()" class="btn btn-default"/><!-- teste avec un bouton pour afficher, on voitnmaintent le ok dans la console mais toujours erreur loadtemplate non def"-->
-		
+	<div class="col-md-12">
+		<form method="POST" action="/parametrage">
+			<div class="panel panel-default text-center">
+				<div class="panel-heading">
+					<h3 class="panel-title">Règles actives</h3>
+				</div>
+				<div id="listeRegles">
+
+				</div>
+			</div>
+
+
+	        <div class="col-lg-6 text-center">
+	        	<input type="submit" onClick="" name="supprimer" value="Supprimer regles" class="btn btn-default"/>
+	        </div>
+	        <div class="col-lg-6 text-center">
+	        	<input type="submit" onClick="" name="ajouter" value="Ajouter regle" class="btn btn-default"/>
+	        </div>
+		</form>
 	</div>
 </div>
 
@@ -24,50 +40,32 @@
 
 {% raw %}
 <script id="reg-template" type="text/x-handlebars-template">
-	<form method="POST" action="/parametrage">
-		<div class="panel panel-default text-center">
-			<div class="panel-heading">
-				<h3 class="panel-title">Règles actives</h3>
-			</div>
+	
 		
-	        {{#each result}}
+	        
 	        <li class="list-group-item">
 		        <div class="row">
 		        	<div class="checkbox">
 		            	<label>
-		            		<input class="col-lg-2" type="checkbox"  name="regle" value="{{_id}}" />
-			        			<div class="col-lg-4 text-center">{{conditions}}</div>
-			       				<div class="col-lg-4 text-center">{{actions}}</div>
+		            		<input class="col-lg-2" type="checkbox"  name="regle" value="{{id_regle}}" />
+			        			<div class="col-lg-4 text-center">
+			        			{{#each conditions}}
+			        				{{nom}}
+			        			{{/each}}
+			        			</div>
+			       				<div class="col-lg-4 text-center">
+			       				{{#each actions}}
+			       					{{description}}
+			       				{{/each}}
+			       				</div>
 			       		</label>
 			       	</div>
 		        </div>
 	        </li> 
-	        {{/each}}
-		</div>
-
-	        <div class="col-lg-6 text-center">
-	        	<input type="submit" name="supprimer" value="Supprimer regles" class="btn btn-default"/>
-	        </div>
-	        <div class="col-lg-6 text-center">
-	        	<input type="submit" name="ajouter" value="Ajouter regle" class="btn btn-default"/>
-	        </div>
-
-    </form>
-	
+	        
+		
 </script>
 {% endraw %}
-
-<script>
-function valider() {
-	var $regles = $("#listeRegles");
-	console.log("ok") 
-	$regles.html("");
-	$.getJSON('/parametrage/chargerRegles', {}, function(data) {
-		console.log(data);
-		$regles.append(regTemplate(data));
-	});
-}
-</script>
 
 
 <script src="static/js/parametrage.js"></script>
