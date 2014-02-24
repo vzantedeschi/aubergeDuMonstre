@@ -20,11 +20,7 @@ def interpretation(trame, now):
   idIntrus = 13
   
   while tables.Personne.objects(personne_id=idIntrus).first() != None: 
-    print "je suis dans la boucle"
     idIntrus = idIntrus+1 
-  
-  
-  print idIntrus
 
   if(trame.valide):
     db_connec = mongoengine.connect('GHome_BDD')
@@ -60,7 +56,7 @@ def interpretation(trame, now):
         if len(etatPiece.persosPresents) == 0:
           newPerso = tables.Personne( personne_id=idIntrus , name ="Intrus", ignore = False)
           newPerso.save()
-          idIntrus = idIntrus+1
+          etatPiece.persosPresents.append(newPerso)
         date = now
         capteur_presence = tables.Presence(piece_id = piece_id, date = date, traite = False)
         capteur_presence.save()
