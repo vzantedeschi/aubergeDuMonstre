@@ -487,7 +487,6 @@ def realisationDemandeAction(actionneurType, actionType):
             fermePiece()
 
 def commande():
-    print "appel de la base de regle"
     global rfidDetected
     global piece
     global piece_id

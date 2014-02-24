@@ -262,13 +262,13 @@ class generateurTrames():
         
         if piece == 1:
             idBytes = self.temperature
-        elif piece ==2:
+        elif piece == 2:
             idBytes = self.temperature2
-        elif piece ==3:
+        elif piece == 3:
             idBytes = self.temperature3
-        elif piece ==4:
+        elif piece == 4:
             idBytes = self.temperature4
-        elif piece ==5:
+        elif piece == 5:
             idBytes = self.temperature5
             
         message = org+dataBytes+idBytes

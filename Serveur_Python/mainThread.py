@@ -21,60 +21,24 @@ initBase.initialize()
 ############# CONNEXION PASSERELLE ###################
 connexion_avec_passerelle = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connected = False
-    
-    # print "\nOu voulez-vous vous connecter?"
-    
-    # passerelleChoisie = 3
-    # while passerelleChoisie > 2 :
-        # print "1. Passerelle EnOcean"
-        # print "2. Simulateur Proxy"
-        # passerelleChoisie = int(input())
-
-    # if passerelleChoisie == 1:
-        # try :
-            # hote = '134.214.106.23'
-            # port = 5000
-            # connexion_avec_passerelle.connect((hote, port))
-            # print("Connexion etablie avec la passerelle sur le port {}".format(port))
-            # connected = True
-            
-        # except socket.error :
-            # print("Impossible de se connecter au proxy")
-            # exit()
-    # else :
-        # print "\nSur quelle adresse IP? (localhost autorisé)"
-        # hote = raw_input(">> ")
-        # print "\nSur quel port?"
-        # port = int(input())
-        # port = 13800
-        # try :
-            # connexion_avec_passerelle.connect((hote, port))
-            # print("Connexion établie avec la passerelle sur le port {}".format(port))
-            # connected = True
-            
-        # except socket.error :
-            # print("Impossible de se connecter au proxy")
-            # exit()
             
 try :
-    #hote = '134.214.106.23'
-    #port = 5000
+    hote = '134.214.106.23'
+    port = 5000
     #connexion_avec_passerelle.connect((hote, port))
     #print("Connexion etablie avec la passerelle sur le port {}".format(port))
     print ("\n")
     #connected = True
-   
 except socket.error :
     print("Impossible de se connecter au proxy")
     print ("\n")
 
 try :
     hote = 'localhost'
-    port = 13700
+    port = 13800
     connexion_avec_passerelle.connect((hote, port))
     print("Connexion etablie avec le simulateur sur le port {}".format(port))
-    print ("\n")
-   
+    print ("\n")   
 except socket.error :
     print("Impossible de se connecter au simulateur")
     print ("\n")
