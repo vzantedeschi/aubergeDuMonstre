@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import socket
-import select
 import sys
 import time
-import random
 import threading
 import generateurTrames
 import mongoengine
@@ -17,6 +15,60 @@ def envoiTramesAbsence():
     trame = trame.encode()
     socketClient.send(trame)
 
+class ThreadSimuActionneurs(threading.Thread):
+    # Simulation de la reponse des capteurs suite a l'activation d'un actionneur
+    def __init__(self):
+        threading.Thread.__init__(self)
+        
+    def run(self):
+        #récupération infos actionneurs dans la base
+        actionneurs = tables.Actionneur.objects
+        actionneursId = [i.actionneur_id for i in actionneurs]
+        continuer = True
+        while continuer:
+            continuer = False
+            # Reception des trames d'actionneurs
+            #msg_recu = socketProxy.recv(28)       
+            #msg_recu = msg_recu.decode()
+            # Pour tester
+            msg_recu = 'A55A6B0570000000FF9F1E0530D1'
+            # Recupere l'identifiant
+            ident = msg_recu[16:24] 
+            ident = int(ident,16)
+
+            if ident in actionneursId:
+                bitAction = msg_recu[8]
+                # Piece concernee
+                #piece = tables.Piece.objects(__raw__={u'actionneurs':{u'$elemMatch':{u'$id':ident}}}).first()
+                piece = None
+                pieces = tables.Piece.objects
+                for p in pieces:
+                    for a in p.actionneurs:
+                        if a.actionneur_id == ident:
+                            piece = p
+                            break
+                    
+                    if piece != None :
+                        break
+                        
+                if piece != None:
+                    pieceID = piece.piece_id
+                    # Type Capteur concerne
+                    typeCapteur = tables.Actionneur.objects(actionneur_id=ident).first().capteur_type
+                    # Le seul type de capteur donc on peut simuler la réponse est le contact pour les volets
+                    if typeCapteur == 'VOL':
+                        if bitAction == '5':
+                            trameGen = gen.contactVoletFerme(pieceID)
+                        elif bitAction == '7':
+                            print "trame envoyee"
+                            trameGen = gen.contactVoletOuvert(pieceID)
+
+                    trameGen = trameGen.encode()
+                    socketClient.send(trameGen) 
+                else: 
+                    print "pb : pas de piece trouvee qui contienne l actionneur concerne"
+                    print ident
+                    
 
 hote = 'localhost'
 port = 13700
