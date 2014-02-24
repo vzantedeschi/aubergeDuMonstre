@@ -124,8 +124,8 @@ def send_parametrage():
 @app.route('/parametrage/chargerRegles')
 @requires_admin_rights
 def get_regles():
-	regles = [a.to_dict() for a in regles]
-	return jsonify(ok=True, result=regles)
+	listeRegles = [a.to_dict() for a in tables.Regles]
+	return jsonify(ok=True, result=listeRegles)
 
 @app.route('/surveillance/pieces')
 def get_pieces():
