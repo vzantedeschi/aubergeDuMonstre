@@ -50,6 +50,7 @@ class Etat(Document):
     humidite = IntField()
     dernierEvenement = DateTimeField()
     dernierMouvement = DateTimeField()
+    interrupteurEnclenche = BooleanField(default=True)
     persosPresents = SortedListField(ReferenceField('Personne'))
 
 class Donnee(Document) :

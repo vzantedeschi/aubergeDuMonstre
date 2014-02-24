@@ -31,13 +31,14 @@ def initialize() :
                             antiIncendieDeclenche = False,
                             climActivee = False,
                             portesFermees = False,
-                            voletsOuverts = False,
+                            voletsOuverts = True,
                             priseDeclenchee = False,
                             lumiereAllumee = False,
                             temperature = 19,
                             humidite =71,
                             dernierEvenement = datetime.datetime.now(),
-                            dernierMouvement = datetime.datetime.now(),                                
+                            dernierMouvement = datetime.datetime.now(),  
+                            interrupteurEnclenche = True,
                             persosPresents = [])
         etat.save()
 
@@ -109,6 +110,7 @@ def initialize() :
                     valeur = listeConditions[1]
                 else :
                     condition = elem
+                    valeur = None
                 
                 obj = tables.Condition.objects(nom = condition).first()
                 if obj == None :
@@ -116,7 +118,11 @@ def initialize() :
                     pb = True
                     break
                 else :
-                    r_conds.append(obj)
+                    if valeur != None:
+                        newCond = tables.Condition(nom= condition, valeur=valeur, description = cond.description)
+                    else:
+                        newCond = tables.Condition(nom= condition, description = cond.description)
+                    r_conds.append(newCond)
                     
             l_act = acts.split(',', acts.count(','))
             
@@ -141,9 +147,7 @@ def initialize() :
         if pb == False :
             #ajoute les actions de la regle
             for cond in r_conds:
-                newCond = tables.Condition(nom= cond.nom, valeur=cond.valeur, description = cond.description)
-                newCond.save()
-                
+                cond.save()
             regle = tables.Regle( regle_id= id, nom = nom, conditions = r_conds, actions = r_acts)
             regle.save()
         
@@ -175,6 +179,7 @@ def initialize() :
                                 humidite =71,
                                 dernierEvenement = datetime.datetime.now(),
                                 dernierMouvement = datetime.datetime.now(),
+                                interrupteurEnclenche = True,
                                 persosPresents = [])
             etat.save()
 

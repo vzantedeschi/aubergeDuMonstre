@@ -295,11 +295,13 @@ def humSup(valeur) :
     currentHum = etat.humidite
     return currentHum > valeur 
 
-def pasChange() : 
-    pass
+def pasChange(valeur) : 
+    print "date : "
+    print now - etat.dernierEvenement
+    return (now - etat.dernierEvenement).total_seconds() > valeur
 
 def mouv() : 
-    pass
+    return (now - etat.dernierMouvement).total_seconds() < 2
 
 def lumEt() :
     return etat.lumiereAllumee == False
@@ -307,8 +309,8 @@ def lumEt() :
 def lumAll() :
     return etat.lumiereAllumee == True
 
-def pasBouge() : 
-    pass
+def pasBouge(valeur) : 
+    return (now - etat.dernierMouvement).total_seconds() > valeur
 
 #Les id des pieces sont-ils dans pieces.txt ou dans nom_piece.txt, les deux fichiers ne correspondent pas.
 def dansCuisine() :
@@ -354,10 +356,10 @@ def eauEt() :
     return etat.antiIncendieDeclenche == False
 
 def intAll() : 
-    return etat.priseDeclenchee == True
+    return etat.interrupteurEnclenche == True
 
 def intEt() :
-    return etat.priseDeclenchee == False
+    return etat.interrupteurEnclenche == False
 
 def repNon() : 
     pass
@@ -464,6 +466,7 @@ def commande():
     global piece
     global piece_id
     global etat
+    global now
     #pour chaque piece de la base
     for piece in tables.Piece.objects:
         piece_id = piece.piece_id
@@ -483,6 +486,8 @@ def commande():
         #a ajouter : dernier changement en date
         #               interrupteur (changements jusqu a la base)
         #               reponse utilisateur eventuelle
+        now = datetime.datetime.now()
+        
         
 
         # ------partie deplacer les personnages dans les donnees -------------------------------
