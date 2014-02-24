@@ -61,15 +61,15 @@ def trameActionneur(actionneurId, activation):
     checksum = calcCheckSum(message)
     return sync + message + checksum
 
-def activerActionneur(idPiece, idAct):
-    actionneurs = piece.actionneurs
-    for a in actionneurs : 
-        if a.capteur_type == idAct : 
-            print "----Activation de l'actionneur"
-            # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
-            if connected == True :
-                print "Envoi au proxy"
-                connectProxy.send(trameActionneur(actionneurConcerne, True))
+# def activerActionneur(idPiece, idAct):
+#     actionneurs = piece.actionneurs
+#     for a in actionneurs : 
+#         if a.capteur_type == idAct : 
+#             print "----Activation de l'actionneur"
+#             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+#             if connected == True :
+#                 print "Envoi au proxy"
+#                 connectProxy.send(trameActionneur(actionneurConcerne, True))
 
 def activerActionneur(idAct):
     print "----Activation de l'actionneur"
@@ -87,15 +87,15 @@ def activerActionneur_type(idPiece, typeActionneur):
                 print "Envoi au proxy"
                 connectProxy.send(trameActionneur(a.actionneur_id, True))
 
-def desactiverActionneur(idPiece, idAct):
-    actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
-    for a in actionneurs : 
-        if a.capteur_type == idAct : 
-            print "----Désactivation de l'actionneur"
-            # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
-            if connected == True :
-                print "Envoi au proxy"
-                connectProxy.send(trameActionneur(actionneurConcerne, False)) 
+# def desactiverActionneur(idPiece, idAct):
+#     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
+#     for a in actionneurs : 
+#         if a.capteur_type == idAct : 
+#             print "----Désactivation de l'actionneur"
+#             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
+#             if connected == True :
+#                 print "Envoi au proxy"
+#                 connectProxy.send(trameActionneur(actionneurConcerne, False)) 
                 
 def desactiverActionneur(idAct):
     if connected == True :
@@ -458,14 +458,63 @@ def ouvreRideau():
     return 0
         
 #----------------------------FIN FONCTIONNALITES--------------------------------------------------------------------------------------------------------
+def realisationDemandeAction(actionneurType, actionType):
+    if actionType:
+        if actionneurType == 'VOL':
+            ouvreRideau()
+        elif actionneurType == 'CLIM':
+            allumeClim()
+        elif actionneurType == 'ANIN':
+            allumeEau()
+        elif actionneurType == 'RID':
+            ouvreRideau()
+        elif actionneurType == 'LUM':
+            allumeLum()
+        elif actionneurType == 'PORTE':
+            ouvrePiece()
+    else:
+        if actionneurType == 'VOL':
+            fermeRideau()
+        elif actionneurType == 'CLIM':
+            eteintClim()
+        elif actionneurType == 'ANIN':
+            eteintEau()
+        elif actionneurType == 'RID':
+            fermeRideau()
+        elif actionneurType == 'LUM':
+            eteintLum()
+        elif actionneurType == 'PORTE':
+            fermePiece()
 
 def commande():
-    print "appel de la base de regle"
     global rfidDetected
     global piece
     global piece_id
     global etat
     global now
+
+#### INTEGRATION ENVOIS DE L'APPLI WEB ########
+
+    for item in tables.DonneeAppli.objects(traite=False):
+        #Recherche des actionneurs de la piece du type demande
+        piece_id = item.piece_id
+        actionType = item.action_type
+        actionneurConcerne = tables.Actionneur.objects(actionneur_id=item.actionneur_id).first()
+        realisationDemandeAction(actionneurConcerne.capteur_type, actionType)
+        item.traite=True
+        item.save()  
+
+    for item in tables.ReponseAppli.objects(traite=False):
+        piece_id = item.piece_id
+        reponse = item.reponse
+        if reponse:
+            fermerVolets(piece_id)
+
+        item.traite=True
+        item.save()  
+
+#### FIN INTEGRATION ENVOIS DE L'APPLI WEB ####
+
     #pour chaque piece de la base
     for piece in tables.Piece.objects:
         piece_id = piece.piece_id

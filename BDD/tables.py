@@ -87,6 +87,11 @@ class DonneeAppli(Donnee) :
 ## Reponse envoyee suite a la detection d'un intrus
 class ReponseAppli(Donnee):
 	reponse = BooleanField(required=True)
+
+class DemandeAppareillage(Donnee):
+	dispositif = StringField(required=True)
+	type = StringField(required=True)
+	ident = IntField(required=True)
     
 class Regle(Document):
     regle_id = IntField(required=True)

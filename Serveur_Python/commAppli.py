@@ -168,7 +168,10 @@ def get_actionneurs(piece_id):
 def send_action():
 	id_act = request.args.get('action')
 	piece = request.args.get('piece')
-	act_type = request.args.get('type')
+	act_typeStr = request.args.get('type')
+	act_type = False
+	if act_typeStr == 'true':
+		act_type = True
 	print str(id_act)
 	now = datetime.datetime.now()
 	reponse = tables.DonneeAppli(date=now,piece_id=piece,actionneur_id=id_act,action_type=act_type)
@@ -207,6 +210,22 @@ def add_actionneur():
 	pieces = [p.name for p in tables.Piece.objects()]
 	types = set([c.capteur_type for c in tables.Actionneur.objects()])
 	return render_template('actionneur.html', pieces=pieces, types=types)
+
+@app.route('/appareillage/capteur')
+@requires_login
+def appareillage():
+	id = request.args.get('id')
+	if id == '' :
+		return jsonify(error=True)
+	else:
+		id = int(id)
+		type = request.args.get('type')
+		piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+		now = datetime.datetime.now()
+		reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
+		reponse.save()
+		return jsonify(error=False)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
