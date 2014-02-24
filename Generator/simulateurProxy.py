@@ -42,21 +42,36 @@ class ThreadSimuActionneurs(threading.Thread):
             if ident in actionneursId:
                 bitAction = msg_recu[8]
                 # Piece concernee
-                piece = tables.Piece.objects(__raw__={u'actionneurs':{u'$elemMatch':{u'$id':ident}}}).first().piece_id
-                # Type Capteur concerne
-                typeCapteur = tables.Actionneur.objects(actionneur_id=ident).first().capteur_type
-                # Le seul type de capteur donc on peut simuler la réponse est le contact pour les volets
-                if typeCapteur == 'VOL':
-                    if bitAction == '5':
-                        trameGen = gen.contactVoletFerme(piece)
-                    elif bitAction == '7':
-                        print "trame envoyee"
-                        trameGen = gen.contactVoletOuvert(piece)
+                #piece = tables.Piece.objects(__raw__={u'actionneurs':{u'$elemMatch':{u'$id':ident}}}).first()
+                piece = None
+                pieces = tables.Piece.objects
+                for p in pieces:
+                    for a in p.actionneurs:
+                        if a.actionneur_id == ident:
+                            piece = p
+                            break
+                    
+                    if piece != None :
+                        break
+                        
+                if piece != None:
+                    pieceID = piece.piece_id
+                    # Type Capteur concerne
+                    typeCapteur = tables.Actionneur.objects(actionneur_id=ident).first().capteur_type
+                    # Le seul type de capteur donc on peut simuler la réponse est le contact pour les volets
+                    if typeCapteur == 'VOL':
+                        if bitAction == '5':
+                            trameGen = gen.contactVoletFerme(pieceID)
+                        elif bitAction == '7':
+                            print "trame envoyee"
+                            trameGen = gen.contactVoletOuvert(pieceID)
 
-                trameGen = trameGen.encode()
-                socketClient.send(trameGen) 
-
-                
+                    trameGen = trameGen.encode()
+                    socketClient.send(trameGen) 
+                else: 
+                    print "pb : pas de piece trouvee qui contienne l actionneur concerne"
+                    print ident
+                    
 
 
 hote = 'localhost'
