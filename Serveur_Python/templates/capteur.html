@@ -68,11 +68,10 @@
 {% raw %}
 <script id="attente-template" type="text/x-handlebars-template">
 	<div class="text-center">
-		<h4>Vérification de la bonne réception des trames</h4>
-		<h4>Veuillez allumer le dispositif</h4>
+		<h4>Veuillez allumer le dispositif et appuyer sur <strong>Tester</strong></h4>
 		<ul class="pager">
-			<li class="previous"><a href="#">&larr; Older</a></li>
-			<li class="next"><a href="#">Newer &rarr;</a></li>
+			<li class="previous"><a href="/add/capteur">&larr; Modifier</a></li>
+			<li class="next"><a href="#" onclick="appareiller()">Tester &rarr;</a></li>
 		</ul>
 	</div>
 </script>
@@ -80,7 +79,15 @@
 {% raw %}
 <script id="notif-template" type="text/x-handlebars-template">
 <div class="alert alert-danger">
-    ID incorrect
+    {{this}}
+</div>
+</script>
+{% endraw %}
+{% raw %}
+<script id="appa-template" type="text/x-handlebars-template">
+<div class="text-center">
+	<h4>Vérification de la bonne réception des trames</h4>
+	<h4>Veuillez patienter</h4>
 </div>
 </script>
 {% endraw %}

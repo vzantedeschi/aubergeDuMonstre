@@ -482,13 +482,42 @@ def commande():
         item.save()  
 
     for item in tables.ReponseAppli.objects(traite=False):
-            piece_id = item.piece_id
-            reponse = item.reponse
-            if reponse:
-                fermerVolets(piece_id)
+        piece_id = item.piece_id
+        reponse = item.reponse
+        if reponse:
+            fermerVolets(piece_id)
 
-            item.traite=True
-            item.save()  
+        item.traite=True
+        item.save()   
+
+    for item in tables.DemandeAppareillage.objects(traite=False):
+        ident = item.ident
+        type = item.type
+        piece = tables.Piece.objects(piece_id = piece_id).first()
+        if item.creer :
+            print 'création dispositif'
+            if item.dispositif == 'Capteur':
+                dispo = tables.Capteur(capteur_id = ident, capteur_type = type)
+                dispo.save()
+                piece.capteurs.append(dispo)
+                piece.save()
+            elif item.dispositif == 'Actionneur':
+                dispo = tables.Actionneur(actionneur_id = ident, capteur_type = type)
+                dispo.save()
+                piece.actionneurs.append(dispo)
+                piece.save()
+        else :
+            print 'suppression dispositif'
+            if item.dispositif == 'Capteur':
+                dispo = tables.Capteur.objects.get(capteur_id = ident)
+                dispo.delete()
+            elif item.dispositif == 'Actionneur':
+                dispo = tables.Actionneur.objects.get(actionneur_id = ident)
+                dispo.delete()
+
+        item.traite=True
+        item.save()
+        
 
 #### FIN ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ####
 

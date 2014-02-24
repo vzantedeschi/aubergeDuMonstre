@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 from flask import Flask, render_template, request, redirect, jsonify, session
-import requests
 import json
+import time
 from mongoengine import *
 import sys
 import datetime
@@ -211,16 +211,28 @@ def add_actionneur():
 @app.route('/appareillage/capteur')
 @requires_login
 def appareillage():
+	id = int(request.args.get('id'))
+	type = request.args.get('type')
+	piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+	now = datetime.datetime.now()
+	reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
+	reponse.save()
+	time.sleep(10)
+	conf = tables.ConfirmationAppareillage.objects(ident=id)
+	if conf :
+		return jsonify(error=False)
+	else :
+		reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type, creer=False)
+		reponse.save()
+		return jsonify(error=True)
+
+@app.route('/appareillage/verifier')
+@requires_login
+def verifierID():
 	id = request.args.get('id')
 	if id == '' :
 		return jsonify(error=True)
 	else:
-		id = int(id)
-		type = request.args.get('type')
-		piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
-		now = datetime.datetime.now()
-		reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
-		reponse.save()
 		return jsonify(error=False)
 
 
