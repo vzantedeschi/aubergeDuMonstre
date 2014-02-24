@@ -7,6 +7,7 @@ import sys
 import mongoengine
 sys.path.append('../BDD')
 import tables
+import threading
 
 rfidDetected = 0
 
@@ -86,7 +87,8 @@ def interpretation(trame, now):
 
             # Si l'intrus est dans la pièce 1 'Couloir', il n'est plus ignoré
             persoAjoute = tables.Personne.objects(nom = "Intrus").first()
-            if piece_id == 1:
+
+            if piece_id == 1 and persoAjoute.ignore == True:
                 persoAjoute.ignore = False
                 persoAjoute.save()
 
@@ -103,8 +105,8 @@ def interpretation(trame, now):
                         etatAChanger.save()
                             
         else:
-            print ("Un résident est dans la piece :",piece_id)
-            print ("Le numéro du résident est :",rfidDetected)
+            print ("Un resident est dans la piece :",piece_id)
+            print ("Le numero du resident est :",rfidDetected)
 
             persoAjoute = tables.Personne.objects(personne_id = rfidDetected).first()
 

@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 from flask import Flask, render_template, request, redirect, jsonify, session
-import requests
 import json
+import time
 from mongoengine import *
 import sys
 import datetime
@@ -18,35 +18,35 @@ app.secret_key = '\x11\x7f\xa7\xd8\xb6\xac\x83[=O@\x9c\x89\x0b\x13Y\x16\xcb\xf9\
 Document.to_dict = lambda s : json.loads(s.to_json())
 
 def etat_to_tuples(piece_id):
-	etat = tables.Etat.objects(piece_id=piece_id).first()
-	piece = tables.Piece.objects(piece_id=piece_id).first()
-	
-	rid = "Fermés"
-	if etat.rideauxOuverts : rid = "Ouverts"
+    etat = tables.Etat.objects(piece_id=piece_id).first()
+    piece = tables.Piece.objects(piece_id=piece_id).first()
+    
+    rid = "Fermés"
+    if etat.rideauxOuverts : rid = "Ouverts"
 
-	inc = "Non déclenchée"
-	if etat.antiIncendieDeclenche : inc = "Déclenchée"
+    inc = "Non déclenchée"
+    if etat.antiIncendieDeclenche : inc = "Déclenchée"
 
-	clim = "Eteinte"
-	if etat.climActivee : clim = "Active"
+    clim = "Eteinte"
+    if etat.climActivee : clim = "Active"
 
-	vol = "Fermés"
-	if etat.voletsOuverts : vol = "Ouverts"
+    vol = "Fermés"
+    if etat.voletsOuverts : vol = "Ouverts"
 
-	prise = "Eteinte"
-	if etat.priseDeclenchee : prise = "Active"
+    prise = "Eteinte"
+    if etat.priseDeclenchee : prise = "Active"
 
-	result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name , "title" : True},
-							{ "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
-							{ "image" : "hum.png", "width" : "20px","nom":"Humidité" , "valeur": etat.humidite },
-							{ "image" : "rideaux.png", "width" : "30px","nom":"Rideaux" , "valeur": rid },
-							{ "image" : "hotel.png", "width" : "40px","nom":"Climatisation" , "valeur": clim },
-							{ "image" : "hotel.png", "width" : "40px","nom":"Prise intelligente" , "valeur": prise },
-							{ "image" : "fire.png", "width" : "30px","nom":"Antincendie" , "valeur": inc },
-							{ "image" : "hotel.png", "width" : "40px","nom":"Volets" , "valeur": vol }
-							]
-			}
-	return result
+    result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name , "title" : True},
+                            { "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
+                            { "image" : "hum.png", "width" : "20px","nom":"Humidité" , "valeur": etat.humidite },
+                            { "image" : "rideaux.png", "width" : "30px","nom":"Rideaux" , "valeur": rid },
+                            { "image" : "hotel.png", "width" : "40px","nom":"Climatisation" , "valeur": clim },
+                            { "image" : "hotel.png", "width" : "40px","nom":"Prise intelligente" , "valeur": prise },
+                            { "image" : "fire.png", "width" : "30px","nom":"Antincendie" , "valeur": inc },
+                            { "image" : "hotel.png", "width" : "40px","nom":"Volets" , "valeur": vol }
+                            ]
+            }
+    return result
 
 def requires_login(f):
     @wraps(f)
@@ -63,7 +63,7 @@ def requires_admin_rights(f):
         if not session.get('logged_in', None):
             return render_template('login.html', warn=True)
         elif session['logged_in'] != 'administrateur':
-        	return redirect('/')
+            return redirect('/')
         else :
             return f(*args, **kwargs)
     return decorated_function
@@ -77,7 +77,7 @@ def inject_user():
 
 @app.route('/login', methods=['GET'])
 def login():
-	return render_template('login.html', error=False, warn=False)
+    return render_template('login.html', error=False, warn=False)
 
 @app.route('/login', methods=['POST'])
 def process_login():
@@ -117,52 +117,52 @@ def parametrage():
 @app.route('/parametrage', methods=['POST'])
 @requires_admin_rights
 def send_parametrage():
-	#si submit=supprimer verifier que quelque chose est coché et supprimer 
-	#puis réaffiche parametrage, sinon go page ajout
+    #si submit=supprimer verifier que quelque chose est coché et supprimer 
+    #puis réaffiche parametrage, sinon go page ajout
     return render_template('parametrage.html')
 
 @app.route('/parametrage/chargerRegles')
 @requires_admin_rights
 def get_regles():
-	listeRegles = [p.to_dict() for p in tables.Regle.objects]
-	reponse= dict(ok=True, result=listeRegles)
-	return json.dumps(reponse)
+    listeRegles = [p.to_dict() for p in tables.Regle.objects]
+    reponse= dict(ok=True, result=listeRegles)
+    return json.dumps(reponse)
 
 @app.route('/parametrage/ActCond/<regle_id>')
 @requires_admin_rights
 def get_actCond(regle_id):
-	regle = tables.Regle.objects(regle_id=regle_id).first()
-	actions = [p.to_dict() for p in regle.actions]
-	conditions = [a.to_dict() for a in regle.conditions]
-	reponse=dict(ok=True, actions=actions, conditions=conditions, id_regle=regle_id)
-	return json.dumps(reponse)
+    regle = tables.Regle.objects(regle_id=regle_id).first()
+    actions = [p.to_dict() for p in regle.actions]
+    conditions = [a.to_dict() for a in regle.conditions]
+    reponse=dict(ok=True, actions=actions, conditions=conditions, id_regle=regle_id)
+    return json.dumps(reponse)
 
 @app.route('/surveillance/pieces')
 def get_pieces():
-	pieces = [p.to_dict() for p in tables.Piece.objects.order_by('+piece_id')]
-	reponse = dict(ok=True, result=pieces)
-	return json.dumps(reponse)
+    pieces = [p.to_dict() for p in tables.Piece.objects.order_by('+piece_id')]
+    reponse = dict(ok=True, result=pieces)
+    return json.dumps(reponse)
 
 @app.route('/surveillance/personnages')
 def get_persos():
-	piece_id = request.args.get('piece')
-	piece_id = int(piece_id)
-	etat = tables.Etat.objects(piece_id=piece_id).first()
-	persos = [p.to_dict() for p in etat.persosPresents]
-	logged = session.get('logged_in', None)
-	reponse = dict(ok=True, result=persos, logged=str(logged))
-	return json.dumps(reponse)
+    piece_id = request.args.get('piece')
+    piece_id = int(piece_id)
+    etat = tables.Etat.objects(piece_id=piece_id).first()
+    persos = [p.to_dict() for p in etat.persosPresents]
+    logged = session.get('logged_in', None)
+    reponse = dict(ok=True, result=persos, logged=str(logged))
+    return json.dumps(reponse)
 
 @app.route('/surveillance/etat/<piece_id>')
 def get_etat_piece(piece_id):
-	etat = etat_to_tuples(piece_id)
-	return json.dumps(etat)
+    etat = etat_to_tuples(piece_id)
+    return json.dumps(etat)
 
 @app.route('/controle/<piece_id>')
 def get_actionneurs(piece_id):
-	piece = tables.Piece.objects(piece_id=piece_id).first()
-	actionneurs = [a.to_dict() for a in piece.actionneurs]
-	return jsonify(ok=True, result=actionneurs, piece=piece.name)
+    piece = tables.Piece.objects(piece_id=piece_id).first()
+    actionneurs = [a.to_dict() for a in piece.actionneurs]
+    return jsonify(ok=True, result=actionneurs, piece=piece.name)
 
 @app.route('/controle/action')
 def send_action():
@@ -180,50 +180,62 @@ def send_action():
 
 @app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
-	perso = tables.Personne.objects(personne_id=perso_id).first()
-	perso.ignore = True
-	perso.save()
-	return "ok"
+    perso = tables.Personne.objects(personne_id=perso_id).first()
+    perso.ignore = True
+    perso.save()
+    return "ok"
 
 @app.route('/surveillance/reponse')
 def reponse():
-	rep = request.args.get('rep')
-	nom = request.args.get('piece')
-	piece = tables.Piece.objects(name=nom).first()
-	now = datetime.datetime.now()
-	reponse = tables.ReponseAppli(date=now,piece_id=piece.piece_id,reponse=False)
-	if rep == 'oui' :
-		reponse.reponse = True
-	reponse.save()
-	return "ok"
+    rep = request.args.get('rep')
+    nom = request.args.get('piece')
+    piece = tables.Piece.objects(name=nom).first()
+    now = datetime.datetime.now()
+    reponse = tables.ReponseAppli(date=now,piece_id=piece.piece_id,reponse=False)
+    if rep == 'oui' :
+        reponse.reponse = True
+    reponse.save()
+    return "ok"
 
 @app.route('/add/capteur')
 @requires_login
 def add_capteur():
-	pieces = [p.name for p in tables.Piece.objects()]
-	types = set([c.capteur_type for c in tables.Capteur.objects()])
-	return render_template('capteur.html', pieces=pieces, types=types)
+    pieces = [p.name for p in tables.Piece.objects()]
+    types = set([c.capteur_type for c in tables.Capteur.objects()])
+    return render_template('capteur.html', pieces=pieces, types=types)
 
 @app.route('/add/actionneur')
 @requires_login
 def add_actionneur():
-	pieces = [p.name for p in tables.Piece.objects()]
-	types = set([c.capteur_type for c in tables.Actionneur.objects()])
-	return render_template('actionneur.html', pieces=pieces, types=types)
+    pieces = [p.name for p in tables.Piece.objects()]
+    types = set([c.capteur_type for c in tables.Actionneur.objects()])
+    return render_template('actionneur.html', pieces=pieces, types=types)
 
 @app.route('/appareillage/capteur')
 @requires_login
 def appareillage():
+	id = int(request.args.get('id'))
+	type = request.args.get('type')
+	piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+	now = datetime.datetime.now()
+	reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
+	reponse.save()
+	time.sleep(10)
+	conf = tables.ConfirmationAppareillage.objects(ident=id)
+	if conf :
+		return jsonify(error=False)
+	else :
+		reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type, creer=False)
+		reponse.save()
+		return jsonify(error=True)
+
+@app.route('/appareillage/verifier')
+@requires_login
+def verifierID():
 	id = request.args.get('id')
 	if id == '' :
 		return jsonify(error=True)
 	else:
-		id = int(id)
-		type = request.args.get('type')
-		piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
-		now = datetime.datetime.now()
-		reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
-		reponse.save()
 		return jsonify(error=False)
 
 

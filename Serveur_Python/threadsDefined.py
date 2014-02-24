@@ -69,6 +69,7 @@ class ThreadCommand(threading.Thread):
 
         # Aucune puce RFID détectée
         self.rfidDetected = False
+        self.Terminated = False
         
     def run(self):
         db_connec = mongoengine.connect('GHome_BDD')
@@ -76,7 +77,7 @@ class ThreadCommand(threading.Thread):
         self.checkStatus = 1
         t = threading.Timer(2,TimerFunc,[self])
 
-        while True :
+        while not self.Terminated:
             try :
                 if self.checkStatus == 1:
                     # Timer avec 2sec de période remettant le checkstatus à 1         
@@ -155,6 +156,7 @@ class ThreadCommand(threading.Thread):
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
                     
             except KeyboardInterrupt:
+                self.Terminated = True
                 t.cancel()
                 break
 
