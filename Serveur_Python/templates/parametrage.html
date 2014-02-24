@@ -30,18 +30,19 @@
 				<h3 class="panel-title">Règles actives</h3>
 			</div>
 		
-	        
+	        {{#each result}}
 	        <li class="list-group-item">
 		        <div class="row">
 		        	<div class="checkbox">
 		            	<label>
-		            		<input class="col-lg-2" type="checkbox"  name="regle" value="aaa" />
-			        			<div class="col-lg-4 text-center">aaa</div>
-			       				<div class="col-lg-4 text-center">aaa</div>
+		            		<input class="col-lg-2" type="checkbox"  name="regle" value="{{_id}}" />
+			        			<div class="col-lg-4 text-center">{{conditions}}</div>
+			       				<div class="col-lg-4 text-center">{{actions}}</div>
 			       		</label>
 			       	</div>
 		        </div>
 	        </li> 
+	        {{/each}}
 		</div>
 
 	        <div class="col-lg-6 text-center">
