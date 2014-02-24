@@ -71,7 +71,7 @@ class ThreadSimuActionneurs(threading.Thread):
                     
 
 hote = 'localhost'
-port = 13800
+port = 14000
 
 
 #Ouverture d'un port de connexion avec les clients
@@ -203,7 +203,8 @@ while True :
                     if event == 1 :
                         if perso == 3:
                             trame = gen.presenceDetected(piece)
-                            socketClient.send(trame)
+                            #trame = trame.encode()
+                            #socketClient.send(trame)
                             ## Laisse le temps aux volets de se fermer avant
                             ## que le capteur ne le signale
                             #time.sleep(10)
@@ -212,7 +213,7 @@ while True :
                             trame = gen.rfidDetected(perso,piece)
                             trame = trame.encode()
                             socketClient.send(trame)
-                            time.sleep(3)
+                            #time.sleep(3)
                             trame = gen.presenceDetected(piece)
 
 
