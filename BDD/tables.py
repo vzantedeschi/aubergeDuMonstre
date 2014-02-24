@@ -78,6 +78,9 @@ class ContactFen(Donnee):
 class RFID (Donnee):
 	resident_id = IntField(required=True)
 
+class ContactPorte(Donnee):
+    ouverte = BooleanField(required = True)
+
 
 ## Donnees recues par l'appli web (actionneurs)
 class DonneeAppli(Donnee) :

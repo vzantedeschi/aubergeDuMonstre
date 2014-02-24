@@ -21,7 +21,7 @@ def enum(*sequential, **named):
   enums = dict(zip(sequential, range(len(sequential))), **named)
   return type('Enum', (), enums)
 
-Capteurs = enum('TEMP', 'RFID', 'PRES','FEN','INTR')
+Capteurs = enum('TEMP', 'RFID', 'PRES','FEN','INTR','POR')
 
 def interpretation(trame, now):
   idIntrus = 13
@@ -212,7 +212,22 @@ def interpretation(trame, now):
         capteur_fenetre.save()
         
         etatPiece.dernierEvenement = date
-        etatPiece.save()  
+        etatPiece.save()
+
+    elif typeCapteur == 'POR':
+        porBytes = int(trame.dataBytes[7:8], 16)
+        print ("porBytes : ",porBytes)
+        if porBytes == 8:
+          capteur_porte = tables.ContactPorte(piece_id = piece_id, date = date, traite = False, ouverte = False)
+          etatPiece.portesFermees = False
+        elif porBytes == 9:
+          capteur_porte = tables.ContactPorte(piece_id = piece_id, date = date, traite = False, ouverte = True)
+          etatPiece.portesFermees = True
+          
+        capteur_porte.save()
+        
+        etatPiece.dernierEvenement = date
+        etatPiece.save() 
 
 #### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
     

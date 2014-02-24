@@ -134,12 +134,13 @@ while True :
                     print "\n***Choisissez un evenement : (tapez ^C pour sortir)"
                     print "\n"
 
-                    event = 5
-                    while event > 4 :
+                    event = 6
+                    while event > 5 :
                         print "1. Quelqu'un entre dans une piece"
                         print "2. On ouvre/ferme les volets dans une piece"
                         print "3. La temperature change dans une piece"
                         print "4. L'humidite change dans une piece"
+                        print "5. On ouvre/ferme une porte dans une piece"
                         event = int(input())
 
                     piece = 6
@@ -162,7 +163,7 @@ while True :
                             print "3. Un inconnu"
                             perso = int(input())
 
-                    if event == 2 :
+                    if event in [2,5] :
 
                         mouv = 3
                         while mouv > 2:
@@ -228,12 +229,12 @@ while True :
                     elif event == 3 :
                         trame = gen.currentTemperature(piece,dbytes)
 
-                    ## Contacteur pour fenêtre (NOT GENERATED)
+                    ## Contacteur pour porte
                     elif event == 5 and mouv == 1 :
-                        trame = gen.contactFenetreOuverte(piece)
+                        trame = gen.contactPorteOuverte(piece)
 
                     elif event == 5 and mouv == 2 :
-                        trame = gen.contactFenetreFermee(piece)
+                        trame = gen.contactPorteFermee(piece)
 
                     ## capteur humidité
                     elif event == 4 :
@@ -242,18 +243,20 @@ while True :
                     ## ouverture des volets par interrupteur
                     elif event == 2 and mouv == 1:
                         trame = gen.ouvreVolet(piece)
+                        trame = trame.encode()
                         socketClient.send(trame)
                         ## Laisse le temps d'ouverture des volets
-                        #time.sleep(10)
-                        #trame = gen.contactVoletOuvert(piece)
+                        time.sleep(10)
+                        trame = gen.contactVoletOuvert(piece)
 
                     ## fermeture des volets par interrupteur
                     elif event == 2 and mouv == 2:
                         trame = gen.fermeVolet(piece)
+                        trame = trame.encode()
                         socketClient.send(trame)
                         ## Laisse le temps d'ouverture des volets
-                        #time.sleep(10)
-                        #trame = gen.contactVoletFerme(piece)
+                        time.sleep(10)
+                        trame = gen.contactVoletFerme(piece)
                         
 
                     trame = trame.encode()

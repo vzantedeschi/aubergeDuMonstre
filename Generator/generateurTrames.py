@@ -17,19 +17,19 @@ class generateurTrames():
             type, id = capt.split()
 
             if (type == 'FEN') :
-                self.fenetre = id
+                self.porte = id
 
             elif (type == 'FEN2') :
-                self.fenetre2 = id
+                self.porte2 = id
                 
             elif (type == 'FEN3') :
-                self.fenetre3 = id
+                self.porte3 = id
                 
             elif (type == 'FEN4') :
-                self.fenetre4 = id
+                self.porte4 = id
                 
             elif (type == 'FEN5') :
-                self.fenetre5 = id
+                self.porte5 = id
 
             elif (type == 'PRES') :
                 self.presence = id
@@ -299,21 +299,21 @@ class generateurTrames():
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    #Generation des trames du capteur de fenetre
-    def contactFenetreOuverte(self,piece) :
+    #Generation des trames du capteur de porte
+    def contactPorteOuverte(self,piece) :
         org = "07"
         dataBytes = "00000008"
         
         if piece == 1:
-            idBytes = self.fenetre
+            idBytes = self.porte
         elif piece ==2:
-            idBytes = self.fenetre2
+            idBytes = self.porte2
         elif piece ==3:
-            idBytes = self.fenetre3
+            idBytes = self.porte3
         elif piece ==4:
-            idBytes = self.fenetre4
+            idBytes = self.porte4
         elif piece ==5:
-            idBytes = self.fenetre5
+            idBytes = self.porte5
             
         message = org+dataBytes+idBytes
         status = "30"
@@ -321,20 +321,20 @@ class generateurTrames():
         queueTrame = status+checksum
         return self.enteteTrames + message + queueTrame
 
-    def contactFenetreFermee(self,piece) :
+    def contactPorteFermee(self,piece) :
         org = "07"
         dataBytes = "00000009"
         
         if piece == 1:
-            idBytes = self.fenetre
+            idBytes = self.porte
         elif piece ==2:
-            idBytes = self.fenetre2
+            idBytes = self.porte2
         elif piece ==3:
-            idBytes = self.fenetre3
+            idBytes = self.porte3
         elif piece ==4:
-            idBytes = self.fenetre4
+            idBytes = self.porte4
         elif piece ==5:
-            idBytes = self.fenetre5
+            idBytes = self.porte5
         
         message = org+dataBytes+idBytes
         status = "30"
