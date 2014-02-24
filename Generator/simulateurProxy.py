@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import socket
-import select
 import sys
 import time
-import random
 import threading
 import generateurTrames
 import mongoengine
@@ -25,8 +23,7 @@ class ThreadSimuActionneurs(threading.Thread):
     def run(self):
         #récupération infos actionneurs dans la base
         actionneurs = tables.Actionneur.objects
-        actionneursId = map(lambda i : i.actionneur_id, actionneurs)
-
+        actionneursId = [i.actionneur_id for i in actionneurs]
         continuer = True
         while continuer:
             continuer = False
