@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 from flask import Flask, render_template, request, redirect, jsonify, session
-import requests
 import json
+import time
 from mongoengine import *
 import sys
 import datetime
@@ -166,14 +166,17 @@ def get_actionneurs(piece_id):
 
 @app.route('/controle/action')
 def send_action():
-    id_act = request.args.get('action')
-    piece = request.args.get('piece')
-    act_type = request.args.get('type')
-    print str(id_act)
-    now = datetime.datetime.now()
-    reponse = tables.DonneeAppli(date=now,piece_id=piece,actionneur_id=id_act,action_type=act_type)
-    reponse.save()
-    return "ok"
+	id_act = request.args.get('action')
+	piece = request.args.get('piece')
+	act_typeStr = request.args.get('type')
+	act_type = False
+	if act_typeStr == 'true':
+		act_type = True
+	print str(id_act)
+	now = datetime.datetime.now()
+	reponse = tables.DonneeAppli(date=now,piece_id=piece,actionneur_id=id_act,action_type=act_type)
+	reponse.save()
+	return "ok"
 
 @app.route('/surveillance/<perso_id>')
 def ignore(perso_id):
@@ -211,17 +214,29 @@ def add_actionneur():
 @app.route('/appareillage/capteur')
 @requires_login
 def appareillage():
-    id = request.args.get('id')
-    if id == '' :
-        return jsonify(error=True)
-    else:
-        id = int(id)
-        type = request.args.get('type')
-        piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
-        now = datetime.datetime.now()
-        reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
-        reponse.save()
-        return jsonify(error=False)
+	id = int(request.args.get('id'))
+	type = request.args.get('type')
+	piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+	now = datetime.datetime.now()
+	reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
+	reponse.save()
+	time.sleep(10)
+	conf = tables.ConfirmationAppareillage.objects(ident=id)
+	if conf :
+		return jsonify(error=False)
+	else :
+		reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type, creer=False)
+		reponse.save()
+		return jsonify(error=True)
+
+@app.route('/appareillage/verifier')
+@requires_login
+def verifierID():
+	id = request.args.get('id')
+	if id == '' :
+		return jsonify(error=True)
+	else:
+		return jsonify(error=False)
 
 
 if __name__ == '__main__':

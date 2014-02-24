@@ -45,18 +45,15 @@ except socket.error :
     if connected == False:
         exit()
 
-   
-
-#récupération identifiants dans la base
-identifiants = tables.Capteur.objects
-identifiants = map(lambda i : i.capteur_id, identifiants)
-
 threadCommand = threadsDefined.ThreadCommand()
 threadCommand.start()
 
 # Process qui va vérifier les trames provenant de la passerelle       
 try: 
     while True:
+        #récupération identifiants dans la base
+        identifiants = [i.capteur_id for i in tables.Capteur.objects(interpreter=True)]
+        nouveaux = [i.capteur_id for i in tables.Capteur.objects(interpreter=False)]
         msg_recu = connexion_avec_passerelle.recv(28)       
         msg_recu = msg_recu.decode()
         print "\n"
@@ -85,6 +82,20 @@ try:
                 if infosTrame.eepSent == False :
                     # Interprète les informations contenues dans la Trame
                     interpreteur.interpretation(infosTrame,now)
+
+        elif int(ident,16) in nouveaux :
+            print 'trame de confirmation reçue'
+            now = datetime.datetime.now()
+            capteur = tables.Capteur.objects(capteur_id = ident).first()
+            pieces = tables.Piece.objects()
+            for p in pieces :
+                if capteur in p.capteurs :
+                    piece_id = p.piece_id
+                    break
+            conf = tables.ConfirmationAppareillage(piece_id = piece_id, date = now, traite = True,ident=ident)
+            capteur.interpreter = True;
+            capteur.save();
+            conf.save();
 
 
 except KeyboardInterrupt:
