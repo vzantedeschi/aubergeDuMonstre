@@ -4,6 +4,7 @@
 from mongoengine import *
 import sys
 import tables
+import datetime
 
 def addCapteur() :
     print 'ajouté à la base'
@@ -25,7 +26,19 @@ def initialize() :
         pi = int(pi)
         piece = tables.Piece(piece_id = pi, name = nom)
         piece.save()
-        etat = tables.Etat(piece_id = piece.piece_id, persosPresents = [])
+        etat = tables.Etat(piece_id = piece.piece_id,
+                            rideauxOuverts = True,
+                            antiIncendieDeclenche = False,
+                            climActivee = False,
+                            portesFermees = False,
+                            voletsOuverts = False,
+                            priseDeclenchee = False,
+                            lumiereAllumee = False,
+                            temperature = 19,
+                            humidite =71,
+                            dernierEvenement = datetime.datetime.now(),
+                            dernierMouvement = datetime.datetime.now(),                                
+                            persosPresents = [])
         etat.save()
 
     #Initialisation capteurs
@@ -150,7 +163,19 @@ def initialize() :
         if piece == None :
             piece = tables.Piece(piece_id = pi, name = "")
             piece.save()
-            etat = tables.Etat(piece_id = pi, persosPresents = [])
+            etat = tables.Etat(piece_id = pi, 
+                                rideauxOuverts = True,
+                                antiIncendieDeclenche = False,
+                                climActivee = False,
+                                portesFermees = False,
+                                voletsOuverts = False,
+                                priseDeclenchee = False,
+                                lumiereAllumee = False,
+                                temperature = 19,
+                                humidite =71,
+                                dernierEvenement = datetime.datetime.now(),
+                                dernierMouvement = datetime.datetime.now(),
+                                persosPresents = [])
             etat.save()
 
         piece.actionneurs.append(actionneur)

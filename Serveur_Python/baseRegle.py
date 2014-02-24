@@ -9,6 +9,7 @@ import socket
 import threading
 sys.path.append('../BDD')
 import tables
+import datetime
 
 
 ## Variables globales ##
@@ -26,6 +27,15 @@ port = 5000
 ## Functions Server ##
 db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
+
+# try :
+    # print 'Attente connexion au proxy'
+    # connectProxy.connect((hote, port))
+    # print("Connexion établie avec la passerelle sur le port {}".format(port))
+    # connected = True
+# except socket.error :
+    # print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
+    # connected = False
 
 def RFIDFunc():
     rfidDetected = 0
@@ -55,14 +65,14 @@ def activerActionneur(idPiece, idAct):
     actionneurs = piece.actionneurs
     for a in actionneurs : 
         if a.capteur_type == idAct : 
-            print "Activation de l'actionneur"
+            print "----Activation de l'actionneur"
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
                 print "Envoi au proxy"
                 connectProxy.send(trameActionneur(actionneurConcerne, True))
 
 def activerActionneur(idAct):
-    print "Activation de l'actionneur"
+    print "----Activation de l'actionneur"
     # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
     if connected == True :
         print "Envoi au proxy"
@@ -72,7 +82,6 @@ def activerActionneur_type(idPiece, typeActionneur):
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     for a in actionneurs: 
         if a.capteur_type == typeActionneur: 
-            print "Activation de l'actionneur"
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
                 print "Envoi au proxy"
@@ -82,7 +91,7 @@ def desactiverActionneur(idPiece, idAct):
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     for a in actionneurs : 
         if a.capteur_type == idAct : 
-            print "Désactivation de l'actionneur"
+            print "----Désactivation de l'actionneur"
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
                 print "Envoi au proxy"
@@ -97,7 +106,6 @@ def desactiverActionneur_type(idPiece, typeActionneur):
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     for a in actionneurs:
         if a.capteur_type == typeActionneur:
-            print "Desactivation de l'actionneur"
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
                 print "Envoi au proxy"
@@ -105,115 +113,83 @@ def desactiverActionneur_type(idPiece, typeActionneur):
                 
 def ouvrirVolets(idPiece):    
     # Allume la prise simulant les volets
-    print "Verrouillage actif : volets en cours d'ouverture"
-    activerActionneur_type(idPiece, 'VOL')        
+    print "*****Verrouillage actif : volets en cours d'ouverture"
+    activerActionneur_type(idPiece, 'VOL')   
 
 def fermerVolets(idPiece):
     # Eteint la prise simulant les volets
-    print "Verrouillage desactive : volets en cours de fermeture"
+    print "*****Verrouillage desactive : volets en cours de fermeture"
     desactiverActionneur_type(idPiece, 'VOL')
     
-#----------------------------CONDITIONS--------------------------------------------------------------------------------------------------------     
-   
-def tempInf(valeur) :
-    currentTemp = tables.Etat.temperature
-    if currentTemp < valeur : 
-        return "tempInf" 
-    
+def ouvrirPiece(idPiece):    
+    # Allume la prise simulant les portes
+    print "*****Verrouillage actif : portes en cours d'ouverture"
+    activerActionneur_type(idPiece, 'PORTE') 
+
+def fermerVolets(idPiece):
+    # Eteint la prise simulant les portes
+    print "*****Verrouillage desactive : portes en cours de fermeture"
+    desactiverActionneur_type(idPiece, 'PORTE')    
+        
 def ouvrirRideaux(idPiece):
-    print "Ouverture des rideaux"
+    print "*****Ouverture des rideaux"
     activerActionneur_type(idPiece, 'RID') 
 
 def fermerRideaux(idPiece):
-    print "Fermeture des rideaux"
+    print "*****Fermeture des rideaux"
     desactiverActionneur_type(idPiece, 'RID')
 
 def allumerClim(idPiece):
-    print "Allumage de la climatisation"
+    print "******Allumage de la climatisation"
     activerActionneur_type(idPiece, 'CLIM')
 
 def eteindreClim(idPiece):
-    print "Extinction de la climatisation"
+    print "******Extinction de la climatisation"
     desactiverActionneur_type(idPiece, 'CLIM')
 
 def allumerAnIn(idPiece):
-    print "Allumage du systeme anti incendie"
+    print "******Allumage du systeme anti incendie"
     activerActionneur_type(idPiece, 'ANIN')
 
 def eteindreAnIn(idPiece):
-    print "Extinction du systeme anti incendie"
+    print "******Extinction du systeme anti incendie"
     desactiverActionneur_type(idPiece, 'ANIN')
+    
+def allumerLum(idPiece):
+    print "******Allumage de la lumiere"
+    activerActionneur_type(idPiece, 'LUM')
 
-def commande(item):
-    global rfidDetected
-    #récupération type de donnée
-    typeInfo = item[u'_cls']
-    #récupération de l'id de la pièce concernée
-    piece_id = item[u'piece_id']
-    #récupération état de la pièce concernée
-    etat = tables.Etat.objects(piece_id = piece_id).first()
-    print("Etat de la piece concernée")
-    print("Numero :",etat.piece_id)
-    print("Rideaux ouverts :",etat.rideauxOuverts)
-    print("Systeme anti-incendie declenchee :",etat.antiIncendieDeclenche)
-    print("Climatisation activee :",etat.climActivee)
-    print("Portes fermees :",etat.portesFermees)
-    print("Volets ouverts :",etat.voletsOuverts)
-    print("Prise allumee :",etat.priseDeclenchee)
-    print("Temperature :",etat.temperature)
-    print("Humidite :",etat.humidite)
-    print("Personnages presents :",etat.persosPresents)
+def eteindreLum(idPiece):
+    print "*****Extinction de la lumiere"
+    desactiverActionneur_type(idPiece, 'LUM')
+    
+def allumerPrise(idPiece):
+    print "******Allumage de la lumiere"
+    activerActionneur_type(idPiece, 'PRISE')
 
-    if (typeInfo == "Donnee.Presence"):
-        print 'Commande suivant une presence en cours'
+def eteindrePrise(idPiece):
+    print "******Extinction de la lumiere"
+    desactiverActionneur_type(idPiece, 'PRISE')
 
-        if rfidDetected == 0 :
-            print ("Intrus est dans la piece :",piece_id)
-
-            # Un seul intrus dans la maison en même temps sinon => comment savoir si un
-            # intrus qui rentre dans une pièce est un nouveau (générer nouvel id) ou un qui
-            # vient de changer de pièce (enlever id de la pièce précédente)
-
-            # Si l'intrus est dans la pièce 1 'Couloir', il n'est plus ignoré
-
-            if piece_id == 1:
-                persoAjoute = tables.Personne.objects(nom = "Intrus").first()
-                persoAjoute.ignore = False
-                persoAjoute.save()
-
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.persosPresents.append(persoAjoute)
-            etatPiece.save()        
-
-            ## Enlever le perso des autres pieces
-            listePieces = tables.Etat.objects
-            for p in listePieces :
-                if p.piece_id != piece_id:
-                    etatAChanger = tables.Etat.objects(piece_id = p.piece_id).first()
-                    if persoAjoute in etatAChanger.persosPresents:
-                        etatAChanger.persosPresents.remove(persoAjoute)
-                        etatAChanger.save()
-                            
-        elif rfidDetected == 1 :
-            print ("Meduse est dans la piece :",piece_id)
-            pieceConcernee = tables.Etat.objects(piece_id = piece_id).first()
-
-            persoAjoute = tables.Personne.objects(personne_id = rfidDetected).first()
-
+#----------------------------CONDITIONS--------------------------------------------------------------------------------------------------------     
+   
+def tempInf(valeur) :
+    currentTemp = etat.temperature
+    return currentTemp < valeur
+    
 def tempSup(valeur) : 
-    currentTemp = tables.Etat.temperature
-    if currentTemp > valeur :
-        return "tempSup"
+    currentTemp = etat.temperature
+    return currentTemp > valeur
         
 def porteOuv() :
-    return tables.Etat.portesFermees == False
+    return etat.portesFermees == False
     
 def porteFer() :
-    return tables.Etat.portesFermees == True
+    return etat.portesFermees == True
 
 def vampire():
     trouve = False
-    for p in tables.Etat.persosPresents : 
+    for p in etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -231,7 +207,7 @@ def vampire():
 
 def meduse ():
     trouve = False
-    for p in tables.Etat.persosPresents : 
+    for p in etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -249,7 +225,7 @@ def meduse ():
     
 def intrus() :
     trouve = False
-    for p in tables.Etat.persosPresents : 
+    for p in etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -266,7 +242,7 @@ def intrus() :
 
 def sirene() : 
     trouve = False
-    for p in tables.Etat.persosPresents : 
+    for p in etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -284,7 +260,7 @@ def sirene() :
 
 def invite() : 
     trouve = False
-    for p in tables.Etat.persosPresents : 
+    for p in etat.persosPresents : 
         fic_id = open('../personnages.txt',"r")
         liste = fic_id.readlines()
         fic_id.close()
@@ -301,20 +277,18 @@ def invite() :
     return trouve 
 
 def fenOuv() : 
-    return tables.Etat.voletsOuverts == True
+    return etat.voletsOuverts == True
 
 def fenFer() : 
-    return tables.Etat.voletsOuverts == False
+    return etat.voletsOuverts == False
 
 def humInf(valeur) : 
-    currentHum = tables.Etat.humidite
-    if currentHum < valeur :
-        return "humInf"
+    currentHum = etat.humidite
+    return currentHum < valeur
 
 def humSup(valeur) : 
-    currentHum = tables.Etat.humidite
-    if currentHum > valeur :
-        return "humSup"
+    currentHum = etat.humidite
+    return currentHum > valeur 
 
 def pasChange() : 
     pass
@@ -323,10 +297,10 @@ def mouv() :
     pass
 
 def lumEt() :
-    return tables.Etat.lumiereAllumee == False
+    return etat.lumiereAllumee == False
 
 def lumAll() :
-    return tables.Etat.lumiereAllumee == True
+    return etat.lumiereAllumee == True
 
 def pasBouge() : 
     pass
@@ -363,22 +337,22 @@ def dansPiece() :
     return False
     
 def climAll() :
-    return tables.Etat.climActivee == True
+    return etat.climActivee == True
 
 def climEt() :
-    return tables.Etat.climActivee == False
+    return etat.climActivee == False
 
 def eauAll() : 
-    return tables.Etat.antiIncendieDeclenche == True
+    return etat.antiIncendieDeclenche == True
 
 def eauEt() : 
-    return tables.Etat.antiIncendieDeclenche == False
+    return etat.antiIncendieDeclenche == False
 
 def intAll() : 
-    return tables.Etat.priseDeclenchee == True
+    return etat.priseDeclenchee == True
 
 def intEt() :
-    return tables.Etat.priseDeclenchee == False
+    return etat.priseDeclenchee == False
 
 def repNon() : 
     pass
@@ -391,183 +365,133 @@ def repOui() :
 #----------------------------FONCTIONNALITES--------------------------------------------------------------------------------------------------------
 
 def eteintClim():
-    if connected == True :
-        #envoi de la trame 
-        print "Desactivation de la climatisation"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "climActive" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.climActivee = False
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1
+    eteindreClim(piece_id)
+    # Modifier l'information de la BDD pour mettre "climActive" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.climActivee = False
+    etatPiece.save()
+    return 0
 
-def allumeClim():        
-    if connected == True :
-        #envoi de la trame
-        print "Activation de la climatisation"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "climActive" à True
-        #change = True
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : change} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.climActivee = True
-        etatPiece.save()
-        return 0 
-    elif connected ==False :    
-        return 1
+def allumeClim(): 
+    allumerClim(piece_id)
+    # Modifier l'information de la BDD pour mettre "climActive" à True
+    #change = True
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'climActivee' : change} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.climActivee = True
+    etatPiece.save()
+    return 0 
+
  
 def ouvreVolet():
-    if connected == True :
-        print "ouverture des volets"
-        ouvrirVolets(piece_id)
-        #Mettre à jour l'état de la pièce dans la BDD
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.voletsOuverts = True
-        etatPiece.save()
-        return 0
-    elif connected ==False :    
-        return 1
+    ouvrirVolets(piece_id)
+    #Mettre à jour l'état de la pièce dans la BDD
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.voletsOuverts = True
+    etatPiece.save()
+    return 0
 
 def fermeVolet():
-        if connected == True :
-            print "Fermeture des volets"
-            fermerVolets(piece_id)
-            #Mettre à jour l'état de la mpièce dans la BDD
-            #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
-            etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-            etatPiece.voletsOuverts = False
-            etatPiece.save()
-            return 0
-        elif connected ==False :   
-            return 1 
+    fermerVolets(piece_id)
+    #Mettre à jour l'état de la mpièce dans la BDD
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'voletsOuverts' : fenDonnees} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.voletsOuverts = False
+    etatPiece.save()
+    return 0
 
 def allumeEau(): 
-    #pas d'envoi de trame pour l'instant
-    if connected ==True :
-        print "Activation du systeme anti-incendie"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.antiIncendieDeclenche = True
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1        
+    allumerAnIn(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à True
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : True} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.antiIncendieDeclenche = True
+    etatPiece.save()
+    return 0
+   
 
-def eteintEau(): 
-    if connected == True :    
-        print "Desactivation du systeme anti-incendie"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.antiIncendieDeclenche = False
-        etatPiece.save()
-        return 0 
-    elif connected ==False :   
-        return 1 
+def eteintEau():    
+    eteindreAnIn(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.antiIncendieDeclenche = False
+    etatPiece.save()
+    return 0 
 
-def allumeLum():
-    if connected == True :    
-        print "Allumer la lumière"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.lumiereAllumee = True
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1
+def allumeLum():  
+    allumerLum(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.lumiereAllumee = True
+    etatPiece.save()
+    return 0
 
-def eteintLum():
-    if connected == True :    
-        print "Éteindre la lumière"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.lumiereAllumee = False
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1
+def eteintLum(): 
+    eteindreLum(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.lumiereAllumee = False
+    etatPiece.save()
+    return 0
         
-def allumeInt():
-    if connected == True :    
-        print "Allumer la prise"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.priseDeclenchee = True
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1
+def allumeInt():      
+    allumerPrise(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.priseDeclenchee = True
+    etatPiece.save()
+    return 0
         
-def eteintInt():
-    if connected == True :    
-        print "Éteindre la prise"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.priseDeclenchee =False
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1
+def eteintInt():   
+    eteindrePrise(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.priseDeclenchee =False
+    etatPiece.save()
+    return 0
         
 def fermePiece():
-    pass
-    #fermeture porte ou fermeture portes fenetres?
+    fermerPiece(piece_id)
+
     
 def ouvrePiece():
-    pass
+    ouvrirPiece(piece_id)
     
 def question():
-    pass
+    print "Question a faire"
 
-def fermeRideau():
-    if connected == True :    
-        print "Fermer le rideau"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.rideauxOuverts = False
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1
+def fermeRideau(): 
+    fermerRideaux(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.rideauxOuverts = False
+    etatPiece.save()
+    return 0
         
-def ouvreRideau(): 
-    if connected == True :    
-        print "Ouvrir le rideau"
-        activerActionneur(idPiece, capteur_id)
-        # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
-        #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
-        etatPiece = tables.Etat.objects(piece_id = piece_id).first()
-        etatPiece.rideauxOuverts = True
-        etatPiece.save()
-        return 0
-    elif connected ==False :   
-        return 1
+def ouvreRideau():   
+    ouvrirRideaux(piece_id)
+    # Modifier l'information de la BDD pour mettre "antiIncendieDeclenche" à False
+    #db.etat.update({u'piece_id' : piece_id},{ "$set": {u'antiIncendieDeclenche' : False} },upsert=False,multi=True)
+    etatPiece = tables.Etat.objects(piece_id = piece_id).first()
+    etatPiece.rideauxOuverts = True
+    etatPiece.save()
+    return 0
         
-def notifierRes():
-    pass 
-
 #----------------------------FIN FONCTIONNALITES--------------------------------------------------------------------------------------------------------
 
 def commande():
-    print "appel de la base de regle"
     global rfidDetected
+    global piece
+    global piece_id
+    global etat
     #pour chaque piece de la base
     for piece in tables.Piece.objects:
         piece_id = piece.piece_id
@@ -652,8 +576,10 @@ def commande():
                 i = i + 1
             
             #si r verifie les conditions on l ajoute a la liste des regles a appliquer
-            if conditionsRemplies : 
+            if conditionsRemplies == True : 
+                print "regle trouvee : " + r.nom
                 reglesRemplies.append(r)
+                
             
                     
         
@@ -665,7 +591,6 @@ def commande():
             enFonctionnement = 0
             i =0
             while enFonctionnement==0 and i < len(r.actions) :
-            
                 act = r.actions[i].nom
                 baseregle = {"allumeClim" : allumeClim,
                              "eteintClim" : eteintClim,
@@ -682,10 +607,11 @@ def commande():
                              "eteintEau" : eteintEau, 
                              "fermeRideau" : fermeRideau, 
                              "ouvreRideau" : ouvreRideau,
-                             "notifierRes" : notifierRes
                              }
                 enFonctionnement = baseregle[act]()
+
                 i = i + 1
+                
         
     # ------fin partie execution des regles trouvees -----------------------------------
 

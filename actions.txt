@@ -12,6 +12,5 @@ allumeEau,Activer le système anti-incendie
 eteintEau,Éteindre le système anti-incendie
 fermeRideau,Cacher les miroirs 
 ouvreRideau,Dévoiler les miroirs
-notifieRes,Envoyer notification aux résidents ?
 allumePris,Allumer une prise
 eteintPris,Eteindre une prise
