@@ -69,26 +69,15 @@ class ThreadCommand(threading.Thread):
 
         # Aucune puce RFID détectée
         self.rfidDetected = False
+        self.Terminated = False
         
     def run(self):
-        #hote = '134.214.106.23'
-        #port = 5000
-        #try :
-        #    self.socket.connect((hote, port))
-        #    print("Connexion établie avec la passerelle sur le port {}".format(port))
-        #    self.connected = True
-        #except socket.error :
-        #    print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
-
-        #webList = ThreadAppliWebListener()
-        #webList.start()
-
         db_connec = mongoengine.connect('GHome_BDD')
         db = db_connec.GHome_BDD
         self.checkStatus = 1
         t = threading.Timer(2,TimerFunc,[self])
 
-        while True :
+        while not self.Terminated:
             try :
                 if self.checkStatus == 1:
                     # Timer avec 2sec de période remettant le checkstatus à 1         
@@ -167,6 +156,7 @@ class ThreadCommand(threading.Thread):
                     # Met le checkstatus à 0 pour éviter de reparcourir la BI
                     
             except KeyboardInterrupt:
+                self.Terminated = True
                 t.cancel()
                 break
 
