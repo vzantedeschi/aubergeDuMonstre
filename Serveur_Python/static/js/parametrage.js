@@ -7,7 +7,7 @@ $(document).ready(function() {
 	$.getJSON('/parametrage/chargerRegles', {}, function(data) {
 		console.log(data);
 		$regles.append(regTemplate(data));
-	});
+	})
 })
 
 
