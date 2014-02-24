@@ -461,7 +461,7 @@ def ouvreRideau():
 def realisationDemandeAction(actionneurType, actionType):
     if actionType:
         if actionneurType == 'VOL':
-            ouvreRideau()
+            ouvreVolet()
         elif actionneurType == 'CLIM':
             allumeClim()
         elif actionneurType == 'ANIN':
@@ -474,7 +474,7 @@ def realisationDemandeAction(actionneurType, actionType):
             ouvrePiece()
     else:
         if actionneurType == 'VOL':
-            fermeRideau()
+            fermeVolet()
         elif actionneurType == 'CLIM':
             eteintClim()
         elif actionneurType == 'ANIN':
