@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block body %}
+
+{% include "header.html" %}
+<div class="container">
+	<div class="col-md-12">
+		<h2>Crée une règle</h2>
+		<div class="col-md-6">
+			<div class="panel panel-default text-center">
+				<div class="panel-heading">
+					<h3 class="panel-title">Conditions</h3>
+				</div>
+				<div id="condition">
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6"> 
+			<div class="panel panel-default text-center">
+				<div class="panel-heading">
+					<h3 class="panel-title">Actions</h3>
+				</div>
+				<div id="action">
+
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</div>
+
+<div class="text-center">
+	<p>Copyright By H4213</p>
+</div>
+{% endblock body %}
+
+{% block javascript %}
+{% raw %}
+<script src="static/js/ajoutRegle.js"></script>
+{% endraw %}
+{% raw %}
+<script id="aj-template" type="text/x-handlebars-template">
+	<div class="panel panel-default text-center">
+		<div class="panel-heading"></div>
+		<form method="POST" action="/ajoutRegle">
+	        {{#each result}}
+	        <li class="list-group-item">
+		        <div class="row">
+		        	<div class="checkbox">
+		            	<label>
+		            		<input type="checkbox"  name="regle" value="{{_id}}" />
+			        			<div class="col-lg-6 text-center">{{condition}}</div>
+			       				<div class="col-lg-6 text-center">{{action}}</div>
+			       		</label>
+			       	</div>
+		        </div>
+	        </li>
+	        {{/each}}
+
+	        <div class="col-lg-6">
+	        	<input type="submit" name="supprimer" value="Supprimer" class="btn btn-default"/>Supprimer règles
+	        </div>
+	        <div class="col-lg-6">
+	        	<input type="submit" name="ajouter" value="Ajouter" class="btn btn-default"/>Ajouter règle
+	        </div>
+
+        </form>
+	</div>
+</script>
+
+{% endraw %}
