@@ -205,16 +205,13 @@ def creation():
 def modifierRegleId(id_regle):
     regle = tables.Regle.objects(regle_id=id_regle).first()
     conds = []
-    ok = False
     for cond in regle.conditions:
         if cond.valeur != None:
-            ok=True
             conds.append(cond)
-    if ok:
-        return render_template('modifierRegle.html', conditions=conds,  regle_id=id_regle)
-    else:
-        return redirect('/parametrage')
 
+    reponse = dict(ok=True, result=conds)
+    return json.dumps(reponse)
+    
 @app.route('/surveillance/pieces')
 def get_pieces():
     pieces = [p.to_dict() for p in tables.Piece.objects.order_by('+piece_id')]

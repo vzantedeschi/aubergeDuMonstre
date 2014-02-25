@@ -54,7 +54,7 @@
 		            	<label>
 		            		<input class="col-lg-2" type="checkbox"  name="regle" value="{{id_regle}}" />
 			        			<div class="col-lg-4 text-center">
-			        			<a href="/modifierRegle/{{id_regle}}" title="Cliquez pour modifier (si c'est possible ^^)">
+			        			<a onClick="ajoutReg({{id_regle}})" title="Cliquez pour modifier (si c'est possible ^^)">
 			        			{{#each conditions}}
 			        				{{#if valeur}}
 			        					/ {{description}} <strong>({{valeur}})</strong> / 
@@ -79,7 +79,7 @@
 {% endraw %}
 
 
-<script src="static/js/parametrage.js"></script>
+<script src="/static/js/parametrage.js"></script>
 
 
 {% endblock %}

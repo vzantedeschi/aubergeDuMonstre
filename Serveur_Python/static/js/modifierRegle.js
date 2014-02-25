@@ -18,9 +18,9 @@ $(document).ready(function() {
 			else{
 				if(conditions[i].nom="pasBouge"){
 					$modif.append(modifBougeTemplate(conditions[i]));
-					else{
-						$modif.append(modifChangeTemplate(conditons[i]));
-					}
+				}
+				else{
+					$modif.append(modifChangeTemplate(conditons[i]));
 				}
 
 			}
