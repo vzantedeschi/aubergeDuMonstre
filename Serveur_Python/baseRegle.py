@@ -103,6 +103,7 @@ def desactiverActionneur(idAct):
         connectProxy.send(trameActionneur(idAct, False))
             
 def desactiverActionneur_type(idPiece, typeActionneur):
+    print "*********PIECE " + str(idPiece)
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     for a in actionneurs:
         if a.capteur_type == typeActionneur:
@@ -260,6 +261,24 @@ def sirene() :
             ident, name = l.split()
             ident = int(ident,16)
             if name == "Sirene" :                            
+                if p.personne_id  == ident :
+                    trouve = True
+                    break                            
+        if trouve == True : 
+            break
+    return trouve 
+    
+def yeti() : 
+    trouve = False
+    for p in etat.persosPresents : 
+        fic_id = open('../personnages.txt',"r")
+        liste = fic_id.readlines()
+        fic_id.close()
+
+        for l in liste:
+            ident, name = l.split()
+            ident = int(ident,16)
+            if name == "Yeti" :                            
                 if p.personne_id  == ident :
                     trouve = True
                     break                            
@@ -517,6 +536,8 @@ def commande():
     for item in tables.DonneeAppli.objects(traite=False):
         #Recherche des actionneurs de la piece du type demande
         piece_id = item.piece_id
+        etat = tables.Etat.objects(piece_id = piece_id).first()
+        print '****PIECE MAIN ' + str(piece_id)
         actionType = item.action_type
         actionneurConcerne = tables.Actionneur.objects(actionneur_id=item.actionneur_id).first()
         realisationDemandeAction(actionneurConcerne.capteur_type, actionType)
@@ -613,6 +634,7 @@ def commande():
                                    "meduse" : meduse,
                                    "intrus" : intrus,
                                    "sirene" : sirene,
+                                   "yeti" : yeti,
                                    "invite" : invite,
                                    "fenOuv" : fenOuv,
                                    "fenFer" : fenFer,

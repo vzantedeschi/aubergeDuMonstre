@@ -6,6 +6,7 @@ vampire,Présence vampire
 meduse,Présence méduse
 intrus,Présence intrus
 sirene,Présence sirène
+yeti,Présence yeti
 invite,Présence invité
 fenOuv,Fenêtre ouverte
 fenFer,Fenêtre fermée
