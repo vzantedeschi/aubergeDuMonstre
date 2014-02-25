@@ -71,7 +71,7 @@ class ThreadSimuActionneurs(threading.Thread):
                     
 
 hote = 'localhost'
-port = 14000
+port = 13800
 
 
 #Ouverture d'un port de connexion avec les clients
@@ -88,8 +88,8 @@ socketClient, infoClient = socketSimulateur.accept()
 okProxy = True
 try :
     socketProxy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #socketProxy.connect(("134.214.106.23", 5000))
-    print("Connexion établie avec la passerelle sur le port {}".format(port))
+    socketProxy.connect(("134.214.106.23", 5000))
+    print("Connexion établie avec la passerelle sur le port 5000.")
 except socket.error :
     print("Impossible de se connecter au proxy")
     print("L'appareillage ne sera pas possible")

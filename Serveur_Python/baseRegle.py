@@ -28,14 +28,14 @@ port = 5000
 db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
-# try :
-    # print 'Attente connexion au proxy'
-    # connectProxy.connect((hote, port))
-    # print("Connexion établie avec la passerelle sur le port {}".format(port))
-    # connected = True
-# except socket.error :
-    # print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
-    # connected = False
+try :
+    print 'Attente connexion au proxy'
+    connectProxy.connect((hote, port))
+    print("Connexion établie avec la passerelle sur le port {}".format(port))
+    connected = True
+except socket.error :
+    print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
+    connected = False
 
 def RFIDFunc():
     rfidDetected = 0
@@ -53,9 +53,9 @@ def calcCheckSum(trame):
 
 def trameActionneur(actionneurId, activation):
     sync = 'A55A'
-    message = '6B0550000000'
+    message = '6B0570000000'
     if activation:
-        message = '6B0570000000'
+        message = '6B0550000000'
     message += format(actionneurId, '08x')
     message += "30"
     checksum = calcCheckSum(message)
@@ -80,12 +80,16 @@ def activerActionneur(idAct):
         
 def activerActionneur_type(idPiece, typeActionneur):
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
-    for a in actionneurs: 
+    for a in actionneurs:
+        print a.capteur_type
         if a.capteur_type == typeActionneur: 
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
-                print "Envoi au proxy"
-                connectProxy.send(trameActionneur(a.actionneur_id, True))
+                print "Envoi au proxy - Activation"
+                trame = trameActionneur(a.actionneur_id, True)
+                print trame
+                trame = trame.encode()
+                connectProxy.send(trame)
 
 # def desactiverActionneur(idPiece, idAct):
 #     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
@@ -103,14 +107,16 @@ def desactiverActionneur(idAct):
         connectProxy.send(trameActionneur(idAct, False))
             
 def desactiverActionneur_type(idPiece, typeActionneur):
-    print "*********PIECE " + str(idPiece)
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     for a in actionneurs:
         if a.capteur_type == typeActionneur:
             # Test si nous sommes effectivement connectés à la passerelle avant d'envoyer une trame d'actionneur
             if connected == True :
-                print "Envoi au proxy"
-                connectProxy.send(trameActionneur(a.actionneur_id, False))
+                print "Envoi au proxy - Desactivation"
+                trame = trameActionneur(a.actionneur_id, False)
+                print trame
+                trame = trame.encode()
+                connectProxy.send(trame)
                 
 def ouvrirVolets(idPiece):    
     # Allume la prise simulant les volets
@@ -419,12 +425,14 @@ def allumeClim():
 def ouvreVolet():
     ouvrirVolets(piece_id)
     etat.voletsOuverts = True
+    etat.interrupteurEnclenche = 0
     etat.save()
     return 0
 
 def fermeVolet():
     fermerVolets(piece_id)
     etat.voletsOuverts = False
+    etat.interrupteurEnclenche = 0
     etat.save()
     return 0
 

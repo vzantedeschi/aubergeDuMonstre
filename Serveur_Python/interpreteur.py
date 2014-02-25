@@ -191,13 +191,15 @@ def interpretation(trame, now):
         if intrDonnees == 5 or intrDonnees == 1:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = True)
           etatPiece.interrupteurEnclenche = 1
+          capteur_interrupteur.save()
+          etatPiece.dernierEvenement = date
+          etatPiece.save() 
         elif intrDonnees == 7 or intrDonnees == 3:
           capteur_interrupteur = tables.Interrupteur(piece_id = piece_id, date = date, traite = False, ouverte = False)
           etatPiece.interrupteurEnclenche = -1
-        capteur_interrupteur.save()
-        etatPiece.dernierEvenement = date
-        etatPiece.save()  
-        
+          capteur_interrupteur.save()
+          etatPiece.dernierEvenement = date
+          etatPiece.save() 
 
     elif typeCapteur == 'FEN':
         fenBytes = int(trame.dataBytes[7:8], 16)
