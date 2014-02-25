@@ -103,6 +103,7 @@ def desactiverActionneur(idAct):
         connectProxy.send(trameActionneur(idAct, False))
             
 def desactiverActionneur_type(idPiece, typeActionneur):
+    print "*********PIECE " + str(idPiece)
     actionneurs = tables.Piece.objects(piece_id = idPiece).first().actionneurs
     for a in actionneurs:
         if a.capteur_type == typeActionneur:
@@ -505,6 +506,8 @@ def realisationDemandeAction(actionneurType, actionType):
             allumeLum()
         elif actionneurType == 'PORTE':
             ouvrePiece()
+        elif actionnerType == 'PRISE':
+        	allumeInt()
     else:
         if actionneurType == 'VOL':
             fermeVolet()
@@ -518,6 +521,8 @@ def realisationDemandeAction(actionneurType, actionType):
             eteintLum()
         elif actionneurType == 'PORTE':
             fermePiece()
+        elif actionnerType == 'PRISE':
+        	eteintInt()
 
 def commande():
     global rfidDetected
@@ -531,6 +536,8 @@ def commande():
     for item in tables.DonneeAppli.objects(traite=False):
         #Recherche des actionneurs de la piece du type demande
         piece_id = item.piece_id
+        etat = tables.Etat.objects(piece_id = piece_id).first()
+        print '****PIECE MAIN ' + str(piece_id)
         actionType = item.action_type
         actionneurConcerne = tables.Actionneur.objects(actionneur_id=item.actionneur_id).first()
         realisationDemandeAction(actionneurConcerne.capteur_type, actionType)

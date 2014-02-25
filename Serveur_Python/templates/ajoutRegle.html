@@ -9,28 +9,40 @@
 {% include "header.html" %}
 <div class="container">
 	<div class="col-md-12">
-		<h2>Crée une règle</h2>
-		<div class="col-md-6">
-			<div class="panel panel-default text-center">
-				<div class="panel-heading">
-					<h3 class="panel-title">Conditions</h3>
-				</div>
-				<div id="condition">
+		<h2 class="text-center"> Créer une règle </h2>
 
+		<form method="POST" action="/ajoutRegle/creer">
+			<div class="form-group col-md-12">
+            	<label>Nom de la règle</label>
+            	<input type="text" class="form-control" name="nomRegle" />
+        	</div>
+			<div class="col-md-6">
+				<div class="panel panel-default text-center">
+					<div class="panel-heading">
+						<h3 class="panel-title">Conditions</h3>
+					</div>
+					<div id="condition">
+
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="col-md-6"> 
-			<div class="panel panel-default text-center">
-				<div class="panel-heading">
-					<h3 class="panel-title">Actions</h3>
-				</div>
-				<div id="action">
+			<div class="col-md-6"> 
+				<div class="panel panel-default text-center">
+					<div class="panel-heading">
+						<h3 class="panel-title">Actions</h3>
+					</div>
+					<div id="action">
 
+					</div>
 				</div>
 			</div>
-		</div>
+			<div class="col-lg-12 text-center">
+	        	<input type="submit" name="creer" value="Creer" class="btn btn-default"/>
+	        </div>
+		</form>
+
+
 	
 	</div>
 </div>
@@ -41,37 +53,147 @@
 {% endblock body %}
 
 {% block javascript %}
-{% raw %}
+
 <script src="static/js/ajoutRegle.js"></script>
-{% endraw %}
+
 {% raw %}
-<script id="aj-template" type="text/x-handlebars-template">
-	<div class="panel panel-default text-center">
-		<div class="panel-heading"></div>
-		<form method="POST" action="/ajoutRegle">
+<script id="ajCNorm-template" type="text/x-handlebars-template">
+	
+
+	        <li class="list-group-item">
+		        <div class="row">
+		        	<div class="checkbox">
+		            	<label>
+		            		<input type="checkbox"  name="condition" value="{{nom}}" />
+			        			<div class="col-lg-11 text-center">{{nom}}</div>
+			       		</label>
+			       	</div>
+		        </div>
+	        </li>
+
+</script>
+
+{% endraw %}
+
+{% raw %}
+<script id="ajCTemp-template" type="text/x-handlebars-template">
+	
+
+	        <li class="list-group-item">
+		        <div class="row">
+		        	<div class="checkbox">
+		            	<label>
+		            		<input type="checkbox"  name="condition" value="{{nom}}" />
+			        			<div class="col-lg-11 text-center">{{nom}}
+			        				<input type="number" name="{{nom}}" min="5" max="40" />
+			        			</div>
+			       		</label>
+			       	</div>
+		        </div>
+	        </li>
+
+</script>
+
+{% endraw %}
+
+{% raw %}
+<script id="ajCHum-template" type="text/x-handlebars-template">
+	
+
+	        <li class="list-group-item">
+		        <div class="row">
+		        	<div class="checkbox">
+		            	<label>
+		            		<input type="checkbox"  name="condition" value="{{nom}}" />
+			        			<div class="col-lg-11 text-center">{{nom}}
+			        				<input type="number" name="{{nom}}" min="7" max="100" />
+			        			</div>
+			       		</label>
+			       	</div>
+		        </div>
+	        </li>
+
+</script>
+
+{% endraw %}
+
+{% raw %}
+<script id="ajCBouge-template" type="text/x-handlebars-template">
+	
+
+	        <li class="list-group-item">
+		        <div class="row">
+		        	<div class="checkbox">
+		            	<label>
+		            		<input type="checkbox"  name="condition" value="{{nom}}" />
+			        			<div class="col-lg-11 text-center">{{nom}} depuis
+				        			<select name="bouge">
+	           							<option value="300">5 minutes</option>
+								        <option value="7200">2 heures</option>
+								        <option value="86400">1 jour</option>
+								        <option value="604800">1 semaine</option>
+								        <option value="1209600">2 semaine</option>
+								        <option value="2419200">1 mois</option>
+								        <option value="14515200">6 mois</option>
+								        <option value="29030400">1 an</option>
+								    </select>
+							    </div>
+			       		</label>
+			       	</div>
+		        </div>
+	        </li>
+
+</script>
+
+{% endraw %}
+
+{% raw %}
+<script id="ajCChange-template" type="text/x-handlebars-template">
+	
+
+	        <li class="list-group-item">
+		        <div class="row">
+		        	<div class="checkbox">
+		            	<label>
+		            		<input type="checkbox"  name="condition" value="{{nom}}" />
+			        			<div class="col-lg-11 text-center">{{nom}} depuis 
+				        			<select name="bouge">
+	           							<option value="300">5 minutes</option>
+								        <option value="7200">2 heures</option>
+								        <option value="86400">1 jour</option>
+								        <option value="604800">1 semaine</option>
+								        <option value="1209600">2 semaine</option>
+								        <option value="2419200">1 mois</option>
+								        <option value="14515200">6 mois</option>
+								        <option value="29030400">1 an</option>
+								    </select>
+							    </div>
+			       		</label>
+			       	</div>
+		        </div>
+	        </li>
+
+</script>
+
+{% endraw %}
+
+{% raw %}
+<script id="ajA-template" type="text/x-handlebars-template">
+	
 	        {{#each result}}
 	        <li class="list-group-item">
 		        <div class="row">
 		        	<div class="checkbox">
 		            	<label>
-		            		<input type="checkbox"  name="regle" value="{{_id}}" />
-			        			<div class="col-lg-6 text-center">{{condition}}</div>
-			       				<div class="col-lg-6 text-center">{{action}}</div>
+		            		<input type="checkbox"  name="action" value="{{nom}}" />
+			        			<div class="col-lg-11 text-center">{{description}}</div>
 			       		</label>
 			       	</div>
 		        </div>
 	        </li>
 	        {{/each}}
-
-	        <div class="col-lg-6">
-	        	<input type="submit" name="supprimer" value="Supprimer" class="btn btn-default"/>Supprimer règles
-	        </div>
-	        <div class="col-lg-6">
-	        	<input type="submit" name="ajouter" value="Ajouter" class="btn btn-default"/>Ajouter règle
-	        </div>
-
-        </form>
-	</div>
 </script>
 
 {% endraw %}
+
+{% endblock %}
