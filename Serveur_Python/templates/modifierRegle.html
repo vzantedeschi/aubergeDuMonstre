@@ -7,7 +7,9 @@
 {% block body %}
 
 {% include "header.html" %}
+<div id="modif">
 
+</div>
 <div class="text-center">
 	<p>Copyright By H4213</p>
 </div>
@@ -16,4 +18,31 @@
 
 {% block javascript %}
 <script src="static/js/modifierRegle.js"></script>
+
+{% raw %}
+<script id="modifTemp-template" type="text/x-handlebars-template">
+	<input type="number" name="{{nom}}"/>	        
+</script>
+{% endraw %}
+
+{% raw %}
+<script id="modifHum-template" type="text/x-handlebars-template">
+	<input type="number" name="{{nom}}"/>	        
+</script>
+{% endraw %}
+
+{% raw %}
+<script id="modifChange-template" type="text/x-handlebars-template">
+	<input type="number" name="{{nom}}"/>	        
+</script>
+{% endraw %}
+
+{% raw %}
+<script id="modifBouge-template" type="text/x-handlebars-template">
+	<input type="number" name="{{nom}}"/>	        
+</script>
+{% endraw %}
+
+
+
 {% endblock %}
