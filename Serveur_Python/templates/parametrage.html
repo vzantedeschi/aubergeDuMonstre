@@ -21,11 +21,13 @@
 
 
 	        <div class="col-lg-6 text-center">
-	        	<input type="submit" onClick="" name="supprimer" value="Supprimer regles" class="btn btn-default"/>
+	        	<input type="submit" name="supprimer" value="Supprimer regles" class="btn btn-default"/>
 	        </div>
-	        <div class="col-lg-6 text-center">
-	        	<input type="submit" onClick="" name="ajouter" value="Ajouter regle" class="btn btn-default"/>
-	        </div>
+		</form>
+		<form method="POST" action="/ajoutRegle">
+			<div class="col-lg-6 text-center">
+		    	<input type="submit" name="ajouter" value="Ajouter regle" class="btn btn-default"/>
+		    </div>
 		</form>
 	</div>
 </div>
@@ -50,12 +52,12 @@
 		            		<input class="col-lg-2" type="checkbox"  name="regle" value="{{id_regle}}" />
 			        			<div class="col-lg-4 text-center">
 			        			{{#each conditions}}
-			        				{{nom}}
+			        				/ {{nom}} / 
 			        			{{/each}}
 			        			</div>
 			       				<div class="col-lg-4 text-center">
 			       				{{#each actions}}
-			       					{{description}}
+			       					/ {{description}} / 
 			       				{{/each}}
 			       				</div>
 			       		</label>

@@ -117,15 +117,17 @@ def parametrage():
 @app.route('/parametrage', methods=['POST'])
 @requires_admin_rights
 def send_parametrage():
-    #si submit=supprimer verifier que quelque chose est coché et supprimer 
-    #puis réaffiche parametrage, sinon go page ajout
-    return render_template('parametrage.html')
+	retour = request.form.getlist("regle")
+	for a in retour:
+		tables.Regle.objects(regle_id=a).first().delete()
+		print a
+	return render_template('parametrage.html')
 
 @app.route('/parametrage/chargerRegles')
 @requires_admin_rights
 def get_regles():
     listeRegles = [p.to_dict() for p in tables.Regle.objects]
-    reponse= dict(ok=True, result=listeRegles)
+    reponse = dict(ok=True, result=listeRegles)
     return json.dumps(reponse)
 
 @app.route('/parametrage/ActCond/<regle_id>')
@@ -136,6 +138,76 @@ def get_actCond(regle_id):
     conditions = [a.to_dict() for a in regle.conditions]
     reponse=dict(ok=True, actions=actions, conditions=conditions, id_regle=regle_id)
     return json.dumps(reponse)
+
+@app.route('/ajoutRegle', methods=['GET', 'POST'])
+@requires_admin_rights
+def ajoutRegle():
+    return render_template('ajoutRegle.html')
+
+@app.route('/ajoutRegle/chargerCond')
+@requires_admin_rights
+def sendCond():
+	listeCond = [c.to_dict() for c in tables.ConditionGenerique.objects]
+	reponse = dict(ok=True, result=listeCond)
+	return json.dumps(reponse)
+
+@app.route('/ajoutRegle/chargerAct')
+@requires_admin_rights
+def sendAct():
+	listeAct = [a.to_dict() for a in tables.Action.objects]
+	reponse = dict(ok=True, result=listeAct)
+	return json.dumps(reponse)
+
+@app.route('/ajoutRegle/creer', methods=['POST'])
+@requires_admin_rights
+def creation():
+	retourCond = request.form.getlist("condition")
+	print retourCond
+	conditions = tables.ConditionGenerique.objects(nom__in=retourCond)
+	newConds = []
+	for cond in conditions:
+		if cond.nom == "tempSup":
+			val = request.form.get('tempSup')
+			print "aaaaaaa"
+			print val
+			newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+		else:
+			if cond.nom == "tempInf":
+				val = request.form.get('tempInf')
+				newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+			else:
+				if cond.nom == "humInf":
+					val = request.form.get('humInf')
+					newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+				else:
+					if cond.nom == "humSup":
+						val = request.form.get('humSup')
+						newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+					else:
+						if cond.nom == "pasBouge":
+							val = request.form.get('pasBouge')
+							newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+						else:
+							if cond.nom == "pasChange":
+								val = request.form.get('pasChange')
+								newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+							else:
+								newCond = tables.Condition(nom=cond.nom, description=cond.description)
+		newCond.save()
+		newConds.append(newCond)
+
+
+	retourAct = request.form.getlist("action")
+	actions = tables.Action.objects(nom__in=retourAct)
+	
+	nom = request.form.get('nomRegle')
+	
+	listeIdRegles = [r.regle_id for r in tables.Regle.objects]
+	maxid = max(listeIdRegles) + 1
+
+	regle = tables.Regle( regle_id= maxid, nom = nom, conditions = newConds, actions = actions)
+	regle.save()
+	return redirect('/parametrage')
 
 @app.route('/surveillance/pieces')
 def get_pieces():
