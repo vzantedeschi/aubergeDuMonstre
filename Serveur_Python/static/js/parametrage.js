@@ -1,6 +1,6 @@
 var nb=1;
 $(document).ready(function() { 
-	regTemplate = loadTemplate('#reg-template'); //loadtemplate indéfini
+	regTemplate = loadTemplate('#reg-template'); 
 
 	var $regles = $("#listeRegles");
 	var i=0;
