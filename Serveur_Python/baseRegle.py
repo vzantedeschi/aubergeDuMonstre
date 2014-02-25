@@ -113,12 +113,12 @@ def desactiverActionneur_type(idPiece, typeActionneur):
                 
 def ouvrirVolets(idPiece):    
     # Allume la prise simulant les volets
-    print "*****Verrouillage actif : volets en cours d'ouverture"
+    print "*****Verrouillage desactive : volets en cours d'ouverture"
     activerActionneur_type(idPiece, 'VOL')   
 
 def fermerVolets(idPiece):
     # Eteint la prise simulant les volets
-    print "*****Verrouillage desactive : volets en cours de fermeture"
+    print "*****Verrouillage active : volets en cours de fermeture"
     desactiverActionneur_type(idPiece, 'VOL')
     
 def ouvrirPiece(idPiece):    
@@ -243,6 +243,10 @@ def intrus() :
                 break                            
         if trouve == True : 
             break
+        
+    if tables.Personne.objects(nom="Intrus").first().ignore == True:
+        trouve = True
+    
     return trouve == False
 
 def sirene() : 
@@ -365,6 +369,7 @@ def repNon() :
 def repOui() :
     pass
     #penser à mettre en "prises en compte" les variables utilisées pour trouver les règles
+
 
 #-----------------------------FIN CONDITIONS--------------------------------------------------------------------------------------------------------
 #----------------------------FONCTIONNALITES--------------------------------------------------------------------------------------------------------
@@ -512,7 +517,35 @@ def commande():
             fermePiece()
 
         item.traite=True
-        item.save()  
+        item.save()   
+
+    for item in tables.DemandeAppareillage.objects(traite=False):
+        ident = item.ident
+        type = item.type
+        piece = tables.Piece.objects(piece_id = piece_id).first()
+        if item.creer :
+            print 'création dispositif'
+            if item.dispositif == 'Capteur':
+                dispo = tables.Capteur(capteur_id = ident, capteur_type = type)
+                dispo.save()
+                piece.capteurs.append(dispo)
+                piece.save()
+            elif item.dispositif == 'Actionneur':
+                dispo = tables.Actionneur(actionneur_id = ident, capteur_type = type)
+                dispo.save()
+                piece.actionneurs.append(dispo)
+                piece.save()
+        else :
+            print 'suppression dispositif'
+            if item.dispositif == 'Capteur':
+                dispo = tables.Capteur.objects.get(capteur_id = ident)
+                dispo.delete()
+            elif item.dispositif == 'Actionneur':
+                dispo = tables.Actionneur.objects.get(actionneur_id = ident)
+                dispo.delete()
+
+        item.traite=True
+        item.save()
 
 #### FIN INTEGRATION ENVOIS DE L'APPLI WEB ####
 

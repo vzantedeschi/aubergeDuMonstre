@@ -7,6 +7,7 @@ import sys
 import mongoengine
 sys.path.append('../BDD')
 import tables
+import threading
 
 rfidDetected = 0
 
@@ -20,7 +21,7 @@ def enum(*sequential, **named):
   enums = dict(zip(sequential, range(len(sequential))), **named)
   return type('Enum', (), enums)
 
-Capteurs = enum('TEMP', 'RFID', 'PRES','FEN','INTR')
+Capteurs = enum('TEMP', 'RFID', 'PRES','FEN','INTR','POR')
 
 def interpretation(trame, now):
   idIntrus = 13
@@ -86,7 +87,8 @@ def interpretation(trame, now):
 
             # Si l'intrus est dans la pièce 1 'Couloir', il n'est plus ignoré
             persoAjoute = tables.Personne.objects(nom = "Intrus").first()
-            if piece_id == 1:
+
+            if piece_id == 1 and persoAjoute.ignore == True:
                 persoAjoute.ignore = False
                 persoAjoute.save()
 
@@ -103,8 +105,8 @@ def interpretation(trame, now):
                         etatAChanger.save()
                             
         else:
-            print ("Un résident est dans la piece :",piece_id)
-            print ("Le numéro du résident est :",rfidDetected)
+            print ("Un resident est dans la piece :",piece_id)
+            print ("Le numero du resident est :",rfidDetected)
 
             persoAjoute = tables.Personne.objects(personne_id = rfidDetected).first()
 
@@ -210,7 +212,22 @@ def interpretation(trame, now):
         capteur_fenetre.save()
         
         etatPiece.dernierEvenement = date
-        etatPiece.save()  
+        etatPiece.save()
+
+    elif typeCapteur == 'POR':
+        porBytes = int(trame.dataBytes[7:8], 16)
+        print ("porBytes : ",porBytes)
+        if porBytes == 8:
+          capteur_porte = tables.ContactPorte(piece_id = piece_id, date = date, traite = False, ouverte = False)
+          etatPiece.portesFermees = False
+        elif porBytes == 9:
+          capteur_porte = tables.ContactPorte(piece_id = piece_id, date = date, traite = False, ouverte = True)
+          etatPiece.portesFermees = True
+          
+        capteur_porte.save()
+        
+        etatPiece.dernierEvenement = date
+        etatPiece.save() 
 
 #### ESSAI INTEGRATION ENVOIS DE L'APPLI WEB ########
     

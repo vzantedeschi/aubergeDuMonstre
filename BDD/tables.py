@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
 import hashlib
 
 from mongoengine import *
-import datetime
 
 def hash_password(password, salt):
     return hashlib.sha512(salt + hashlib.sha256(password).hexdigest()).hexdigest()
@@ -12,6 +10,7 @@ def hash_password(password, salt):
 class Capteur(Document):
 	capteur_id = IntField(primary_key=True)
 	capteur_type = StringField(required=True)
+	interpreter = BooleanField(default=True)
 		
 class Actionneur(Document):
 	actionneur_id = IntField(primary_key=True)
@@ -35,6 +34,7 @@ class Utilisateur(Document):
 	salt = StringField(required=True)
 
 	def valider_mot_passe(self, mot):
+		print hash_password(mot, self.salt)
 		return hash_password(mot, self.salt) == self.secret_hash
 
 class Etat(Document):
@@ -78,6 +78,9 @@ class ContactFen(Donnee):
 class RFID (Donnee):
 	resident_id = IntField(required=True)
 
+class ContactPorte(Donnee):
+    ouverte = BooleanField(required = True)
+
 
 ## Donnees recues par l'appli web (actionneurs)
 class DonneeAppli(Donnee) :
@@ -90,7 +93,11 @@ class ReponseAppli(Donnee):
 
 class DemandeAppareillage(Donnee):
 	dispositif = StringField(required=True)
+	creer = BooleanField(default=True)
 	type = StringField(required=True)
+	ident = IntField(required=True)
+
+class ConfirmationAppareillage(Donnee):
 	ident = IntField(required=True)
     
 class Regle(Document):
