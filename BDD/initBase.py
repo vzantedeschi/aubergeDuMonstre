@@ -201,7 +201,7 @@ def initialize() :
         user.save()
 
     # Création d'un type intrus dans la base des personnages
-    personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False, image=image)
+    personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False, image="intrus.jpg")
     personnage.save()
 
     ####### Création d'un superutilisateur #######
