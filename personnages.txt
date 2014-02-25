@@ -1,5 +1,5 @@
-00000001 Meduse
-00000002 Vampire
-00000003 Zombie
-00000004 Sirene
-00000005 Yeti
+00000001 Meduse jeti.jpg
+00000002 Vampire jeti.jpg
+00000003 Zombie jeti.jpg
+00000004 Sirene jeti.jpg
+00000005 Yeti jeti.jpg

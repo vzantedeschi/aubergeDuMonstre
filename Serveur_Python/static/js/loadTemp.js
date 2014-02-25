@@ -1,7 +1,5 @@
 $(document).ready(function() { 
     pieces = new Array();
-    //rects statiques
-	rects = new Array();
     $.getJSON('/surveillance/pieces', {}, function(data) {
         pieces = data.result;
     });
@@ -30,7 +28,7 @@ function alertNon() {
 }
 
 /* Handlebars */
-
+var rects = new Array();
 
 loadTemplate = function(template_id) {
     var source = $(template_id).html();
@@ -54,7 +52,8 @@ function updateEtatPiece(piece) {
     var persos = new Array();
     $.getJSON('/surveillance/personnages', {piece : piece}, function(data) {
         persos = data.result;
-        if (rects[0])  {
+        if (rects[0]) {
+        	console.log("dessin");
         	drawPerso(piece,persos);
         }
         for (var j = 0; j < persos.length; j ++) {
