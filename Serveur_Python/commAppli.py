@@ -218,6 +218,11 @@ def creation():
 				regle.save()
 				return redirect('/parametrage')
 
+@app.route('/modifierRegle', methods=['POST'])
+@requires_admin_rights
+def modfierRegle():
+    return render_template('modifierRegle.html')
+
 @app.route('/surveillance/pieces')
 def get_pieces():
     pieces = [p.to_dict() for p in tables.Piece.objects.order_by('+piece_id')]

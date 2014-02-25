@@ -20,17 +20,23 @@
 			</div>
 
 
-	        <div class="col-lg-6 text-center">
+	        <div class="col-lg-4 text-center">
 	        	<input type="submit" name="supprimer" value="Supprimer regles" class="btn btn-default"/>
 	        </div>
 		</form>
 		<form method="POST" action="/ajoutRegle">
-			<div class="col-lg-6 text-center">
+			<div class="col-lg-4 text-center">
 		    	<input type="submit" name="ajouter" value="Ajouter regle" class="btn btn-default"/>
+		    </div>
+		</form>
+		<form method="POST" action="/modifierRegle">
+			<div class="col-lg-4 text-center">
+		    	<input type="submit" name="modfier" value="Modifier regle" class="btn btn-default"/>
 		    </div>
 		</form>
 	</div>
 </div>
+<br><br>
 
 <div class="text-center">
 	<p>Copyright By H4213</p>
@@ -52,7 +58,11 @@
 		            		<input class="col-lg-2" type="checkbox"  name="regle" value="{{id_regle}}" />
 			        			<div class="col-lg-4 text-center">
 			        			{{#each conditions}}
-			        				/ {{description}} / 
+			        				{{#if valeur}}
+			        					/ {{description}} <strong>({{valeur}})</strong> / 
+			        				{{else}}
+			        					/ {{description}} /
+			        				{{/if}}
 			        			{{/each}}
 			        			</div>
 			       				<div class="col-lg-4 text-center">
