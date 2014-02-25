@@ -29,4 +29,4 @@ eauEt,Système anti-incendie éteint
 intAll,Interrupteur enclenché
 intEt,Interrupteur désenclenché
 repNon,l'utilisateur répond non
-repOui,l'utilisateur répond oui
+repOui,l'utilisateur répond ouia
