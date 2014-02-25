@@ -487,6 +487,8 @@ def realisationDemandeAction(actionneurType, actionType):
             allumeLum()
         elif actionneurType == 'PORTE':
             ouvrePiece()
+        elif actionnerType == 'PRISE':
+        	allumeInt()
     else:
         if actionneurType == 'VOL':
             fermeVolet()
@@ -500,6 +502,8 @@ def realisationDemandeAction(actionneurType, actionType):
             eteintLum()
         elif actionneurType == 'PORTE':
             fermePiece()
+        elif actionnerType == 'PRISE':
+        	eteintInt()
 
 def commande():
     global rfidDetected
