@@ -267,6 +267,24 @@ def sirene() :
         if trouve == True : 
             break
     return trouve 
+    
+def yeti() : 
+    trouve = False
+    for p in etat.persosPresents : 
+        fic_id = open('../personnages.txt',"r")
+        liste = fic_id.readlines()
+        fic_id.close()
+
+        for l in liste:
+            ident, name = l.split()
+            ident = int(ident,16)
+            if name == "Yeti" :                            
+                if p.personne_id  == ident :
+                    trouve = True
+                    break                            
+        if trouve == True : 
+            break
+    return trouve 
 
 def invite() : 
     trouve = False
@@ -616,6 +634,7 @@ def commande():
                                    "meduse" : meduse,
                                    "intrus" : intrus,
                                    "sirene" : sirene,
+                                   "yeti" : yeti,
                                    "invite" : invite,
                                    "fenOuv" : fenOuv,
                                    "fenFer" : fenFer,

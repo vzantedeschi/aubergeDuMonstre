@@ -162,52 +162,66 @@ def sendAct():
 @requires_admin_rights
 def creation():
 	retourCond = request.form.getlist("condition")
-	print retourCond
-	conditions = tables.ConditionGenerique.objects(nom__in=retourCond)
-	newConds = []
-	for cond in conditions:
-		if cond.nom == "tempSup":
-			val = request.form.get('tempSup')
-			print "aaaaaaa"
-			print val
-			newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+	if retourCond==[]:
+		#les champs sont incomplets
+		return redirect('/ajoutRegle')
+	else :
+		retourAct = request.form.getlist("action")
+		if retourAct==[]:
+			#les champs sont incomplets
+			return redirect('/ajoutRegle')
 		else:
-			if cond.nom == "tempInf":
-				val = request.form.get('tempInf')
-				newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+			nom = request.form.get('nomRegle')
+			if nom == "":
+				#les champs sont incomplets
+				return redirect('/ajoutRegle')
 			else:
-				if cond.nom == "humInf":
-					val = request.form.get('humInf')
-					newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
-				else:
-					if cond.nom == "humSup":
-						val = request.form.get('humSup')
+				conditions = tables.ConditionGenerique.objects(nom__in=retourCond)
+				newConds = []
+				for cond in conditions:
+					if cond.nom == "tempSup":
+						val = request.form.get('tempSup')
 						newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
 					else:
-						if cond.nom == "pasBouge":
-							val = request.form.get('pasBouge')
+						if cond.nom == "tempInf":
+							val = request.form.get('tempInf')
 							newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
 						else:
-							if cond.nom == "pasChange":
-								val = request.form.get('pasChange')
+							if cond.nom == "humInf":
+								val = request.form.get('humInf')
 								newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
 							else:
-								newCond = tables.Condition(nom=cond.nom, description=cond.description)
-		newCond.save()
-		newConds.append(newCond)
+								if cond.nom == "humSup":
+									val = request.form.get('humSup')
+									newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+								else:
+									if cond.nom == "pasBouge":
+										val = request.form.get('pasBouge')
+										newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+									else:
+										if cond.nom == "pasChange":
+											val = request.form.get('pasChange')
+											newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
+										else:
+											newCond = tables.Condition(nom=cond.nom, description=cond.description)
+					newCond.save()
+					newConds.append(newCond)
 
 
-	retourAct = request.form.getlist("action")
-	actions = tables.Action.objects(nom__in=retourAct)
-	
-	nom = request.form.get('nomRegle')
-	
-	listeIdRegles = [r.regle_id for r in tables.Regle.objects]
-	maxid = max(listeIdRegles) + 1
+				
+				actions = tables.Action.objects(nom__in=retourAct)
+				
+				listeIdRegles = [r.regle_id for r in tables.Regle.objects]
+				maxid = max(listeIdRegles) + 1
 
-	regle = tables.Regle( regle_id= maxid, nom = nom, conditions = newConds, actions = actions)
-	regle.save()
-	return redirect('/parametrage')
+				regle = tables.Regle( regle_id= maxid, nom = nom, conditions = newConds, actions = actions)
+				regle.save()
+				return redirect('/parametrage')
+
+@app.route('/modifierRegle', methods=['POST'])
+@requires_admin_rights
+def modfierRegle():
+    return render_template('modifierRegle.html')
 
 @app.route('/surveillance/pieces')
 def get_pieces():

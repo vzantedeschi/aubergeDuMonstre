@@ -75,13 +75,13 @@ def initialize() :
             condition = listeConditions[0]
             valeur = float(listeConditions[1])
             cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
+            cond.save()
         else :
             condition = c_nom
-
             cond = tables.ConditionGenerique(nom = condition, description = desc)
-
-        #cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
-        cond.save()
+            cond.save()
+            #cond = tables.ConditionGenerique(nom = condition, valeur=valeur, description = desc)
+        
         
     #Initialisation actions
     fic_id = open('../actions.txt',"r")
@@ -119,9 +119,9 @@ def initialize() :
                     break
                 else :
                     if valeur != None:
-                        newCond = tables.Condition(nom= condition, valeur=float(valeur), description = cond.description)
+                        newCond = tables.Condition(nom= condition, valeur=float(valeur), description = obj.description)
                     else:
-                        newCond = tables.Condition(nom= condition, description = cond.description)
+                        newCond = tables.Condition(nom= condition, description = obj.description)
                     r_conds.append(newCond)
                     
             l_act = acts.split(',', acts.count(','))

@@ -6,6 +6,7 @@ vampire,Présence vampire
 meduse,Présence méduse
 intrus,Présence intrus
 sirene,Présence sirène
+yeti,Présence yeti
 invite,Présence invité
 fenOuv,Fenêtre ouverte
 fenFer,Fenêtre fermée
@@ -28,4 +29,4 @@ eauEt,Système anti-incendie éteint
 intAll,Interrupteur enclenché
 intEt,Interrupteur désenclenché
 repNon,l'utilisateur répond non
-repOui,l'utilisateur répond oui
+repOui,l'utilisateur répond ouia
