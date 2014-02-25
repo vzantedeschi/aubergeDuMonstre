@@ -192,16 +192,16 @@ def initialize() :
     fic_id.close()
 
     for l in liste:
-        ident, name = l.split()
+        ident, name, image = l.split()
         ident = int(ident,16)
         print ident
-        personnage = tables.Personne(personne_id=ident, nom=name)
+        personnage = tables.Personne(personne_id=ident, nom=name, image=image)
         personnage.save()
         user = tables.Utilisateur(identifiant=name, secret_hash='IFODJI2973', salt='2')
         user.save()
 
     # Création d'un type intrus dans la base des personnages
-    personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False)
+    personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False, image=image)
     personnage.save()
 
     ####### Création d'un superutilisateur #######
@@ -215,7 +215,12 @@ if __name__ == '__main__' :
     ##### Ajout intrus dans le couloir ######
     piece = tables.Piece.objects(name="Couloir").first()
     etat = tables.Etat.objects(piece_id=piece.piece_id).first()
-    #id = random.randint(10, 100)
+    yeti = tables.Personne.objects.get(nom='Yeti')
     intrus = tables.Personne.objects.get(nom='Intrus')
+    meduse = tables.Personne.objects.get(nom='Meduse')
+    zombie = tables.Personne.objects.get(nom='Zombie')
     etat.persosPresents.append(intrus)
+    etat.persosPresents.append(meduse)
+    etat.persosPresents.append(zombie)
+    etat.persosPresents.append(yeti)
     etat.save()

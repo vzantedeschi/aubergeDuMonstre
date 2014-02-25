@@ -8,5 +8,4 @@
 8; vampire veut manger et volets ouverts;repOui,fenOuv;fermePiece,fermeVolet;
 9; vampire veut manger et portes ouvertes;repOui,porteOuv;fermePiece,fermeVolet;
 10; meduse dans couloir;dansCouloir,meduse;fermeRideau;
-11; air frais;tempSup 15,yeti,climEt;allumeClim;
-12; sirene dans couloir;dansCouloir,sirene;ouvreRideau;
+11; sirene dans couloir;dansCouloir,sirene;ouvreRideau;

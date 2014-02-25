@@ -26,6 +26,7 @@ class Personne(Document):
 	personne_id = IntField(unique=True)	
 	nom = StringField(default="Intrus")
 	ignore = BooleanField(default=True)
+	image = StringField(required=True)
 
 class Utilisateur(Document):
 	identifiant = StringField(unique=True)
