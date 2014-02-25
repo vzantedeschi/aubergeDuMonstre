@@ -88,8 +88,9 @@ socketClient, infoClient = socketSimulateur.accept()
 okProxy = True
 try :
     socketProxy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socketProxy.connect(("134.214.106.23", 5000))
+    #socketProxy.connect(("134.214.106.23", 5000))
     print("Connexion établie avec la passerelle sur le port 5000.")
+    okProxy = False
 except socket.error :
     print("Impossible de se connecter au proxy")
     print("L'appareillage ne sera pas possible")

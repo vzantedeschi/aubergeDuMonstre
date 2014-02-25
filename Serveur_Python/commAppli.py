@@ -250,7 +250,6 @@ def send_action():
 	act_type = False
 	if act_typeStr == 'true':
 		act_type = True
-	print "********************PIECE " + str(piece)
 	now = datetime.datetime.now()
 	reponse = tables.DonneeAppli(date=now,piece_id=piece,actionneur_id=id_act,action_type=act_type)
 	reponse.save()
@@ -291,7 +290,7 @@ def add_actionneur():
 
 @app.route('/appareillage/capteur')
 @requires_login
-def appareillage():
+def appareillage_capt():
 	id = int(request.args.get('id'),16)
 	type = request.args.get('type')
 	piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
@@ -307,14 +306,50 @@ def appareillage():
 		reponse.save()
 		return jsonify(error=True)
 
+@app.route('/appareillage/actionneur')
+@requires_login
+def appareillage_act():
+    id = int(request.args.get('id'),16)
+    type = request.args.get('type')
+    piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+    now = datetime.datetime.now()
+    reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Actionneur',type=type)
+    reponse.save()
+    return jsonify(error=False)
+
 @app.route('/appareillage/verifier')
 @requires_login
 def verifierID():
 	id = request.args.get('id')
-	if id == '' :
+	if id == '' or tables.Capteur.objects(capteur_id=id) or tables.Actionneur.objects(actionneur_id=id):
 		return jsonify(error=True)
 	else:
 		return jsonify(error=False)
+
+@app.route('/appareillage/annuler')
+@requires_login
+def annuler():
+    id = int(request.args.get('id'),16)
+    type = request.args.get('type')
+    piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+    now = datetime.datetime.now()
+    reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Actionneur',type=type, creer=False)
+    reponse.save()
+    return 'ok'
+
+
+@app.route('/appareillage/confirmer')
+@requires_login
+def confirmer():
+    id = int(request.args.get('id'),16)
+    piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+    now = datetime.datetime.now()
+    actionneur = tables.Actionneur.objects(actionneur_id = id).first()
+    actionneur.interpreter = True;
+    actionneur.save();
+    conf = tables.ConfirmationAppareillage(piece_id = piece.piece_id, date = now, traite = True,ident=id)
+    conf.save()
+    return 'ok'
 
 
 if __name__ == '__main__':
