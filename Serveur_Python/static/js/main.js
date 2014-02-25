@@ -1,16 +1,3 @@
-$(document).ready(function() { 
-    status = new Array();
-    pieces = new Array();
-    
-    $.getJSON('/surveillance/pieces', {}, function(data) {
-        pieces = data.result;
-    });
-    setInterval(updateEtats, 1000);
-
-    var $notification = $('#notification.hidden');
-    $notification.hide();
-})
-
 //design constants
 var WIDTH = $(document).width() * 0.4; 
 var HEIGHT = $(document).height() * 0.7;
@@ -32,8 +19,6 @@ var MARGE = 3;
 //Draw maison 
 maison = new Raphael(document.getElementById("maison"), WIDTH + MARGE * 2, HEIGHT);
 
-//rects statiques
-var rects = new Array();
 rects[0] = createRoom(w1 + MARGE, h2 + MARGE, w3, h3 - MARGE);
 rects[1] = createRoom(0, 0, w1, HEIGHT);
 rects[2] = createRoom(w1 + w3 + 2 * MARGE, h2 + MARGE, w4 - MARGE, h4 - MARGE);
@@ -66,58 +51,6 @@ function addHoverListener(obj) {
     });
 }
 
-function updateEtats() {
-    for (var i = 0; i < pieces.length ; i++) {
-        var piece = i + 1;
-        updateEtatPiece(piece);
-        if (rects)  {
-            rects[i].attr({"fill":"white"});
-            if (pieces[i].name == $("#piece").text()) {
-                rects[i].attr({"fill":"red"});
-            }
-        }
-    }
-}
-
 function drawPerso(piece,perso){
     //console.log(rects[piece - 1].attr("width"));
 }
-
-function updateEtatPiece(piece) {
-    var persos = new Array();
-    $.getJSON('/surveillance/personnages', {piece : piece}, function(data) {
-        persos = data.result;
-        for (var j = 0; j < persos.length; j ++) {
-            drawPerso(piece,persos[j]);
-            if (new String(persos[j].nom).valueOf() == new String("Intrus")){
-                if (new String(persos[j].ignore).valueOf() == new String("false")) {
-                    if (new String(data.logged).valueOf() != new String("None")) {
-                        $('#piece').text(pieces[piece - 1].name);
-                        $('#notification').show();
-                        $("#notification").removeClass('hidden');
-                        //la prochaine fois, on ignore cet intrus
-                        $.getJSON('/surveillance/' + persos[j].personne_id);
-                    }
-                }
-            }
-        }   
-    });
-}
-function alertOui() {	
-	alert("A table!");
-	$('#notification').hide();
-    $("#notification").addClass('hidden');
-    piece = $("#piece").text();
-    $("#piece").text("");
-    $.getJSON('/surveillance/reponse', {piece : piece, rep : "oui"});
-}
-
-function alertNon() {	
-	alert("Rien à faire");
-    $('#notification').hide();
-    $("#notification").addClass('hidden');
-	piece = $("#piece").text();
-    $("#piece").text("");
-    $.getJSON('/surveillance/reponse', {piece : piece, rep : "non"});
-}
-

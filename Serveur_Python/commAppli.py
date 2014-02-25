@@ -166,13 +166,13 @@ def get_actionneurs(piece_id):
 
 @app.route('/controle/action')
 def send_action():
-	id_act = request.args.get('action')
-	piece = request.args.get('piece')
+	id_act = int(request.args.get('action'))
+	piece = int(request.args.get('piece'))
 	act_typeStr = request.args.get('type')
 	act_type = False
 	if act_typeStr == 'true':
 		act_type = True
-	print str(id_act)
+	print "********************PIECE " + str(piece)
 	now = datetime.datetime.now()
 	reponse = tables.DonneeAppli(date=now,piece_id=piece,actionneur_id=id_act,action_type=act_type)
 	reponse.save()
