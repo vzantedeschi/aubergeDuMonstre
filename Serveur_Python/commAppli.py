@@ -83,7 +83,7 @@ def login():
 def process_login():
     ident, mot = request.form['username'], request.form['password']
     user = tables.Utilisateur.objects(identifiant=ident).first()
-    if user is None or user.valider_mot_passe(mot):
+    if user is None or not user.valider_mot_passe(mot):
         app.logger.warning("Impossible de se logger : {}".format(user))
         return render_template('login.html', error=True, username=ident)
     else:
@@ -206,8 +206,6 @@ def creation():
 											newCond = tables.Condition(nom=cond.nom, description=cond.description)
 					newCond.save()
 					newConds.append(newCond)
-
-
 				
 				actions = tables.Action.objects(nom__in=retourAct)
 				

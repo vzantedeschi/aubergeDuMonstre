@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import hashlib
+import os
 
 from mongoengine import *
 
+def generate_salt():
+    return os.urandom(16).encode('base_64')
+
 def hash_password(password, salt):
-    return hashlib.sha512(salt + hashlib.sha256(password).hexdigest()).hexdigest()
+    return hashlib.sha512(salt + password).hexdigest()
 
 class Capteur(Document):
 	capteur_id = IntField(primary_key=True)
@@ -29,10 +33,17 @@ class Personne(Document):
 	image = StringField(required=True)
 
 class Utilisateur(Document):
-	identifiant = StringField(unique=True)
+	identifiant = StringField(primary_key=True)
 
 	secret_hash = StringField(required=True)
 	salt = StringField(required=True)
+
+	@staticmethod
+	def new_user(ident, password):
+		u = Utilisateur(identifiant=ident)
+		u.salt = generate_salt()
+		u.secret_hash = hash_password(password, u.salt)
+		return u
 
 	def valider_mot_passe(self, mot):
 		print hash_password(mot, self.salt)

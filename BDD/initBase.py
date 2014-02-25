@@ -197,7 +197,7 @@ def initialize() :
         print ident
         personnage = tables.Personne(personne_id=ident, nom=name, image=image)
         personnage.save()
-        user = tables.Utilisateur(identifiant=name, secret_hash='IFODJI2973', salt='2')
+        user = tables.Utilisateur.new_user(name,"ghome123")
         user.save()
 
     # Création d'un type intrus dans la base des personnages
@@ -205,7 +205,7 @@ def initialize() :
     personnage.save()
 
     ####### Création d'un superutilisateur #######
-    admin = tables.Utilisateur(identifiant='administrateur',secret_hash='IFODJI2973', salt='2')
+    admin = tables.Utilisateur.new_user('administrateur',"ghome123")
     admin.save()
 
     print 'base réinitialisée'

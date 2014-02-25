@@ -563,7 +563,7 @@ def commande():
     #     item.save()   
 
     for item in tables.DemandeAppareillage.objects(traite=False):
-        ident = item.ident
+        ident = int(item.ident,16)
         type = item.type
         piece = tables.Piece.objects(piece_id = piece_id).first()
         if item.creer :
