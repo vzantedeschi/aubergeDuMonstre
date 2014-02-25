@@ -218,10 +218,20 @@ def creation():
 				regle.save()
 				return redirect('/parametrage')
 
-@app.route('/modifierRegle', methods=['POST'])
+@app.route('/modifierRegle/<id_regle>')
 @requires_admin_rights
-def modfierRegle():
-    return render_template('modifierRegle.html')
+def modifierRegleId(id_regle):
+    regle = tables.Regle.objects(regle_id=id_regle).first()
+    conds = []
+    ok = False
+    for cond in regle.conditions:
+        if cond.valeur != None:
+            ok=True
+            conds.append(cond)
+    if ok:
+        return render_template('modifierRegle.html', conditions=conds,  regle_id=id_regle)
+    else:
+        return redirect('/parametrage')
 
 @app.route('/surveillance/pieces')
 def get_pieces():

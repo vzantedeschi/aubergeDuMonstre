@@ -23,17 +23,14 @@
 	        <div class="col-lg-4 text-center">
 	        	<input type="submit" name="supprimer" value="Supprimer regles" class="btn btn-default"/>
 	        </div>
+
 		</form>
 		<form method="POST" action="/ajoutRegle">
 			<div class="col-lg-4 text-center">
 		    	<input type="submit" name="ajouter" value="Ajouter regle" class="btn btn-default"/>
 		    </div>
 		</form>
-		<form method="POST" action="/modifierRegle">
-			<div class="col-lg-4 text-center">
-		    	<input type="submit" name="modfier" value="Modifier regle" class="btn btn-default"/>
-		    </div>
-		</form>
+		
 	</div>
 </div>
 <br><br>
@@ -57,6 +54,7 @@
 		            	<label>
 		            		<input class="col-lg-2" type="checkbox"  name="regle" value="{{id_regle}}" />
 			        			<div class="col-lg-4 text-center">
+			        			<a href="/modifierRegle/{{id_regle}}" title="Cliquez pour modifier (si c'est possible ^^)">
 			        			{{#each conditions}}
 			        				{{#if valeur}}
 			        					/ {{description}} <strong>({{valeur}})</strong> / 
@@ -64,6 +62,7 @@
 			        					/ {{description}} /
 			        				{{/if}}
 			        			{{/each}}
+			        			</a>
 			        			</div>
 			       				<div class="col-lg-4 text-center">
 			       				{{#each actions}}
