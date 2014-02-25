@@ -25,10 +25,10 @@ connected = False
 try :
     hote = '134.214.106.23'
     port = 5000
-    connexion_avec_passerelle.connect((hote, port))
-    print("Connexion etablie avec la passerelle sur le port {}".format(port))
-    print ("\n")
-    connected = True
+    #connexion_avec_passerelle.connect((hote, port))
+    #print("Connexion etablie avec la passerelle sur le port {}".format(port))
+    #print ("\n")
+    #connected = True
 except socket.error :
     print("Impossible de se connecter au proxy")
     print ("\n")

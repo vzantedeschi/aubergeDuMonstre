@@ -202,7 +202,7 @@ def vampire():
         fic_id.close()
 
         for l in liste:
-            ident, name = l.split()
+            ident, name, image = l.split()
             ident = int(ident,16)
             if name == "Vampire" :                            
                 if p.personne_id  == ident :
@@ -220,7 +220,7 @@ def meduse ():
         fic_id.close()
 
         for l in liste:
-            ident, name = l.split()
+            ident, name, image = l.split()
             ident = int(ident,16)
             if name == "Meduse" :                            
                 if p.personne_id  == ident :
@@ -243,7 +243,7 @@ def intrus() :
         fic_id.close()
 
         for l in liste:
-            ident, name = l.split()
+            ident, name, image = l.split()
             ident = int(ident,16)                           
             if p.personne_id  == ident :
                 trouve = True
@@ -264,7 +264,7 @@ def sirene() :
         fic_id.close()
 
         for l in liste:
-            ident, name = l.split()
+            ident, name, image = l.split()
             ident = int(ident,16)
             if name == "Sirene" :                            
                 if p.personne_id  == ident :
@@ -282,7 +282,7 @@ def yeti() :
         fic_id.close()
 
         for l in liste:
-            ident, name = l.split()
+            ident, name, image = l.split()
             ident = int(ident,16)
             if name == "Yeti" :                            
                 if p.personne_id  == ident :
@@ -300,7 +300,7 @@ def invite() :
         fic_id.close()
 
         for l in liste:
-            ident, name = l.split()
+            ident, name, image = l.split()
             ident = int(ident,16)
             if name == "Invite" :                            
                 if p.personne_id  == ident :
@@ -514,8 +514,8 @@ def realisationDemandeAction(actionneurType, actionType):
             allumeLum()
         elif actionneurType == 'PORTE':
             ouvrePiece()
-        elif actionnerType == 'PRISE':
-        	allumeInt()
+        elif actionneurType == 'PRISE':
+            allumeInt()
     else:
         if actionneurType == 'VOL':
             fermeVolet()
@@ -529,8 +529,8 @@ def realisationDemandeAction(actionneurType, actionType):
             eteintLum()
         elif actionneurType == 'PORTE':
             fermePiece()
-        elif actionnerType == 'PRISE':
-        	eteintInt()
+        elif actionneurType == 'PRISE':
+            eteintInt()
 
 def commande():
     global rfidDetected
