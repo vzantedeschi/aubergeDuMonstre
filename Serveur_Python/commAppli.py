@@ -179,31 +179,11 @@ def creation():
 				conditions = tables.ConditionGenerique.objects(nom__in=retourCond)
 				newConds = []
 				for cond in conditions:
-					if cond.nom == "tempSup":
-						val = request.form.get('tempSup')
+					if cond.nom in ["tempSup", "tempInf", 'humInf', 'humSup', 'pasBouge', 'pasChange']:
+						val = request.form.get(cond.nom)
 						newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
 					else:
-						if cond.nom == "tempInf":
-							val = request.form.get('tempInf')
-							newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
-						else:
-							if cond.nom == "humInf":
-								val = request.form.get('humInf')
-								newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
-							else:
-								if cond.nom == "humSup":
-									val = request.form.get('humSup')
-									newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
-								else:
-									if cond.nom == "pasBouge":
-										val = request.form.get('pasBouge')
-										newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
-									else:
-										if cond.nom == "pasChange":
-											val = request.form.get('pasChange')
-											newCond = tables.Condition(nom=cond.nom, valeur=val, description=cond.description)
-										else:
-											newCond = tables.Condition(nom=cond.nom, description=cond.description)
+						newCond = tables.Condition(nom=cond.nom, description=cond.description)
 					newCond.save()
 					newConds.append(newCond)
 				
@@ -308,7 +288,7 @@ def add_actionneur():
 @app.route('/appareillage/capteur')
 @requires_login
 def appareillage():
-	id = int(request.args.get('id'))
+	id = int(request.args.get('id'),16)
 	type = request.args.get('type')
 	piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
 	now = datetime.datetime.now()

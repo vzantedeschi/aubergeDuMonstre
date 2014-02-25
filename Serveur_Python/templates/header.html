@@ -23,18 +23,17 @@
         <li>
           <a href="/parametrage">Parametrages</a>
         </li>
-        
+        </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>
           {% if user %}
-              <a href="/logout"><span class="glyphicon glyphicon-remove"></span> Logout<span class="username">
-                  {{user.identifiant}}</span></a>
+              <a href="/logout"><span class="username">
+                  <strong>{{user.identifiant}}</strong> </span><span class="glyphicon glyphicon-remove"></span> Logout</a>
           {% else %}
               <a href="/login"><span class="glyphicon glyphicon-user"></span> S'identifier</a>
           {% endif %}
           </li>
         </ul>
-      </ul>
     </div>
 </div>
 

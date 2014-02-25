@@ -563,7 +563,8 @@ def commande():
     #     item.save()   
 
     for item in tables.DemandeAppareillage.objects(traite=False):
-        ident = int(item.ident,16)
+        print 'Demande appareillage dispositif ' + str(item.ident)
+        ident = item.ident
         type = item.type
         piece = tables.Piece.objects(piece_id = piece_id).first()
         if item.creer :
@@ -582,10 +583,9 @@ def commande():
             print 'suppression dispositif'
             if item.dispositif == 'Capteur':
                 dispo = tables.Capteur.objects.get(capteur_id = ident)
-                dispo.delete()
             elif item.dispositif == 'Actionneur':
                 dispo = tables.Actionneur.objects.get(actionneur_id = ident)
-                dispo.delete()
+            dispo.delete()
 
         item.traite=True
         item.save()
