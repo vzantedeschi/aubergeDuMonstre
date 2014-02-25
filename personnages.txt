@@ -1,5 +1,5 @@
-00000001 Meduse jeti.jpg
-00000002 Vampire jeti.jpg
-00000003 Zombie jeti.jpg
-00000004 Sirene jeti.jpg
+00000001 Meduse meduse.png
+00000002 Vampire vampire_lego.png
+00000003 Zombie zombie.png
+00000004 Sirene sirene.png
 00000005 Yeti jeti.jpg

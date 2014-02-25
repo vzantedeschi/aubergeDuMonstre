@@ -35,7 +35,7 @@ except socket.error :
 
 try :
     hote = 'localhost'
-    port = 13800
+    port = 13900
     connexion_avec_passerelle.connect((hote, port))
     print("Connexion etablie avec le simulateur sur le port {}".format(port))
     print ("\n")   

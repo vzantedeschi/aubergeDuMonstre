@@ -71,7 +71,7 @@ class ThreadSimuActionneurs(threading.Thread):
                     
 
 hote = 'localhost'
-port = 13800
+port = 13900
 
 
 #Ouverture d'un port de connexion avec les clients
