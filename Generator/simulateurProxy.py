@@ -155,12 +155,15 @@ while True :
 
                     if event == 1 :
                         
-                        perso = 4
-                        while perso > 3 :
+                        perso = 7
+                        while perso > 6 :
                             print "\nQuel personnage?"
                             print "1. Meduse"
                             print "2. Vampire"
-                            print "3. Un inconnu"
+                            print "3. Zombie"
+                            print "4. Sirene"
+                            print "5. Yeti"
+                            print "6. Un inconnu"
                             perso = int(input())
 
                     if event in [2,5] :
@@ -202,7 +205,7 @@ while True :
 
                     ## capteurs de présence et rfid
                     if event == 1 :
-                        if perso == 3:
+                        if perso == 6:
                             trame = gen.presenceDetected(piece)
                             #trame = trame.encode()
                             #socketClient.send(trame)
