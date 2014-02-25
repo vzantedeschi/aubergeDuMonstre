@@ -1,5 +1,5 @@
 1; air frais;tempSup 19,climEt;allumeClim;
-2; pas trop frais;tempInf 19,climAll;eteintClim;
+2; pas trop frais;tempInf 10,climAll;eteintClim;
 3; arroser sirene;dansChambre,humInf 70,eauEt;allumeEau;
 4; pas noyer la piece;dansChambre,humSup 70,eauAll;eteintEau;
 5; interrupteur volet;intAll,fenFer;ouvreVolet;
@@ -7,3 +7,6 @@
 7; intrus detecte;intrus;question;
 8; vampire veut manger et volets ouverts;repOui,fenOuv;fermePiece,fermeVolet;
 9; vampire veut manger et portes ouvertes;repOui,porteOuv;fermePiece,fermeVolet;
+10; meduse dans couloir;dansCouloir,meduse;fermeRideau;
+11; air frais;tempSup 15,yeti,climEt;allumeClim;
+12; sirene dans couloir;dansCouloir,sirene;ouvreRideau;
