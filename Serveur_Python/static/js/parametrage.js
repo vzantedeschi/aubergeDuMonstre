@@ -20,3 +20,11 @@ $(document).ready(function() {
 	});
 })
 
+function ajoutReg(id_regle){
+	$.getJSON('modifierRegle/' + id_regle, {}, function(data){
+		for(i=0; i.data.result.length; i++){
+			var modifie = data.result[i]
+		}
+	});
+
+}

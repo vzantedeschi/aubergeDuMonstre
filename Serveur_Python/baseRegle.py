@@ -30,9 +30,10 @@ db = db_connec.GHome_BDD
 
 try :
     print 'Attente connexion au proxy'
-    connectProxy.connect((hote, port))
+    #connectProxy.connect((hote, port))
     print("Connexion établie avec la passerelle sur le port {}".format(port))
-    connected = True
+    #connected = True
+    connected = False
 except socket.error :
     print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
     connected = False
@@ -570,12 +571,12 @@ def commande():
         if item.creer :
             print 'création dispositif'
             if item.dispositif == 'Capteur':
-                dispo = tables.Capteur(capteur_id = ident, capteur_type = type)
+                dispo = tables.Capteur(capteur_id = ident, capteur_type = type, interpreter=False)
                 dispo.save()
                 piece.capteurs.append(dispo)
                 piece.save()
             elif item.dispositif == 'Actionneur':
-                dispo = tables.Actionneur(actionneur_id = ident, capteur_type = type)
+                dispo = tables.Actionneur(actionneur_id = ident, capteur_type = type, interpreter=False)
                 dispo.save()
                 piece.actionneurs.append(dispo)
                 piece.save()
@@ -589,6 +590,14 @@ def commande():
 
         item.traite=True
         item.save()
+
+### ENVOI TRAMES D'APPAREILLAGE ###
+    for item in tables.Actionneur.objects(interpreter=False):
+        if connected :
+            connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
+            print 'trame appareillage envoyée'
+        else :
+            print 'Appareillage impossible en mode hors connexion'
 
 #### FIN INTEGRATION ENVOIS DE L'APPLI WEB ####
 

@@ -14,11 +14,10 @@ function valider() {
 	piece = $('#nom').val();
 	$.getJSON('/appareillage/verifier', {id : id}, function(data) {
         console.log(data);
-        var $form = $(".form-horizontal");
         if (new String(data.error).valueOf() == new String("false")) {
-        	$form.html(attenteTemplate());
+        	$(".form-horizontal").html(attenteTemplate());
         } else {
-			$form.prepend(notifTemplate("ID incorrect"));
+			$("#attention").html(notifTemplate("ID incorrect"));
         }
     });
 }

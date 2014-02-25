@@ -19,6 +19,7 @@ class Capteur(Document):
 class Actionneur(Document):
 	actionneur_id = IntField(primary_key=True)
 	capteur_type = StringField(required=True)
+	interpreter = BooleanField(default=True)
 
 class Piece(Document):
 	piece_id = IntField(primary_key=True)
