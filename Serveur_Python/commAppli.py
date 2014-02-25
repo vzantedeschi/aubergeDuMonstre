@@ -36,14 +36,18 @@ def etat_to_tuples(piece_id):
     prise = "Eteinte"
     if etat.priseDeclenchee : prise = "Active"
 
+    portes = "Ouvertes"
+    if etat.portesFermees : prise = "Fermées"
+
     result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name , "title" : True},
                             { "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
                             { "image" : "hum.png", "width" : "20px","nom":"Humidité" , "valeur": etat.humidite },
                             { "image" : "rideaux.png", "width" : "30px","nom":"Rideaux" , "valeur": rid },
-                            { "image" : "hotel.png", "width" : "40px","nom":"Climatisation" , "valeur": clim },
-                            { "image" : "hotel.png", "width" : "40px","nom":"Prise intelligente" , "valeur": prise },
+                            { "image" : "clim.png", "width" : "30px","nom":"Climatisation" , "valeur": clim },
+                            { "image" : "prise.png", "width" : "30px","nom":"Prise intelligente" , "valeur": prise },
                             { "image" : "fire.png", "width" : "30px","nom":"Antincendie" , "valeur": inc },
-                            { "image" : "hotel.png", "width" : "40px","nom":"Volets" , "valeur": vol }
+                            { "image" : "portes.png", "width" : "40px","nom":"Portes" , "valeur": portes },
+                            { "image" : "volets.png", "width" : "30px","nom":"Volets" , "valeur": vol }
                             ]
             }
     return result
