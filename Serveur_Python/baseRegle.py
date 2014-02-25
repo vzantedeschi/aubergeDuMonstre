@@ -364,10 +364,20 @@ def intEt() :
     return etat.interrupteurEnclenche == -1
 
 def repNon() : 
-    pass
+    reponse= tables.ReponseAppli.objects(piece_id=piece_id, traite=False).first()
+    if reponse != None:
+    	reponse.traite = True
+    	reponse.save()
+    	return not reponse.reponse
+    return False
 
 def repOui() :
-    pass
+    reponse= tables.ReponseAppli.objects(piece_id=piece_id, traite=False).first()
+    if reponse != None:
+    	reponse.traite = True
+    	reponse.save()
+    	return reponse.reponse
+    return False
     #penser à mettre en "prises en compte" les variables utilisées pour trouver les règles
 
 
@@ -509,15 +519,15 @@ def commande():
         item.traite=True
         item.save()  
 
-    for item in tables.ReponseAppli.objects(traite=False):
-        piece_id = item.piece_id
-        reponse = item.reponse
-        if reponse:
-            fermeVolets()
-            fermePiece()
+    # for item in tables.ReponseAppli.objects(traite=False):
+    #     piece_id = item.piece_id
+    #     reponse = item.reponse
+    #     if reponse:
+    #         fermeVolets()
+    #         fermePiece()
 
-        item.traite=True
-        item.save()   
+    #     item.traite=True
+    #     item.save()   
 
     for item in tables.DemandeAppareillage.objects(traite=False):
         ident = item.ident
