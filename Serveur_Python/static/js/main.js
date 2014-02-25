@@ -53,11 +53,25 @@ function addHoverListener(obj) {
 }
 
 function drawPerso(piece,persos){
-    var w = rects[piece - 1].attr("width");
-    var h = rects[piece - 1].attr("height");
+    var w = rects[piece - 1].attr("width") - 25;
+    var h = rects[piece - 1].attr("height") - 25;
     var len = persos.length;
+    var x = 0;
+    var y = 0;
+    if (piece == 1) {
+        x = w1 + MARGE;
+        y = h2 + MARGE;
+    }  else if (piece == 3) {
+        x = w1 + w3 + 2 * MARGE;
+        y = h2 + MARGE;
+    } else if (piece == 4) {
+        x = w1 + w3 + 2 * MARGE;
+        y = h2 + h4 + MARGE;
+    } else if (piece == 5) {
+        x = w1 + MARGE;
+    }
     for (var j = 0; j < len; j ++) {
-        maison.image('/static/img/' + persos[j].image, w/len * j, h/len * j, 50, 50);                
+        maison.image('/static/img/' + persos[j].image, x + w/len * j, y + h/len * j, 50, 50);                
     }
 }
 
