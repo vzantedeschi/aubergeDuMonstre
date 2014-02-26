@@ -194,14 +194,13 @@ def initialize() :
     for l in liste:
         ident, name, image = l.split()
         ident = int(ident,16)
-        print ident
         personnage = tables.Personne(personne_id=ident, nom=name, image=image)
         personnage.save()
         user = tables.Utilisateur.new_user(name,"ghome123")
         user.save()
 
     # Création d'un type intrus dans la base des personnages
-    personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False, image=image)
+    personnage = tables.Personne(personne_id = 0, nom = "Intrus", ignore = False, image="intrus.jpg")
     personnage.save()
 
     ####### Création d'un superutilisateur #######

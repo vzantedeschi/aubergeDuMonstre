@@ -37,7 +37,7 @@ def etat_to_tuples(piece_id):
     if etat.priseDeclenchee : prise = "Active"
 
     portes = "Ouvertes"
-    if etat.portesFermees : prise = "Fermées"
+    if etat.portesFermees : portes = "Fermées"
 
     result = { "couples": [ { "image" : "hotel.png", "width" : "40px", "nom":"Piece" , "valeur": piece.name , "title" : True},
                             { "image" : "temp.png", "width" : "30px","nom":"Température" , "valeur": etat.temperature },
