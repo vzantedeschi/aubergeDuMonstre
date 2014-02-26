@@ -9,3 +9,4 @@
 9; vampire veut manger et portes ouvertes;repOui,porteOuv;fermePiece,fermeVolet;
 10; meduse dans couloir;dansCouloir,meduse;fermeRideau;
 11; sirene dans couloir;dansCouloir,sirene;ouvreRideau;
+12; yeti climatisation;yeti,tempSup 15,climEt;allumeClim;
