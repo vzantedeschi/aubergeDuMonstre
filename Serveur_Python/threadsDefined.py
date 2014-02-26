@@ -43,6 +43,7 @@ class ThreadCommand(threading.Thread):
         db = db_connec.GHome_BDD
         self.checkStatus = 1
         t = threading.Timer(2,TimerFunc,[self])
+        baseRegle.connect()
 
         while not self.Terminated:
             try :

@@ -294,7 +294,7 @@ def appareillage_capt():
 	now = datetime.datetime.now()
 	reponse = tables.DemandeAppareillage(date=now,piece_id=piece,ident=id,dispositif='Capteur',type=type)
 	reponse.save()
-	time.sleep(10)
+	time.sleep(30)
 	conf = tables.ConfirmationAppareillage.objects(ident=id)
 	if conf :
 		return jsonify(error=False)
@@ -317,7 +317,7 @@ def appareillage_act():
 @app.route('/appareillage/verifier')
 @requires_login
 def verifierID():
-	id = request.args.get('id')
+	id = int(request.args.get('id'),16)
 	if id == '' or tables.Capteur.objects(capteur_id=id) or tables.Actionneur.objects(actionneur_id=id):
 		return jsonify(error=True)
 	else:
@@ -339,11 +339,13 @@ def annuler():
 @requires_login
 def confirmer():
     id = int(request.args.get('id'),16)
-    piece = tables.Piece.objects.get(name=request.args.get('piece')).piece_id
+    piece = tables.Piece.objects.get(name=request.args.get('piece'))
     now = datetime.datetime.now()
     actionneur = tables.Actionneur.objects(actionneur_id = id).first()
     actionneur.interpreter = True;
     actionneur.save();
+    piece.actionneurs.append(actionneur)
+    piece.save()
     conf = tables.ConfirmationAppareillage(piece_id = piece.piece_id, date = now, traite = True,ident=id)
     conf.save()
     return 'ok'

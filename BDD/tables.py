@@ -47,7 +47,6 @@ class Utilisateur(Document):
 		return u
 
 	def valider_mot_passe(self, mot):
-		print hash_password(mot, self.salt)
 		return hash_password(mot, self.salt) == self.secret_hash
 
 class Etat(Document):
