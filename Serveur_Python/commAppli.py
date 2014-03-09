@@ -11,7 +11,7 @@ sys.path.append('../BDD')
 import tables
 
 app = Flask(__name__)
-db_connec = connect('GHome_BDD')
+db_connec = connect('GHome_BDD', host='192.168.137.1')
 app.secret_key = '\x11\x7f\xa7\xd8\xb6\xac\x83[=O@\x9c\x89\x0b\x13Y\x16\xcb\xf9\xcd<c\xdc\x12'
 
 ### fonction de conversion des instances mongoengine en dictionnaires json ###
@@ -200,6 +200,11 @@ def creation():
 				regle.save()
 				return redirect('/parametrage')
 
+@app.route('/modifierRegle')
+@requires_admin_rights
+def modifierRegle():
+    return render_template('modifierRegle.html')
+
 @app.route('/modifierRegle/<id_regle>')
 @requires_admin_rights
 def modifierRegleId(id_regle):
@@ -207,7 +212,7 @@ def modifierRegleId(id_regle):
     conds = []
     for cond in regle.conditions:
         if cond.valeur != None:
-            conds.append(cond)
+            conds.append(cond.to_dict())
 
     reponse = dict(ok=True, result=conds)
     return json.dumps(reponse)
