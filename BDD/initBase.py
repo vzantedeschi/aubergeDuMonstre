@@ -194,7 +194,6 @@ def initialize() :
     for l in liste:
         ident, name, image = l.split()
         ident = int(ident,16)
-        print ident
         personnage = tables.Personne(personne_id=ident, nom=name, image=image)
         personnage.save()
         user = tables.Utilisateur.new_user(name,"ghome123")

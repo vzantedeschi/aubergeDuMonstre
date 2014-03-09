@@ -28,16 +28,6 @@ port = 5000
 db_connec = mongoengine.connect('GHome_BDD')
 db = db_connec.GHome_BDD
 
-try :
-    print 'Attente connexion au proxy'
-    #connectProxy.connect((hote, port))
-    print("Connexion établie avec la passerelle sur le port {}".format(port))
-    #connected = True
-    connected = False
-except socket.error :
-    print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
-    connected = False
-
 def RFIDFunc():
     rfidDetected = 0
 
@@ -533,6 +523,18 @@ def realisationDemandeAction(actionneurType, actionType):
         elif actionneurType == 'PRISE':
             eteintInt()
 
+def connect():
+    global connected
+    try :
+        print 'Attente connexion au proxy'
+        connectProxy.connect((hote, port))
+        print("Connexion établie avec la passerelle sur le port {}".format(port))
+        connected = True
+        #connected = False
+    except socket.error :
+        print("Impossible de se connecter au proxy : Les trames d'actionneurs ne seront pas envoyees")
+        connected = False
+
 def commande():
     global rfidDetected
     global piece
@@ -567,7 +569,7 @@ def commande():
         print 'Demande appareillage dispositif ' + str(item.ident)
         ident = item.ident
         type = item.type
-        piece = tables.Piece.objects(piece_id = piece_id).first()
+        piece = tables.Piece.objects(piece_id = item.piece_id).first()
         if item.creer :
             print 'création dispositif'
             if item.dispositif == 'Capteur':
@@ -594,7 +596,9 @@ def commande():
 ### ENVOI TRAMES D'APPAREILLAGE ###
     for item in tables.Actionneur.objects(interpreter=False):
         if connected :
-            connectProxy.send( 'A55A6B0550000000FF9F1E0530B1' )
+            trame = trameActionneur(item.actionneur_id, True);
+            trame.encode()
+            connectProxy.send( trame )
             print 'trame appareillage envoyée'
         else :
             print 'Appareillage impossible en mode hors connexion'
@@ -723,3 +727,15 @@ def commande():
                 enFonctionnement = baseregle[act]()
 
                 i = i + 1
+
+if __name__ == '__main__':
+    connect()
+
+    try: 
+        while True:
+            commande()
+    except KeyboardInterrupt:
+        print '\nFermeture de la connexion'
+        connectProxy.close()
+
+print "Exit main program"
